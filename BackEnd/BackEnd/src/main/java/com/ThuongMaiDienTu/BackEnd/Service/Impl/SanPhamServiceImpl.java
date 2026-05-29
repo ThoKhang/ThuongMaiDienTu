@@ -3,9 +3,10 @@ package com.ThuongMaiDienTu.BackEnd.Service.Impl;
 import com.ThuongMaiDienTu.BackEnd.DTO.Request.SanPhamRequest;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.SanPhamResponse;
 import com.ThuongMaiDienTu.BackEnd.Service.SanPhamService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public List<SanPhamResponse> getAllSanPham() {

@@ -11,7 +11,6 @@ public class TinhTrangDuyetConverter implements AttributeConverter<TinhTrangDuye
     public String convertToDatabaseColumn(TinhTrangDuyet attribute) {
         return attribute == null ? null : attribute.getDbValue();
     }
-
     @Override
     public TinhTrangDuyet convertToEntityAttribute(String dbData) {
         return dbData == null ? null : TinhTrangDuyet.fromDbValue(dbData);
