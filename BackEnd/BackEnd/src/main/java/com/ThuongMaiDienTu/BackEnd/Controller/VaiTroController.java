@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/api/vaitro")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/demo")
 @CrossOrigin(origins = "*")
-public class DemoController {
+public class VaiTroController {
+
 }
