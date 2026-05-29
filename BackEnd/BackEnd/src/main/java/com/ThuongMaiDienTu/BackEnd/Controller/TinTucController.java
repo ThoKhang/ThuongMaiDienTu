@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/giaodich-affiliate")
+@RequestMapping("/api/tintuc")
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class GiaoDichAffiliateController {
+public class TinTucController {
 }
