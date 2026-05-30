@@ -2,16 +2,18 @@
 -- THIET KE CO SO DU LIEU PORTAL AFFILIATE LINH KIEN MAY TINH
 -- Tích hợp RBAC Model, EAV Filter & Truy vết Affiliate khép kín
 -- ============================================================
-
 USE master;
+IF EXISTS (SELECT * FROM sys.databases WHERE name = N'LKMT_MoHinhWebCong')
+BEGIN
+    USE master;
+    ALTER DATABASE LKMT_MoHinhWebCong SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE LKMT_MoHinhWebCong;
+END
 GO
-IF DB_ID('LKMT_MoHinhWebCong') IS NOT NULL DROP DATABASE LKMT_MoHinhWebCong;
-GO
-CREATE DATABASE LKMT_MoHinhWebCong COLLATE Vietnamese_CI_AS;
-GO
-USE LKMT_MoHinhWebCong;
-GO
-
+create database LKMT_MoHinhWebCong
+go 
+use LKMT_MoHinhWebCong
+go
 -- ============================================================
 -- 1. QUẢN LÝ PHÂN QUYỀN & TÀI KHOẢN (RBAC)
 -- ============================================================

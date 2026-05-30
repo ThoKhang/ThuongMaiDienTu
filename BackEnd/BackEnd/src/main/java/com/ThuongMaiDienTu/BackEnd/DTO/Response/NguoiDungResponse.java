@@ -1,12 +1,15 @@
 package com.ThuongMaiDienTu.BackEnd.DTO.Response;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+
 @Data
 public class NguoiDungResponse {
     private Integer id;
     private String tenDangNhap;
     private String email;
     private String trangThai;
-    private LocalDateTime ngayTao;
+    private Date ngayTao;
+    private List<String> vaiTros;
 }
