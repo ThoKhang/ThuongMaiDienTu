@@ -1,24 +1,42 @@
 package com.ThuongMaiDienTu.BackEnd.Entity;
 
-import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "NGUOIDUNG")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NguoiDungEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "tenDangNhap", nullable = false, unique = true, length = 100)
+
+    @Column(name = "tenDangNhap", nullable = false, unique = true)
     private String tenDangNhap;
-    @Column(name = "matKhau", nullable = false, length = 255)
+
+    @Column(name = "matKhau", nullable = false)
     private String matKhau;
-    @Column(name = "email", nullable = false, unique = true, length = 150)
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Column(name = "trangThai", length = 20)
-    private TrangThaiNguoiDung trangThai;
-    @Column(name = "ngayTao", insertable = false, updatable = false)
-    private LocalDateTime ngayTao;
+
+    @Column(name = "trangThai")
+    private String trangThai = "HoatDong";
+
+    @Column(name = "ngayTao")
+    private Date ngayTao = new Date();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "VAITRO_NGUOIDUNG",
+        joinColumns = @JoinColumn(name = "idNguoiDung"),
+        inverseJoinColumns = @JoinColumn(name = "idVaiTro")
+    )
+    private Set<VaiTroEntity> vaiTros = new HashSet<>(); 
 }
