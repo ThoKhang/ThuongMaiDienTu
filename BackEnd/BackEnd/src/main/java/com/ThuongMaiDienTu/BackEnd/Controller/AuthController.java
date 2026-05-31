@@ -1,10 +1,17 @@
 package com.ThuongMaiDienTu.BackEnd.Controller;
 
+import com.ThuongMaiDienTu.BackEnd.DTO.Request.DoiTacLienKetRequest;
 import com.ThuongMaiDienTu.BackEnd.DTO.Request.LoginRequest;
+import com.ThuongMaiDienTu.BackEnd.DTO.Request.NguoiDungRequest;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.JwtResponse;
 import com.ThuongMaiDienTu.BackEnd.Jwt.JwtUtils;
+import com.ThuongMaiDienTu.BackEnd.Mapper.NguoiDungMapper;
 import com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails;
+import com.ThuongMaiDienTu.BackEnd.Service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*") // Hỗ trợ frontend gọi API
+@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired
@@ -25,6 +33,8 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+    private final AuthService authService;
+    private final NguoiDungMapper nguoiDungMapper;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -48,5 +58,16 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 roles));
+    }
+    @PostMapping("register-user")
+    public ResponseEntity<?> UserRegister(@RequestBody NguoiDungRequest  nguoiDungRequest) {
+        String token = authService.nguoiDungRegister(nguoiDungRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body("Đăng ký người dùng thành công!");
+    }
+    @PostMapping("register-vendor")
+    public ResponseEntity<?> VendorRegister(@RequestBody DoiTacLienKetRequest doiTacLienKetRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.doiTacRegister(doiTacLienKetRequest));
     }
 }

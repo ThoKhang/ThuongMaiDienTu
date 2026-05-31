@@ -2,6 +2,7 @@ package com.ThuongMaiDienTu.BackEnd.Service.Impl;
 
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.NguoiDungResponse;
 import com.ThuongMaiDienTu.BackEnd.Entity.NguoiDungEntity;
+import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
 import com.ThuongMaiDienTu.BackEnd.Repository.NguoiDungRepository;
 import com.ThuongMaiDienTu.BackEnd.Service.NguoiDungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
         // Logic đổi trạng thái
         if ("HoatDong".equals(nguoiDung.getTrangThai())) {
-            nguoiDung.setTrangThai("DaKhoa");
+            nguoiDung.setTrangThai(TrangThaiNguoiDung.KHOA);
         } else {
-            nguoiDung.setTrangThai("HoatDong");
+            nguoiDung.setTrangThai(TrangThaiNguoiDung.HOAT_DONG);
         }
         
         // Lưu lại vào DB
@@ -48,7 +49,9 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         dto.setId(entity.getId());
         dto.setTenDangNhap(entity.getTenDangNhap());
         dto.setEmail(entity.getEmail());
-        dto.setTrangThai(entity.getTrangThai());
+        if (entity.getTrangThai() != null) {
+            dto.setTrangThai(entity.getTrangThai().getDbValue());
+        }
         dto.setNgayTao(entity.getNgayTao());
         // Lấy danh sách tên vai trò
         List<String> roles = entity.getVaiTros().stream()

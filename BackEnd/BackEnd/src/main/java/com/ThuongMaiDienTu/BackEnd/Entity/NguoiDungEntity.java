@@ -1,5 +1,6 @@
 package com.ThuongMaiDienTu.BackEnd.Entity;
 
+import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class NguoiDungEntity {
     private String email;
 
     @Column(name = "trangThai")
-    private String trangThai = "HoatDong";
+    private TrangThaiNguoiDung trangThai;
 
     @Column(name = "ngayTao")
     private Date ngayTao = new Date();
@@ -38,5 +39,11 @@ public class NguoiDungEntity {
         joinColumns = @JoinColumn(name = "idNguoiDung"),
         inverseJoinColumns = @JoinColumn(name = "idVaiTro")
     )
-    private Set<VaiTroEntity> vaiTros = new HashSet<>(); 
+    private Set<VaiTroEntity> vaiTros = new HashSet<>();
+    @PrePersist
+    protected void onCreate() {
+        if (this.trangThai == null) {
+            this.trangThai = TrangThaiNguoiDung.HOAT_DONG;
+        }
+    }
 }

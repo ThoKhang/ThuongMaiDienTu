@@ -1,6 +1,7 @@
 package com.ThuongMaiDienTu.BackEnd.Security;
 
 import com.ThuongMaiDienTu.BackEnd.Jwt.JwtAuthFilter;
+import com.ThuongMaiDienTu.BackEnd.Service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/auth/**").permitAll() 
+                auth.requestMatchers("/api/auth/**","/api/sanpham/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             );

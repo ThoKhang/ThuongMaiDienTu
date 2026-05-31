@@ -1,6 +1,6 @@
 package com.ThuongMaiDienTu.BackEnd.Jwt;
 
-import com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetailsService;
+import com.ThuongMaiDienTu.BackEnd.Service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private com.ThuongMaiDienTu.BackEnd.Service.CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

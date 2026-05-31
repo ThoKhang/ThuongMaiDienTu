@@ -19,7 +19,7 @@ public class SanPhamController {
     public ResponseEntity<List<SanPhamResponse>> getAll() {
         return ResponseEntity.ok(sanPhamService.getAllSanPham());
     }
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<SanPhamResponse> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(sanPhamService.getSanPhamById(id));
     }
