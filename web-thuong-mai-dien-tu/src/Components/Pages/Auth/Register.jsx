@@ -115,15 +115,18 @@ const Main = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Tên cửa hàng/Thương hiệu</label>
-                  <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Lab Components Store" type="text" />
+                  <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Linh kiện Store" type="text" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Mã số thuế / Định danh</label>
-                  <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="MST-0123456789" type="text" />
+                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Thời hạn hợp đồng</label>
+                  <input {...register('thoiHanHopDong', { required: 'Vui lòng chọn thời hạn hợp đồng' })}
+                    className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" 
+                    type="date" min={new Date().toISOString().split("T")[0]} />
+                  {errors.thoiHanHopDong && <span className="text-red-500 text-xs">{errors.thoiHanHopDong.message}</span>}
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Địa chỉ trụ sở</label>
-                  <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="123 Đường Công Nghệ, Quận 1, TP. HCM" type="text" />
+                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Link website</label>
+                  <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="https://linh-kien-may-tinh.com" type="text" />
                 </div>
               </div>
             </div>
