@@ -5,7 +5,11 @@ import com.ThuongMaiDienTu.BackEnd.DTO.Request.NguoiDungRequest;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.DoiTacLienKetResponse;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.NguoiDungResponse;
 
+import com.ThuongMaiDienTu.BackEnd.DTO.Response.JwtResponse;
+
 public interface AuthService {
     String nguoiDungRegister(NguoiDungRequest nguoiDungRequest);
     DoiTacLienKetResponse doiTacRegister(DoiTacLienKetRequest doiTacLienKetRequest);
+    void sendOtp(String email);
+    JwtResponse verifyOtpAndLogin(String email, String otp);
 }

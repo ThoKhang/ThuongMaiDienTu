@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './Components/layout/DangKy/Header';
 import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
+import Login from './Components/Pages/Auth/Login';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Footer />
             </>
           } />
+        <Route path="/dang-nhap" element={<Login />} />
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
