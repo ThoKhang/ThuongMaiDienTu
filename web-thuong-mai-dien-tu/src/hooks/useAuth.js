@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { authService } from '../services/authService';
 
-/**
- * Hook đăng ký tài khoản người mua
- * Sau khi thành công, lưu token vào localStorage và điều hướng về trang chủ
- */
 export const useRegisterUser = () => {
   const navigate = useNavigate();
   return useMutation({
@@ -25,11 +21,6 @@ export const useRegisterUser = () => {
   });
 };
 
-/**
- * Hook đăng ký tài khoản người bán (DoiTac)
- * Yêu cầu người dùng đã đăng nhập (có token) trước khi gọi API này.
- * Trả về DoiTacLienKetResponse từ backend.
- */
 export const useRegisterVendor = () => {
   const navigate = useNavigate();
   return useMutation({

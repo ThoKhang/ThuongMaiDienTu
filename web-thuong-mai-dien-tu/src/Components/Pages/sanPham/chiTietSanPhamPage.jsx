@@ -65,16 +65,26 @@ const ChiTietSanPhamPage = () => {
   // Tăng lượt xem khi vào trang
   useEffect(() => {
     if (id) {
-      sanPhamService.tangLuotXem(id).catch(() => {/* silent */});
+      sanPhamService.tangLuotXem(id).catch(() => {/* silent */ });
     }
   }, [id]);
 
   /* ── Dữ liệu demo để UI không trống khi chưa có backend ── */
+  let parsedThongSo = [];
+  if (sanPham?.thongSoKyThuat) {
+    try {
+      const obj = JSON.parse(sanPham.thongSoKyThuat);
+      parsedThongSo = Object.entries(obj).map(([key, value]) => `${key.toUpperCase()}: ${value}`);
+    } catch (e) {
+      parsedThongSo = typeof sanPham.thongSoKyThuat === 'string' ? sanPham.thongSoKyThuat.split('\n').filter(Boolean) : [];
+    }
+  }
+
   const demo = {
-    maSku: sanPham?.maSku ?? 'GPU-N-4090-FE',
+    maSku: sanPham?.id ? `SP00${sanPham.id}` : 'GPU-N-4090-FE',
     tenSanPham: sanPham?.tenSanPham ?? 'NVIDIA GeForce RTX 4090 Founders Edition 24GB GDDR6X',
-    giaBan: sanPham?.giaBan ?? 42500000,
-    giaGoc: sanPham?.giaGoc ?? 48000000,
+    giaBan: sanPham?.giaKhuyenMai ?? sanPham?.giaNiemYet ?? 42500000,
+    giaGoc: sanPham?.giaNiemYet ?? 48000000,
     tinhTrang: sanPham?.tinhTrang ?? 'Đã qua sử dụng (Like New)',
     baoHanh: sanPham?.baoHanh ?? 'Còn 24 tháng (Chính hãng)',
     moTa: sanPham?.moTa ?? '',
@@ -89,7 +99,7 @@ const ChiTietSanPhamPage = () => {
       danhGia: sanPham?.nguoiBan?.danhGia ?? 4,
       anhDaiDien: sanPham?.nguoiBan?.anhDaiDien ?? null,
     },
-    thongSoKyThuat: sanPham?.thongSoKyThuat ?? [
+    thongSoKyThuat: parsedThongSo.length > 0 ? parsedThongSo : [
       'Kiến trúc NVIDIA Ada Lovelace',
       '24 GB GDDR6X 384-bit',
       '16384 nhân CUDA',
@@ -100,15 +110,15 @@ const ChiTietSanPhamPage = () => {
   };
 
   // Ảnh hiển thị
-  const danhSachAnh = demo.anhSanPham.length > 0
+  const danhSachAnh = Array.isArray(demo.anhSanPham) && demo.anhSanPham.length > 0
     ? demo.anhSanPham
     : [
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBkAsXSm337uUuMCtq9h8ie2dL-uJy8YZkD3hzAgYMjjjaMl9EUP1QaOr-qraJ7XJs7_Gx9Ip2WcJTbXSLVCqcdWCQMc6ZKuwXO7_AbSmMb99Ob2dtkhvpv-qhqjklKmenVnYrowAMtZ5emVRraKZVsEqnj2vfjK7g6fwH-2hEz77kTTyxGLdKm7aC4nqQ1JJ_vrivAHYFbTTmCZsiMYsxNyonGnLD88AYWOmFN5iTgFfhY4kxJjWuSKPXbFCsBBuF7Vmuput8zkno',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCcNXldKgT7FkeJz2wLdRbMSV7Xgjl4GBhdSPvVkgIysDtEuGTxNBvmBsZbu5o_7gIYF8zmH-mgXm2W1_OMgDNdHn1mSZ9RTwkhcCoS_0UfxCSknoPFlzPkhGmJDQqJK22Tc5-NCFy3iWiEfbKyXHHhSyJSq9_PzaqPtUbq-Bpnxy7HX6KZzCdvABfTOCCVUGzJ0hGPCK2E3Y87A17I26bOuIrSOPXL7OQP1r6HIX_Wbelhea11Rd_Zq1hanWqicKxQ64U3rlR98_I',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCx_jCf-OZDInlJXT3_k2t7YUenq_WR3ERMFBgCJBSSHbJIQqewksJ2IL_ZTRIC09G56RrQkUUO5PdiYbOX74_UZO_RZomoLRACAWT-uqgS31IfnUXzBnsPv2WqIpbn1L0VecbP3DtO0esR89viDaCH2OkDXjEnzXNvEMvxZgpydbEnXPN8MAn8N2IXeMi2cv-1o8vkARh7AQggMpHMO5NpOOFOf62WOfXMnmIUX-Z-bZgDx1Q6eG4B8x5tPLkteKlwkEjzYSTXL2I',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDcCOodmD78prGPwavbGcmXs0pWmfUzMgiAVHOPWyU5-Ds8bM1dtG18gYh-aQTVgUJFismQA_V5bVrzLOcqEOQt2_27fhjbKylNMGmCQpNMCsrMv4GRXtincN3ZTjoB3IJPJT6MG6tkXGmX5KvnTZTrbn_N80wgjtvpjUmfc-RBLCsxsln7GAqhjRtXjFeP-gExPde6oynaXXpAPOrFFZIw_-RLKuMzEtUgdWUOSZh10dA6fSGNUyv9z11Zer2NQbA2YDOZdUKhG0A',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBTFwUB9BjYtbo4L9fToYEuqYY1JSOKakTpirJUSo_8T-zyVkIs-TT3G6Y6udQu4na7ptvJtgdxBH4MMtbMNB0lT3NSnqFC4dtVQl8cBmGkCDUeQ7mJWajCqfb7RGcYMSdDRgN-PRgYHL81e_SIEsk48OZy_Hjv5vGjTSLS7vMpWoiXS-l4Rsb45B5GmNyrG-qDMD2AaFoBKxAlG529Kw8ol_iU3ZYKH0Ht3vtRCB0wH2LYJHL6pmJgyWLZjePyfwHrWyxvCKWQ1V8',
-      ];
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBkAsXSm337uUuMCtq9h8ie2dL-uJy8YZkD3hzAgYMjjjaMl9EUP1QaOr-qraJ7XJs7_Gx9Ip2WcJTbXSLVCqcdWCQMc6ZKuwXO7_AbSmMb99Ob2dtkhvpv-qhqjklKmenVnYrowAMtZ5emVRraKZVsEqnj2vfjK7g6fwH-2hEz77kTTyxGLdKm7aC4nqQ1JJ_vrivAHYFbTTmCZsiMYsxNyonGnLD88AYWOmFN5iTgFfhY4kxJjWuSKPXbFCsBBuF7Vmuput8zkno',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCcNXldKgT7FkeJz2wLdRbMSV7Xgjl4GBhdSPvVkgIysDtEuGTxNBvmBsZbu5o_7gIYF8zmH-mgXm2W1_OMgDNdHn1mSZ9RTwkhcCoS_0UfxCSknoPFlzPkhGmJDQqJK22Tc5-NCFy3iWiEfbKyXHHhSyJSq9_PzaqPtUbq-Bpnxy7HX6KZzCdvABfTOCCVUGzJ0hGPCK2E3Y87A17I26bOuIrSOPXL7OQP1r6HIX_Wbelhea11Rd_Zq1hanWqicKxQ64U3rlR98_I',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCx_jCf-OZDInlJXT3_k2t7YUenq_WR3ERMFBgCJBSSHbJIQqewksJ2IL_ZTRIC09G56RrQkUUO5PdiYbOX74_UZO_RZomoLRACAWT-uqgS31IfnUXzBnsPv2WqIpbn1L0VecbP3DtO0esR89viDaCH2OkDXjEnzXNvEMvxZgpydbEnXPN8MAn8N2IXeMi2cv-1o8vkARh7AQggMpHMO5NpOOFOf62WOfXMnmIUX-Z-bZgDx1Q6eG4B8x5tPLkteKlwkEjzYSTXL2I',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDcCOodmD78prGPwavbGcmXs0pWmfUzMgiAVHOPWyU5-Ds8bM1dtG18gYh-aQTVgUJFismQA_V5bVrzLOcqEOQt2_27fhjbKylNMGmCQpNMCsrMv4GRXtincN3ZTjoB3IJPJT6MG6tkXGmX5KvnTZTrbn_N80wgjtvpjUmfc-RBLCsxsln7GAqhjRtXjFeP-gExPde6oynaXXpAPOrFFZIw_-RLKuMzEtUgdWUOSZh10dA6fSGNUyv9z11Zer2NQbA2YDOZdUKhG0A',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBTFwUB9BjYtbo4L9fToYEuqYY1JSOKakTpirJUSo_8T-zyVkIs-TT3G6Y6udQu4na7ptvJtgdxBH4MMtbMNB0lT3NSnqFC4dtVQl8cBmGkCDUeQ7mJWajCqfb7RGcYMSdDRgN-PRgYHL81e_SIEsk48OZy_Hjv5vGjTSLS7vMpWoiXS-l4Rsb45B5GmNyrG-qDMD2AaFoBKxAlG529Kw8ol_iU3ZYKH0Ht3vtRCB0wH2LYJHL6pmJgyWLZjePyfwHrWyxvCKWQ1V8',
+    ];
 
   /* ── Error state ── */
   if (isError) {
@@ -217,7 +227,7 @@ const ChiTietSanPhamPage = () => {
                 {/* SKU + Title */}
                 <div className="space-y-1 mb-5">
                   <span className="font-label text-xs font-semibold text-primary uppercase tracking-widest">
-                    Mã SKU: {demo.maSku}
+                    Mã sản phẩm: {demo.maSku}
                   </span>
                   <h1 className="text-2xl font-headline font-extrabold tracking-tight text-on-surface leading-tight">
                     {demo.tenSanPham}
