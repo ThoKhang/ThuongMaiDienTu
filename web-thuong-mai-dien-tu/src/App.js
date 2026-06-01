@@ -7,10 +7,16 @@ import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 
+// BỔ SUNG IMPORT TRANG ADMIN
+import AdminLayout from './Components/layout/admin/AdminLayout';
+import Dashboard from './Components/Pages/admin/Dashboard';
+import UserManagement from './Components/Pages/admin/UserManagement';
+
 function App() {
   return (
     <>
       <Routes>
+        {/* --- CÁC ROUTE CŨ CỦA BẠN (Giữ nguyên) --- */}
         <Route
           path="/"
           element={
@@ -29,10 +35,32 @@ function App() {
               <Register />
               <Footer />
             </>
-          } />
+          }
+        />
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
+
+        {/* --- ĐÃ SỬA: ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
+        <Route path="/admin" element={<AdminLayout />}>
+          {/* Thuộc tính 'index' nghĩa là tự động hiển thị Dashboard khi vào đúng /admin */}
+          <Route index element={<Dashboard />} />
+          
+          {/* Bỏ dấu '/' ở trước chữ users để nó nối tiếp vào /admin */}
+          <Route path="users" element={<UserManagement />} />
+        </Route>
       </Routes>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      
+      <ToastContainer 
+        position="top-right" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+        theme="light" 
+      />
     </>
   );
 }
