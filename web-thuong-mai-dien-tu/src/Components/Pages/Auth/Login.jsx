@@ -3,6 +3,16 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLogin } from '../../../hooks/useAuth';
+import { 
+  FaMicrochip, 
+  FaShieldAlt, 
+  FaShippingFast, 
+  FaUser, 
+  FaLock, 
+  FaEye, 
+  FaEyeSlash, 
+  FaArrowRight 
+} from 'react-icons/fa';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -54,7 +64,7 @@ const Login = () => {
         {/* Top: Logo Card */}
         <div className="flex items-center gap-3 self-start">
           <div className="bg-white rounded-xl p-2.5 shadow-md flex items-center justify-center">
-            <span className="material-symbols-outlined text-primary text-2xl font-bold">memory</span>
+            <FaMicrochip className="text-primary text-2xl" />
           </div>
           <span className="font-headline font-black text-xl text-white tracking-tight">Chợ Linh Kiện</span>
         </div>
@@ -74,17 +84,13 @@ const Login = () => {
         <div className="grid grid-cols-2 gap-4 mt-auto">
           {/* Card 1 */}
           <div className="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300">
-            <span className="material-symbols-outlined text-white mb-3 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-              verified_user
-            </span>
+            <FaShieldAlt className="text-white mb-3 text-2xl" />
             <h3 className="font-headline font-bold text-white text-sm">Nguồn gốc rõ ràng</h3>
             <p className="text-xs text-white/70 mt-1 font-light leading-relaxed">Xác thực 100% linh kiện từ nhà sản xuất gốc.</p>
           </div>
           {/* Card 2 */}
           <div className="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300">
-            <span className="material-symbols-outlined text-white mb-3 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-              local_shipping
-            </span>
+            <FaShippingFast className="text-white mb-3 text-2xl" />
             <h3 className="font-headline font-bold text-white text-sm">Giao hàng nhanh</h3>
             <p className="text-xs text-white/70 mt-1 font-light leading-relaxed">Quy trình logistics tối ưu cho kỹ thuật.</p>
           </div>
@@ -137,10 +143,8 @@ const Login = () => {
               <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-semibold">
                 Tên đăng nhập hoặc Email
               </label>
-              <div className="relative">
-                <span className="material-symbols-outlined text-on-surface-variant/50 absolute left-3.5 top-1/2 -translate-y-1/2 text-xl">
-                  person
-                </span>
+              <div className="relative flex items-center">
+                <FaUser className="text-on-surface-variant/40 absolute left-4 text-sm" />
                 <input
                   {...register('tenDangNhap', { 
                     required: 'Vui lòng nhập tên đăng nhập hoặc email' 
@@ -167,10 +171,8 @@ const Login = () => {
                   Quên mật khẩu?
                 </Link>
               </div>
-              <div className="relative">
-                <span className="material-symbols-outlined text-on-surface-variant/50 absolute left-3.5 top-1/2 -translate-y-1/2 text-xl">
-                  lock
-                </span>
+              <div className="relative flex items-center">
+                <FaLock className="text-on-surface-variant/40 absolute left-4 text-sm" />
                 <input
                   {...register('matKhau', { 
                     required: 'Vui lòng nhập mật khẩu',
@@ -185,11 +187,13 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 hover:text-on-surface transition-colors"
+                  className="absolute right-4 text-on-surface-variant/60 hover:text-on-surface transition-colors flex items-center justify-center"
                 >
-                  <span className="material-symbols-outlined text-xl">
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
+                  {showPassword ? (
+                    <FaEyeSlash className="text-base" />
+                  ) : (
+                    <FaEye className="text-base" />
+                  )}
                 </button>
               </div>
               {errors.matKhau && (
@@ -226,7 +230,7 @@ const Login = () => {
               ) : (
                 <>
                   Đăng nhập ngay
-                  <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                  <FaArrowRight className="text-xs" />
                 </>
               )}
             </button>
