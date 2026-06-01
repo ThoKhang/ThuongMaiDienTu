@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor").permitAll() // Thêm endpoint của bạn vào đây nếu chưa có prefix /api
+                        auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor","/api/trangchu/**").permitAll() // Thêm endpoint của bạn vào đây nếu chưa có prefix /api
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 );

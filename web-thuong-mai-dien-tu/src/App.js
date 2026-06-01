@@ -6,6 +6,7 @@ import Header from './Components/layout/DangKy/Header';
 import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
+import Home from './Components/Pages/TrangChu/TrangChu';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           element={
             <>
               <Header />
-              <Register />
+              <Home />
               <Footer />
             </>
           }
