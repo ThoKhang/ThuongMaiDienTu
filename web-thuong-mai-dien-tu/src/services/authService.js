@@ -12,5 +12,17 @@ export const authService = {
   registerVendor: async (vendorData) => {
     const response = await api.post('/api/auth/register-vendor', vendorData);
     return response.data;
+  },
+  login: async (credentials) => {
+    const response = await api.post('/api/auth/login', credentials);
+    return response.data;
+  },
+  sendOtp: async (email) => {
+    const response = await api.post('/api/auth/send-otp', { email });
+    return response.data;
+  },
+  loginOtp: async (email, otp) => {
+    const response = await api.post('/api/auth/login-otp', { email, otp });
+    return response.data;
   }
 };
