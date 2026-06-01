@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './Components/layout/DangKy/Header';
 import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
+import Login from './Components/Pages/Auth/Login';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 
 // BỔ SUNG IMPORT TRANG ADMIN
@@ -16,7 +17,7 @@ function App() {
   return (
     <>
       <Routes>
-        {/* --- CÁC ROUTE CŨ CỦA BẠN (Giữ nguyên) --- */}
+        {/* --- CÁC ROUTE KHÁCH HÀNG --- */}
         <Route
           path="/"
           element={
@@ -37,9 +38,13 @@ function App() {
             </>
           }
         />
+        
+        {/* Đã gộp thành công route Đăng nhập từ nhánh khác */}
+        <Route path="/dang-nhap" element={<Login />} />
+        
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
 
-        {/* --- ĐÃ SỬA: ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
+        {/* --- ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
         <Route path="/admin" element={<AdminLayout />}>
           {/* Thuộc tính 'index' nghĩa là tự động hiển thị Dashboard khi vào đúng /admin */}
           <Route index element={<Dashboard />} />
