@@ -28,24 +28,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        // THÊM LOG
+        System.out.println(">>> REQUEST URI: " + request.getRequestURI());
+        System.out.println(">>> METHOD: " + request.getMethod());
+        System.out.println(">>> AUTH HEADER: " + request.getHeader("Authorization"));
+
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                // Nếu Token hợp lệ, lấy Username và nạp vào Context của Spring Security
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+
+                // THÊM LOG
+                System.out.println(">>> USERNAME: " + userDetails.getUsername());
+                System.out.println(">>> AUTHORITIES: " + userDetails.getAuthorities());
+
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
             logger.error("Không thể thiết lập xác thực người dùng: " + e.getMessage());
         }
-
         filterChain.doFilter(request, response);
     }
 

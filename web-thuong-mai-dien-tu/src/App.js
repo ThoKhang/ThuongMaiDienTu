@@ -12,6 +12,9 @@ import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 import AdminLayout from './Components/layout/admin/AdminLayout';
 import Dashboard from './Components/Pages/admin/Dashboard';
 import UserManagement from './Components/Pages/admin/UserManagement';
+import ProductManagement from './Components/Pages/admin/ProductManagement';
+// 1. THÊM DÒNG IMPORT NÀY:
+import TransactionManagement from './Components/Pages/admin/TransactionManagement';
 
 function App() {
   return (
@@ -39,18 +42,18 @@ function App() {
           }
         />
         
-        {/* Đã gộp thành công route Đăng nhập từ nhánh khác */}
         <Route path="/dang-nhap" element={<Login />} />
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
 
         {/* --- ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
         <Route path="/admin" element={<AdminLayout />}>
-          {/* Thuộc tính 'index' nghĩa là tự động hiển thị Dashboard khi vào đúng /admin */}
           <Route index element={<Dashboard />} />
-          
-          {/* Bỏ dấu '/' ở trước chữ users để nó nối tiếp vào /admin */}
+          <Route path="products" element={<ProductManagement />} />
           <Route path="users" element={<UserManagement />} />
+          
+          {/* 2. THÊM DÒNG ROUTE NÀY: */}
+          <Route path="commissions" element={<TransactionManagement />} />
         </Route>
       </Routes>
       
