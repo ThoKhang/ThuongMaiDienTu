@@ -3,6 +3,8 @@ package com.ThuongMaiDienTu.BackEnd.Entity;
 import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +34,10 @@ public class NguoiDungEntity {
 
     @Column(name = "ngayTao")
     private Date ngayTao = new Date();
+    @Column(name = "ngaySinh")
+    private LocalDate ngaySinh;
+    @Column(name = "soDienThoai", length = 15)
+    private String soDienThoai;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

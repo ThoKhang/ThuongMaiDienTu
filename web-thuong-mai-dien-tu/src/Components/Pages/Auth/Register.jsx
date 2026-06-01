@@ -1,4 +1,20 @@
+import { useRegisterUser } from "../../../hooks/useAuth";
+import { useForm } from 'react-hook-form';
+
 const Main = () => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { mutate: registerUser, isPending } = useRegisterUser();
+  const onSubmit = (data) => {
+    const payload = {
+      tenDangNhap:data.tenDangNhap,
+      soDienThoai:data.soDienThoai,
+      email:data.email,
+      ngaySinh:data.ngaySinh,
+      matKhau:data.matKhau
+    }
+    registerUser(payload);
+  }
+  const selectedRole = watch("role", "buyer");
   return (
     <main className="min-h-screen pt-24 pb-12 flex items-center justify-center px-4">
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -31,21 +47,21 @@ const Main = () => {
         </div>
 
         <div className="lg:col-span-7 bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.08)]">
-          <form className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <div className="space-y-2">
               <h2 className="text-3xl font-headline font-bold">Đăng ký tài khoản</h2>
               <p className="text-on-surface-variant">Chọn loại hình tài khoản để bắt đầu trải nghiệm</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <label className="cursor-pointer group">
-                <input defaultChecked className="hidden peer" name="role" type="radio" value="buyer" />
+                <input {...register("role")} defaultChecked className="hidden peer" type="radio" value="buyer" />
                 <div className="flex flex-col items-center gap-3 p-4 rounded-lg bg-surface-container-low border border-transparent peer-checked:bg-primary-fixed peer-checked:border-primary transition-all duration-200">
                   <span className="material-symbols-outlined text-on-surface group-hover:scale-110 transition-transform">shopping_bag</span>
                   <span className="font-headline font-semibold text-sm">Người mua</span>
                 </div>
               </label>
               <label className="cursor-pointer group">
-                <input className="hidden peer" name="role" type="radio" value="seller" />
+                <input {...register("role")} className="hidden peer" type="radio" value="seller" />
                 <div className="flex flex-col items-center gap-3 p-4 rounded-lg bg-surface-container-low border border-transparent peer-checked:bg-primary-fixed peer-checked:border-primary transition-all duration-200">
                   <span className="material-symbols-outlined text-on-surface group-hover:scale-110 transition-transform">storefront</span>
                   <span className="font-headline font-semibold text-sm">Người bán</span>
@@ -55,26 +71,43 @@ const Main = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Họ và tên</label>
-                <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Nguyễn Văn A" type="text" />
+                <input {...register('tenDangNhap', { required: 'Tên đăng nhập là bắt buộc' })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Nguyễn Văn A" type="text" />
+                {errors.tenDangNhap && <span className="text-red-500 text-xs">{errors.tenDangNhap.message}</span>}
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Số điện thoại</label>
-                <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="0901 234 567" type="tel" />
+                <input {...register('soDienThoai', { required: 'Số điện thoại là bắt buộc' })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="0901 234 567" type="tel" />
+                {errors.soDienThoai && <span className="text-red-500 text-xs">{errors.soDienThoai.message}</span>}
               </div>
-              <div className="md:col-span-2 space-y-2">
+              <div className="space-y-2">
                 <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Địa chỉ Email</label>
-                <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="example@precision.vn" type="email" />
+                <input {...register('email', { required: 'Email là bắt buộc', pattern: { value: /^\S+@\S+$/i, message: 'Email không hợp lệ' } })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="example@precision.vn" type="email" />
+                {errors.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Ngày sinh</label>
+                <input {...register('ngaySinh', { required: 'Ngày sinh là bắt buộc' })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" type="date" max={new Date().toISOString().split("T")[0]} />
+                {errors.ngaySinh && <span className="text-red-500 text-xs">{errors.ngaySinh.message}</span>}
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Mật khẩu</label>
-                <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="••••••••" type="password" />
+                <input {...register("matKhau", { required: "Vui lòng nhập mật khẩu", minLength: 6 })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="••••••••" type="password" />
+                {errors.matKhau && <span className="text-red-500 text-xs">{errors.matKhau.message}</span>}
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-medium">Xác nhận mật khẩu</label>
-                <input className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="••••••••" type="password" />
+                <input {...register("xacNhanMatKhau", { validate: value => value === watch('matKhau') || "Mật khẩu không khớp" })}
+                className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="••••••••" type="password" />
+                {errors.xacNhanMatKhau && <span className="text-red-500 text-xs">{errors.xacNhanMatKhau.message}</span>}
               </div>
             </div>
-            <div className="pt-6 border-t border-surface-container-high space-y-6" id="seller-info">
+            {selectedRole === 'seller' && (
+              <div className="pt-6 border-t border-surface-container-high space-y-6" id="seller-info">
               <div className="flex items-center gap-2 mb-4">
                 <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>info</span>
                 <h3 className="font-headline font-bold text-on-surface">Thông tin cửa hàng</h3>
@@ -94,6 +127,8 @@ const Main = () => {
                 </div>
               </div>
             </div>
+            )}
+            
             <div className="flex items-start gap-3 py-2">
               <input className="mt-1 rounded text-primary focus:ring-primary border-outline-variant/30" type="checkbox" />
               <p className="text-xs text-on-surface-variant leading-relaxed font-body">
@@ -101,8 +136,8 @@ const Main = () => {
                 <a className="text-primary font-semibold hover:underline" href="#">Điều khoản dịch vụ</a> và <a className="text-primary font-semibold hover:underline" href="#">Chính sách bảo mật</a> của Precision Marketplace.
               </p>
             </div>
-            <button className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold rounded-lg shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all" type="submit">
-              Tạo tài khoản ngay
+            <button className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold rounded-lg shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all" type="submit" disabled={isPending}>
+              {isPending ? "Đang xử lý..." : "Đăng ký ngay"}
             </button>
           </form>
           <div className="mt-8 pt-8 border-t border-surface-container-high flex flex-col items-center gap-4">

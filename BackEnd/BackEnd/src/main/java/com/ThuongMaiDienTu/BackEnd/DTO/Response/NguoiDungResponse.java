@@ -1,6 +1,8 @@
 package com.ThuongMaiDienTu.BackEnd.DTO.Response;
 
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -12,4 +14,6 @@ public class NguoiDungResponse {
     private String trangThai;
     private Date ngayTao;
     private List<String> vaiTros;
+    private LocalDate ngaySinh;
+    private String soDienThoai;
 }

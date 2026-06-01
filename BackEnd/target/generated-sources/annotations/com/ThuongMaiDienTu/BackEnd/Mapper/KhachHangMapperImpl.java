@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-01T00:28:01+0700",
+    date = "2026-06-01T10:54:05+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -27,8 +27,6 @@ public class KhachHangMapperImpl implements KhachHangMapper {
         khachHangEntity.idNguoiDung( request.getIdNguoiDung() );
         khachHangEntity.hoTen( request.getHoTen() );
         khachHangEntity.diemThuong( request.getDiemThuong() );
-        khachHangEntity.ngaySinh( request.getNgaySinh() );
-        khachHangEntity.soDienThoai( request.getSoDienThoai() );
 
         return khachHangEntity.build();
     }
@@ -44,8 +42,6 @@ public class KhachHangMapperImpl implements KhachHangMapper {
         khachHangResponse.setIdNguoiDung( entity.getIdNguoiDung() );
         khachHangResponse.setHoTen( entity.getHoTen() );
         khachHangResponse.setDiemThuong( entity.getDiemThuong() );
-        khachHangResponse.setNgaySinh( entity.getNgaySinh() );
-        khachHangResponse.setSoDienThoai( entity.getSoDienThoai() );
 
         return khachHangResponse;
     }

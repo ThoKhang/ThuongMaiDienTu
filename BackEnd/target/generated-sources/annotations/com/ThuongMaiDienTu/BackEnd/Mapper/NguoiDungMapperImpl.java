@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-01T00:28:01+0700",
+    date = "2026-06-01T10:54:05+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +29,8 @@ public class NguoiDungMapperImpl implements NguoiDungMapper {
         nguoiDungEntity.setTenDangNhap( request.getTenDangNhap() );
         nguoiDungEntity.setMatKhau( request.getMatKhau() );
         nguoiDungEntity.setEmail( request.getEmail() );
+        nguoiDungEntity.setNgaySinh( request.getNgaySinh() );
+        nguoiDungEntity.setSoDienThoai( request.getSoDienThoai() );
 
         return nguoiDungEntity;
     }
@@ -47,6 +49,8 @@ public class NguoiDungMapperImpl implements NguoiDungMapper {
         nguoiDungResponse.setEmail( entity.getEmail() );
         nguoiDungResponse.setNgayTao( entity.getNgayTao() );
         nguoiDungResponse.setVaiTros( mapVaiTros( entity.getVaiTros() ) );
+        nguoiDungResponse.setNgaySinh( entity.getNgaySinh() );
+        nguoiDungResponse.setSoDienThoai( entity.getSoDienThoai() );
 
         return nguoiDungResponse;
     }

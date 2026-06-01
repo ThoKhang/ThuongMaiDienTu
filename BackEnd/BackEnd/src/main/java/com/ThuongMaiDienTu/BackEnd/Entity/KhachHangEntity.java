@@ -15,8 +15,4 @@ public class KhachHangEntity {
     private String hoTen;
     @Column(name = "diemThuong")
     private Integer diemThuong;
-    @Column(name = "ngaySinh")
-    private LocalDate ngaySinh;
-    @Column(name = "soDienThoai", length = 15)
-    private String soDienThoai;
 }
