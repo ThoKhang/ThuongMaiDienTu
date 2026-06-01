@@ -14,4 +14,5 @@ public class SanPhamRequest {
     private BigDecimal giaKhuyenMai;
     private Integer soLuongTon;
     private String urlAffiliate;
+    private String tinhTrangDuyet;
 }

@@ -21,6 +21,8 @@ CREATE TABLE NGUOIDUNG (
     tenDangNhap VARCHAR(100) NOT NULL UNIQUE,
     matKhau VARCHAR(255) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
+    soDienThoai VARCHAR(15) NULL,   -- Chuyển từ KHACHHANG sang
+    ngaySinh DATE NULL,             -- Chuyển từ KHACHHANG sang
     trangThai VARCHAR(20) DEFAULT 'HoatDong',
     ngayTao DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -41,8 +43,6 @@ CREATE TABLE KHACHHANG (
     idNguoiDung INT PRIMARY KEY,
     hoTen VARCHAR(150) NOT NULL,
     diemThuong INT DEFAULT 0,
-    ngaySinh DATE NULL,
-    soDienThoai VARCHAR(15) NULL,
     CONSTRAINT FK_KH_ND FOREIGN KEY (idNguoiDung) REFERENCES NGUOIDUNG(id) ON DELETE CASCADE
 );
 
@@ -201,12 +201,11 @@ INSERT INTO VAITRO (tenVaiTro, moTa) VALUES
 -- ============================================================
 -- 2. THÊM NGƯỜI DÙNG (TÀI KHOẢN ĐĂNG NHẬP)
 -- ============================================================
-INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, trangThai) VALUES
-('admin', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'admin@lkmt.com', 'HoatDong'),
-('khachhang1', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'khachhang1@gmail.com', 'HoatDong'),
-('doitac_gearvn', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@gearvn.com', 'HoatDong'),
-('doitac_hacom', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@hacom.vn', 'HoatDong');
-
+INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, soDienThoai, ngaySinh, trangThai) VALUES
+('admin', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'admin@lkmt.com', NULL, NULL, 'HoatDong'),
+('khachhang1', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'khachhang1@gmail.com', '0901234567', '2000-05-15', 'HoatDong'),
+('doitac_gearvn', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@gearvn.com', NULL, NULL, 'HoatDong'),
+('doitac_hacom', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@hacom.vn', NULL, NULL, 'HoatDong');
 -- ============================================================
 -- 3. CẤP QUYỀN (MAP VAI TRÒ VÀO TÀI KHOẢN)
 -- ============================================================
@@ -219,8 +218,8 @@ INSERT INTO VAITRO_NGUOIDUNG (idNguoiDung, idVaiTro) VALUES
 -- ============================================================
 -- 4. THÔNG TIN CHI TIẾT KHÁCH HÀNG
 -- ============================================================
-INSERT INTO KHACHHANG (idNguoiDung, hoTen, diemThuong, ngaySinh, soDienThoai) VALUES
-(2, 'Nguyễn Văn Trải Nghiệm', 150, '2000-05-15', '0901234567');
+INSERT INTO KHACHHANG (idNguoiDung, hoTen, diemThuong) VALUES
+(2, 'Nguyễn Văn Trải Nghiệm', 150);
 
 -- ============================================================
 -- 5. THÔNG TIN CHI TIẾT ĐỐI TÁC
@@ -315,13 +314,13 @@ INSERT INTO VAITRO (tenVaiTro, moTa) VALUES
 ('Marketing', 'Nhân viên chạy chiến dịch Affiliate');
 
 -- 2. Bảng NGUOIDUNG (Thêm 3 Khách hàng và 3 Đối tác = 6 user để đủ dữ liệu map cho 2 bảng dưới)
-INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, trangThai) VALUES
-('khachhang2', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh2@gmail.com', 'HoatDong'),
-('khachhang3', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh3@gmail.com', 'HoatDong'),
-('khachhang4', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh4@gmail.com', 'HoatDong'),
-('doitac_phongvu', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@phongvu.vn', 'HoatDong'),
-('doitac_anphat', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@anphat.vn', 'HoatDong'),
-('doitac_memoryzone', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@memoryzone.vn', 'HoatDong');
+INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, soDienThoai, ngaySinh, trangThai) VALUES
+('khachhang2', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh2@gmail.com', '0912345678', '1998-02-20', 'HoatDong'),
+('khachhang3', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh3@gmail.com', '0923456789', '2001-10-10', 'HoatDong'),
+('khachhang4', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh4@gmail.com', '0934567890', '1995-08-08', 'HoatDong'),
+('doitac_phongvu', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@phongvu.vn', NULL, NULL, 'HoatDong'),
+('doitac_anphat', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@anphat.vn', NULL, NULL, 'HoatDong'),
+('doitac_memoryzone', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@memoryzone.vn', NULL, NULL, 'HoatDong');
 -- (ID tự động sinh sẽ là: 5,6,7 cho Khách hàng | 8,9,10 cho Đối tác)
 
 -- 3. Bảng VAITRO_NGUOIDUNG (Map quyền cho 6 user mới)
@@ -330,10 +329,10 @@ INSERT INTO VAITRO_NGUOIDUNG (idNguoiDung, idVaiTro) VALUES
 (8, 3), (9, 3), (10, 3); -- idVaiTro 3 = DoiTac
 
 -- 4. Bảng KHACHHANG (Thêm 3 khách hàng chi tiết)
-INSERT INTO KHACHHANG (idNguoiDung, hoTen, diemThuong, ngaySinh, soDienThoai) VALUES
-(5, 'Trần Lắp Ráp', 200, '1998-02-20', '0912345678'),
-(6, 'Lê Tản Nhiệt', 50, '2001-10-10', '0923456789'),
-(7, 'Phạm Ép Xung', 300, '1995-08-08', '0934567890');
+INSERT INTO KHACHHANG (idNguoiDung, hoTen, diemThuong) VALUES
+(5, 'Trần Lắp Ráp', 200),
+(6, 'Lê Tản Nhiệt', 50),
+(7, 'Phạm Ép Xung', 300);
 
 -- 5. Bảng DOITACLIENKET (Thêm 3 đối tác chi tiết)
 INSERT INTO DOITACLIENKET (idNguoiDung, tenCongTy, websiteUrl, thoiHanHopDong, trangThaiDuyet) VALUES

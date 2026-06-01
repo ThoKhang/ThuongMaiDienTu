@@ -1,7 +1,8 @@
-package com.ThuongMaiDienTu.BackEnd.Security;
+package com.ThuongMaiDienTu.BackEnd.Service;
 
 import com.ThuongMaiDienTu.BackEnd.Entity.NguoiDungEntity;
 import com.ThuongMaiDienTu.BackEnd.Repository.NguoiDungRepository;
+import com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
