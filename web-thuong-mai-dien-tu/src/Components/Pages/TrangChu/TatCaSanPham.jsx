@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function TatCaSanPham() {
     const [data, setData] = useState(null);
@@ -16,25 +16,43 @@ export default function TatCaSanPham() {
         return Math.round(((niemYet - khuyenMai) / niemYet) * 100);
     };
 
+    const location = useLocation();
+
     useEffect(() => {
         setLoading(true);
         setError(null);
 
-        fetch(`http://localhost:8080/api/sanpham/phan-trang?page=${trang}`)
-            .then(res => {
-                if (!res.ok) throw new Error("Lỗi server: " + res.status);
-                return res.json();
-            })
-            .then(d => {
-                setData(d);
-                setLoading(false);
-            })
-            .catch(err => {
-                setError(err.message);
-                setLoading(false);
-            });
+        const searchParams = new URLSearchParams(location.search);
+        const query = searchParams.get("q");
 
-    }, [trang]);
+        if (query) {
+            import("../../../services/sanPhamService").then(({ sanPhamService }) => {
+                sanPhamService.searchByKeyword(query)
+                    .then(results => {
+                        setData({ content: results || [], totalPages: 1 });
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        setError(err.message);
+                        setLoading(false);
+                    });
+            });
+        } else {
+            fetch(`http://localhost:8080/api/sanpham/phan-trang?page=${trang}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Lỗi server: " + res.status);
+                    return res.json();
+                })
+                .then(d => {
+                    setData(d);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    setError(err.message);
+                    setLoading(false);
+                });
+        }
+    }, [trang, location.search]);
 
     if (loading) {
         return (

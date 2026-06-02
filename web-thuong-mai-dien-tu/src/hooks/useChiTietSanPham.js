@@ -11,10 +11,13 @@ export const useChiTietSanPham = (idSanPham) => {
   });
 };
 
-export const useSanPhamTuongTu = (idDanhMuc, idSanPhamHienTai, limit = 4) => {
+export const useSanPhamTuongTu = (idDanhMuc, idSanPhamHienTai) => {
   return useQuery({
     queryKey: ['san-pham-tuong-tu', idDanhMuc, idSanPhamHienTai],
-    queryFn: () => sanPhamService.getSanPhamTuongTu(idDanhMuc, idSanPhamHienTai, limit),
+    queryFn: async () => {
+      const data = await sanPhamService.getAll2SanPham({ idDanhMuc, excludeId: idSanPhamHienTai });
+      return data?.content || data || [];
+    },
     enabled: !!idDanhMuc && !!idSanPhamHienTai,
     staleTime: 1000 * 60 * 5,
   });

@@ -22,7 +22,8 @@ import Dashboard from './Components/Pages/admin/Dashboard';
 import UserManagement from './Components/Pages/admin/UserManagement';
 import ProductManagement from './Components/Pages/admin/ProductManagement';
 import TransactionManagement from './Components/Pages/admin/TransactionManagement';
-import PartnerManagement from './Components/Pages/admin/PartnerManagement'; 
+// THÊM IMPORT TRANG QUẢN LÝ ĐỐI TÁC
+import PartnerManagement from './Components/Pages/admin/PartnerManagement';
 import NewsManagement from './Components/Pages/admin/NewsManagement';
 import VendorLayout from './Components/layout/vendor/VendorLayout';
 import QuanLyTinDang from './Components/Pages/sanPham/QuanLyTinDang';
@@ -50,9 +51,9 @@ function App() {
             </>
           }
         />
-        
+
         <Route path="/dang-nhap" element={<Login />} />
-        
+
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
         <Route path="/danh-muc/:id" element={<DanhMuc />} />
 
@@ -77,6 +78,8 @@ function App() {
           <Route path="products" element={<ProductManagement />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="commissions" element={<TransactionManagement />} />
+
+          {/* THÊM ROUTE CHO TRANG ĐỐI TÁC */}
           <Route path="partners" element={<PartnerManagement />} />
           <Route path="news" element={<NewsManagement />} />
         </Route>
@@ -89,18 +92,18 @@ function App() {
           <Route path="dashboard" element={<VendorDashboard />} />
         </Route>
       </Routes>
-      
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
-        rtl={false} 
-        pauseOnFocusLoss 
-        draggable 
-        pauseOnHover 
-        theme="light" 
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </>
   );
