@@ -369,8 +369,22 @@ INSERT INTO THUOCTINH_LINHKIEN (tenThuocTinh, idDanhMuc) VALUES
 -- 10. Bảng SANPHAM (Thêm 3 sản phẩm tương ứng 3 danh mục mới)
 INSERT INTO SANPHAM (idDanhMuc, idDoiTac, idThuongHieu, tenSanPham, thongSoKyThuat, giaNiemYet, giaKhuyenMai, soLuongTon, urlAffiliate, tinhTrangDuyet) VALUES
 (5, 8, 5, 'Nguồn Cooler Master MWE Gold 750 V2', '{"efficiency":"80 Plus Gold"}', 2500000, 2200000, 40, 'https://phongvu.vn/aff/psu-cm-750w', 'DaDuyet'),
+(5, 8, 5, 'Nguồn ASUS ROG Thor 850W Platinum', '{"efficiency":"80 Plus Platinum"}', 4500000, 4200000, 10, 'https://phongvu.vn/aff/psu-asus-thor-850', 'ChoDuyet'),
+(5, 8, 5, 'Nguồn Corsair RM1000x 1000W 80 Plus Gold', '{"efficiency":"80 Plus Gold"}', 3800000, 3600000, 5, 'https://phongvu.vn/aff/psu-corsair-1000', 'DaAn'),
+(5, 8, 5, 'Nguồn MSI MAG A650BN 650W 80 Plus Bronze', '{"efficiency":"80 Plus Bronze"}', 1500000, 1350000, 20, 'https://phongvu.vn/aff/psu-msi-650', 'TuChoi'),
+(5, 8, 5, 'Nguồn Seasonic S12III 550W 80 Plus Bronze', '{"efficiency":"80 Plus Bronze"}', 1200000, null, 0, 'https://phongvu.vn/aff/psu-seasonic-550', 'DaDuyet'),
+
 (6, 9, 6, 'Vỏ case NZXT H510 Flow', '{"color":"Matte Black"}', 2100000, 1950000, 25, 'https://anphat.vn/aff/case-nzxt-h510', 'DaDuyet'),
-(7, 10, 7, 'Tản nhiệt khí Noctua NH-D15', '{"fan_speed":"1500 RPM"}', 2800000, 2600000, 15, 'https://memoryzone.vn/aff/noctua-d15', 'DaDuyet');
+(6, 9, 6, 'Vỏ case Corsair 4000D Airflow Tempered Glass', '{"color":"White"}', 2300000, 2150000, 15, 'https://anphat.vn/aff/case-corsair-4000d', 'ChoDuyet'),
+(6, 9, 6, 'Vỏ case LIAN LI O11 Dynamic EVO', '{"color":"Black"}', 3900000, 3700000, 8, 'https://anphat.vn/aff/case-lian-li-o11', 'DaAn'),
+(6, 9, 6, 'Vỏ case Xigmatek NYX 3F Kèm 3 Fan RGB', '{"color":"Black"}', 850000, 790000, 30, 'https://anphat.vn/aff/case-xigmatek-nyx', 'TuChoi'),
+(6, 9, 6, 'Vỏ case Phanteks Eclipse G360A Mid Tower', '{"color":"Black"}', 2500000, null, 0, 'https://anphat.vn/aff/case-phanteks-g360', 'DaDuyet'),
+
+(7, 10, 7, 'Tản nhiệt khí Noctua NH-D15', '{"fan_speed":"1500 RPM"}', 2800000, 2600000, 15, 'https://memoryzone.vn/aff/noctua-d15', 'DaDuyet'),
+(7, 10, 7, 'Tản nhiệt nước AIO ASUS ROG Strix LC II 360 ARGB', '{"radiator_size":"360mm"}', 4800000, 4500000, 5, 'https://memoryzone.vn/aff/aio-asus-lc360', 'ChoDuyet'),
+(7, 10, 7, 'Tản nhiệt khí Deepcool AK400 Performance', '{"fan_speed":"1850 RPM"}', 690000, 650000, 12, 'https://memoryzone.vn/aff/noctua-deepcool-ak400', 'DaAn'),
+(7, 10, 7, 'Tản nhiệt nước AIO Corsair H150i RGB Elite', '{"radiator_size":"360mm"}', 3900000, 3700000, 3, 'https://memoryzone.vn/aff/aio-corsair-h150i', 'TuChoi'),
+(7, 10, 7, 'Tản nhiệt khí Thermalright Assassin X 120 Refined SE', '{"fan_speed":"1550 RPM"}', 450000, null, 0, 'https://memoryzone.vn/aff/thermalright-assassin-120', 'DaDuyet');
 -- (ID tự động sinh: 5, 6, 7)
 
 -- 11. Bảng GIATRI_THUOCTINH (Gán giá trị thuộc tính cho 3 sản phẩm trên)

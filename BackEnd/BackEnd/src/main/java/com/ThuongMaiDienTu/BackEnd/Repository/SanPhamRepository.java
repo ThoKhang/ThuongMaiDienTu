@@ -13,12 +13,11 @@ import org.springframework.data.domain.Page;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer> {
 
-    @Query("SELECT s FROM SanPhamEntity s WHERE s.giaKhuyenMai < s.giaNiemYet " +
-           "AND s.tinhTrangDuyet = :tinhTrang ORDER BY s.giaNiemYet DESC")
     Page<SanPhamEntity> findByTinhTrangDuyet(TinhTrangDuyet tinhTrang, Pageable pageable);
     Page<SanPhamEntity> findByIdDanhMucAndTinhTrangDuyet(
             Integer idDanhMuc,
             TinhTrangDuyet tinhTrang,
             Pageable pageable
     );
+    List<SanPhamEntity> findByIdDoiTac(Integer idDoiTac);
 }
