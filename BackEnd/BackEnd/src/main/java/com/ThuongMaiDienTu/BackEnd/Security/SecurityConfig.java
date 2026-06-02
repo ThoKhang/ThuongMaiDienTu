@@ -68,20 +68,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-<<<<<<< HEAD
-                        .requestMatchers("/api/sanpham/**", "/api/danh-muc/**", "/api/tintuc/**", "/api/trangchu/**")
-                        .permitAll()
-                        .requestMatchers("/api/khachhang/**").permitAll()
-                        .requestMatchers("/api/theodoi-click/**").permitAll()
-                        .requestMatchers("/register-user").permitAll()
-                        .requestMatchers("/register-vendor").permitAll()
-                        .requestMatchers("/error").permitAll()
-
-                        // done nha ae
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
-
-                        .anyRequest().authenticated());
-=======
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
                         .requestMatchers("/error").permitAll()
@@ -99,11 +85,11 @@ public class SecurityConfig {
                         // API công khai của sản phẩm (Đặt sau)
                         .requestMatchers(HttpMethod.GET, "/api/sanpham/**").permitAll()
                         .requestMatchers("/api/trangchu/**","/api/danh-muc/**","/api/tintuc/**").permitAll()
+                        .requestMatchers("/api/khachhang/**").permitAll()
+                        .requestMatchers("/api/theodoi-click/**").permitAll()
                         
                         .anyRequest().authenticated()
                 );
->>>>>>> 85fc57d2963caeabc90f60ad64896c62d085feda
-
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
