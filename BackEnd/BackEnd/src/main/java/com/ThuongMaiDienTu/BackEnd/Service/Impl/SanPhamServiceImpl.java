@@ -143,6 +143,8 @@ public class SanPhamServiceImpl implements SanPhamService {
         sp.setIdDanhMuc(request.getIdDanhMuc());
         sp.setIdThuongHieu(request.getIdThuongHieu());
         sp.setTenSanPham(request.getTenSanPham());
+        sp.setUrl(request.getUrl());
+        sp.setMoTa(request.getMoTa());
         sp.setThongSoKyThuat(request.getThongSoKyThuat());
         sp.setGiaNiemYet(request.getGiaNiemYet());
         sp.setGiaKhuyenMai(request.getGiaKhuyenMai());

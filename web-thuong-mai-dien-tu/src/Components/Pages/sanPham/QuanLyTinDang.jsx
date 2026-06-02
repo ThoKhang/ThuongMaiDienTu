@@ -35,6 +35,8 @@ const QuanLyTinDang = () => {
   const [editStock, setEditStock] = useState('');
   const [editSpecs, setEditSpecs] = useState('');
   const [editAffiliate, setEditAffiliate] = useState('');
+  const [editUrl, setEditUrl] = useState('');
+  const [editDescription, setEditDescription] = useState('');
 
   // Fetch partner products
   const { data: products = [], isLoading, error } = useQuery({
@@ -204,6 +206,8 @@ const QuanLyTinDang = () => {
     setEditStock(product.soLuongTon || 0);
     setEditSpecs(product.thongSoKyThuat || '');
     setEditAffiliate(product.urlAffiliate || '');
+    setEditUrl(product.url || '');
+    setEditDescription(product.moTa || '');
     setIsEditModalOpen(true);
   };
 
@@ -253,6 +257,8 @@ const QuanLyTinDang = () => {
       giaKhuyenMai: (editPromoPrice !== '' && editPromoPrice !== null) ? parseFloat(editPromoPrice) : null,
       soLuongTon: parseInt(editStock),
       urlAffiliate: editAffiliate,
+      url: editUrl,
+      moTa: editDescription,
       tinhTrangDuyet: selectedProduct.tinhTrangDuyet
     };
 
@@ -415,7 +421,18 @@ const QuanLyTinDang = () => {
                       <td className="py-4.5 px-6">
                         <div className="flex items-center gap-3.5">
                           <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-100 flex items-center justify-center text-slate-400 overflow-hidden shrink-0">
-                            <span className="material-symbols-outlined text-2xl">photo</span>
+                            {sp.url ? (
+                              <img
+                                src={sp.url}
+                                alt={sp.tenSanPham}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                                }}
+                              />
+                            ) : (
+                              <span className="material-symbols-outlined text-2xl">photo</span>
+                            )}
                           </div>
                           <div>
                             <p className="font-semibold text-slate-800 line-clamp-1 hover:text-sky-600 cursor-pointer">{sp.tenSanPham}</p>
@@ -635,14 +652,38 @@ const QuanLyTinDang = () => {
                 </div>
               </div>
 
+              {/* Đường dẫn ảnh sản phẩm (URL) */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Đường dẫn ảnh sản phẩm (URL)</label>
+                <input
+                  type="url"
+                  value={editUrl}
+                  onChange={(e) => setEditUrl(e.target.value)}
+                  placeholder="Nhập đường dẫn hình ảnh (https://...)"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                />
+              </div>
+
+              {/* Mô tả chi tiết */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mô tả chi tiết</label>
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  placeholder="Nhập mô tả sản phẩm..."
+                  rows={3}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                />
+              </div>
+
               {/* Technical Specifications */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thông số kỹ thuật / Mô tả</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thông số kỹ thuật (Dạng JSON hoặc Text)</label>
                 <textarea
                   value={editSpecs}
                   onChange={(e) => setEditSpecs(e.target.value)}
-                  placeholder="Nhập thông số kỹ thuật dạng text hoặc JSON..."
-                  rows={4}
+                  placeholder="Nhập thông số kỹ thuật..."
+                  rows={3}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
                 />
               </div>
