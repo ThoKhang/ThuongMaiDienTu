@@ -39,8 +39,8 @@ export const adminService = {
         const response = await api.get('/api/admin/partners');
         return response.data;
     },
-    updatePartnerConfig: async (id, tyLeHoaHong, trangThai) => {
-        const response = await api.put(`/api/admin/partners/${id}/config?tyLeHoaHong=${tyLeHoaHong}&trangThai=${trangThai}`);
+    updatePartnerConfig: async (id, tyLeHoaHong, trangThai, trangThaiDuyet) => {
+        const response = await api.put(`/api/admin/partners/${id}/config?tyLeHoaHong=${tyLeHoaHong}&trangThai=${trangThai}&trangThaiDuyet=${trangThaiDuyet}`);
         return response.data;
     }
 };

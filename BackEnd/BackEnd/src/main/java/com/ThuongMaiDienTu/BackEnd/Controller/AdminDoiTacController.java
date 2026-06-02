@@ -21,8 +21,9 @@ public class AdminDoiTacController {
     public ResponseEntity<String> updateConfig(
             @PathVariable Integer id, 
             @RequestParam Double tyLeHoaHong, 
-            @RequestParam String trangThai) {
-        boolean success = doiTacService.capNhatCauHinh(id, tyLeHoaHong, trangThai);
+            @RequestParam String trangThai,
+            @RequestParam String trangThaiDuyet) { // Thêm param này
+        boolean success = doiTacService.capNhatCauHinh(id, tyLeHoaHong, trangThai, trangThaiDuyet);
         if (success) {
             return ResponseEntity.ok("Cập nhật cấu hình đối tác thành công!");
         }

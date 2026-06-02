@@ -12,10 +12,11 @@ public class DoiTacResponse {
     private String soDienThoai;
     private Double tyLeHoaHong;
     private String apiEndpoint;
-    private String trangThai;
-    private String ngayHopTac;
     
-    // Các trường thống kê động
+    private String trangThai; 
+    private String trangThaiDuyet; 
+    
+    private String ngayHopTac;
     private Long tongSoDonHang;
     private Double tongHoaHongTichLuy;
 }

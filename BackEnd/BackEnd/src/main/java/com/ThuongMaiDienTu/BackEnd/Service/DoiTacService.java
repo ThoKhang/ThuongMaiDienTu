@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface DoiTacService {
     List<DoiTacResponse> getAllDoiTac();
-    boolean capNhatCauHinh(Integer id, Double tyLeMoi, String trangThaiMoi);
+    boolean capNhatCauHinh(Integer id, Double tyLeMoi, String trangThai, String trangThaiDuyet);
 }

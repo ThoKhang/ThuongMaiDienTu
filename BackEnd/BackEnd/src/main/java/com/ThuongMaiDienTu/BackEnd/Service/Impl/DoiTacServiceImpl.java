@@ -5,6 +5,7 @@ import com.ThuongMaiDienTu.BackEnd.Service.DoiTacService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,16 +20,17 @@ public class DoiTacServiceImpl implements DoiTacService {
 
     @Override
     public List<DoiTacResponse> getAllDoiTac() {
+        // Lấy riêng biệt nd.trangThai và dt.trangThaiDuyet
         String sql = "SELECT dt.idNguoiDung as id, dt.tenCongTy as tenDoiTac, nd.email, nd.soDienThoai, " +
-                     "COALESCE(ch.phanTramHoaHong, 0) as tyLeHoaHong, dt.websiteUrl as apiEndpoint, " +
-                     "dt.trangThaiDuyet as trangThai, nd.ngayTao as ngayHopTac, " +
+                     "COALESCE(MAX(ch.phanTramHoaHong), 0) as tyLeHoaHong, dt.websiteUrl as apiEndpoint, " +
+                     "nd.trangThai, dt.trangThaiDuyet, nd.ngayTao as ngayHopTac, " +
                      "COUNT(gd.id) as tongSoDon, SUM(gd.hoaHongNhan) as tongHoaHong " +
                      "FROM DOITACLIENKET dt " +
                      "JOIN NGUOIDUNG nd ON dt.idNguoiDung = nd.id " +
                      "LEFT JOIN CAUHINH_AFFILIATE ch ON dt.idNguoiDung = ch.idDoiTac " +
                      "LEFT JOIN GIAODICH_AFFILIATE gd ON dt.idNguoiDung = gd.idDoiTac " +
                      "GROUP BY dt.idNguoiDung, dt.tenCongTy, nd.email, nd.soDienThoai, " +
-                     "ch.phanTramHoaHong, dt.websiteUrl, dt.trangThaiDuyet, nd.ngayTao " +
+                     "dt.websiteUrl, nd.trangThai, dt.trangThaiDuyet, nd.ngayTao " +
                      "ORDER BY dt.idNguoiDung DESC";
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
@@ -39,7 +41,6 @@ public class DoiTacServiceImpl implements DoiTacService {
             Double hoaHong = row.get("tongHoaHong") != null ? ((Number) row.get("tongHoaHong")).doubleValue() : 0.0;
             Double tyLeHoaHong = row.get("tyLeHoaHong") != null ? ((Number) row.get("tyLeHoaHong")).doubleValue() : 0.0;
 
-            // Xử lý an toàn định dạng ngày tháng tương tự như file Giao Dịch
             String formattedDate = "";
             Object rawDate = row.get("ngayHopTac");
             if (rawDate != null) {
@@ -61,6 +62,7 @@ public class DoiTacServiceImpl implements DoiTacService {
                     .tyLeHoaHong(tyLeHoaHong)
                     .apiEndpoint((String) row.get("apiEndpoint"))
                     .trangThai((String) row.get("trangThai"))
+                    .trangThaiDuyet((String) row.get("trangThaiDuyet")) // Thêm dòng này
                     .ngayHopTac(formattedDate)
                     .tongSoDonHang(((Number) row.get("tongSoDon")).longValue())
                     .tongHoaHongTichLuy(hoaHong)
@@ -69,18 +71,25 @@ public class DoiTacServiceImpl implements DoiTacService {
         return result;
     }
 
-    @Override
-    public boolean capNhatCauHinh(Integer id, Double tyLeMoi, String trangThaiMoi) {
-        // Cập nhật trạng thái duyệt ở bảng DOITACLIENKET
-        String sqlUpdateDoiTac = "UPDATE DOITACLIENKET SET trangThaiDuyet = ? WHERE idNguoiDung = ?";
-        jdbcTemplate.update(sqlUpdateDoiTac, trangThaiMoi, id);
+    // Đã thay đổi Interface thêm tham số trangThaiDuyet nên đổi hàm này nhé
+    @Transactional
+    public boolean capNhatCauHinh(Integer id, Double tyLeMoi, String trangThai, String trangThaiDuyet) {
+        // 1. Cập nhật trạng thái Hoạt động/Khóa ở bảng NGUOIDUNG
+        jdbcTemplate.update("UPDATE NGUOIDUNG SET trangThai = ? WHERE id = ?", trangThai, id);
 
-        String sqlUpdateCauHinh = "INSERT INTO CAUHINH_AFFILIATE (idAdmin, idDoiTac, phanTramHoaHong, ngayCapNhat) " +
-                                  "VALUES (1, ?, ?, CURRENT_TIMESTAMP) " + 
-                                  "ON DUPLICATE KEY UPDATE phanTramHoaHong = ?, ngayCapNhat = CURRENT_TIMESTAMP";
+        // 2. Cập nhật trạng thái duyệt (ChoDuyet/DaDuyet) ở bảng DOITACLIENKET
+        jdbcTemplate.update("UPDATE DOITACLIENKET SET trangThaiDuyet = ? WHERE idNguoiDung = ?", trangThaiDuyet, id);
+
+        // 3. Khắc phục lỗi sinh nhiều dòng: Kiểm tra xem đã có cấu hình chưa
+        Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM CAUHINH_AFFILIATE WHERE idDoiTac = ?", Integer.class, id);
         
-        int updated = jdbcTemplate.update(sqlUpdateCauHinh, id, tyLeMoi, tyLeMoi);
-        
+        if (count != null && count > 0) {
+            // Có rồi thì UPDATE
+            jdbcTemplate.update("UPDATE CAUHINH_AFFILIATE SET phanTramHoaHong = ?, ngayCapNhat = CURRENT_TIMESTAMP WHERE idDoiTac = ?", tyLeMoi, id);
+        } else {
+            // Chưa có thì INSERT (Giả sử idAdmin thao tác đang là 1)
+            jdbcTemplate.update("INSERT INTO CAUHINH_AFFILIATE (idAdmin, idDoiTac, phanTramHoaHong, ngayCapNhat) VALUES (1, ?, ?, CURRENT_TIMESTAMP)", id, tyLeMoi);
+        }
         return true;
     }
 }
