@@ -171,11 +171,13 @@ CREATE TABLE DANHGIA (
 
 CREATE TABLE TINTUC (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    idAdmin INT NOT NULL,
+    idNguoiDang INT NOT NULL, -- Đổi tên từ idAdmin thành idNguoiDang
     tieuDe VARCHAR(300) NOT NULL,
     noiDung TEXT NOT NULL, 
     ngayDang DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT FK_TT_ADMIN FOREIGN KEY (idAdmin) REFERENCES NGUOIDUNG(id)
+    hinhAnh VARCHAR(500) NULL,
+    trangThaiDuyet VARCHAR(20) DEFAULT 'ChoDuyet',
+    CONSTRAINT FK_TT_NGUOIDUNG FOREIGN KEY (idNguoiDang) REFERENCES NGUOIDUNG(id)
 );
 
 -- ============================================================
@@ -299,9 +301,18 @@ INSERT INTO GIAODICH_AFFILIATE (idClick, idKhachHang, idDoiTac, idSanPham, soLuo
 -- ============================================================
 INSERT INTO DANHGIA (idKhachHang, idDoiTac, diemRating, noiDung, trangThaiDuyet) VALUES
 (2, 3, 5, 'Link Affiliate chuyển hướng mượt mà, ghi nhận hoa hồng tức thì. Rất tuyệt!', 'DaDuyet');
-
-INSERT INTO TINTUC (idAdmin, tieuDe, noiDung) VALUES
-(1, 'Cập nhật chính sách Affiliate Tháng 6/2026', 'Nâng mức hoa hồng cho nhóm VGA cao cấp lên 6%. Mọi người chú ý đẩy số nhé!');
+-- 2. Bảng NGUOIDUNG (Thêm 3 Khách hàng và 3 Đối tác = 6 user để đủ dữ liệu map cho 2 bảng dưới)
+INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, soDienThoai, ngaySinh, trangThai) VALUES
+('khachhang2', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh2@gmail.com', '0912345678', '1998-02-20', 'HoatDong'),
+('khachhang3', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh3@gmail.com', '0923456789', '2001-10-10', 'HoatDong'),
+('khachhang4', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh4@gmail.com', '0934567890', '1995-08-08', 'HoatDong'),
+('doitac_phongvu', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@phongvu.vn', NULL, NULL, 'HoatDong'),
+('doitac_anphat', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@anphat.vn', NULL, NULL, 'HoatDong'),
+('doitac_memoryzone', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@memoryzone.vn', NULL, NULL, 'HoatDong');
+INSERT INTO TINTUC (idNguoiDang, tieuDe, noiDung) VALUES
+(1, 'Cập nhật chính sách Affiliate Tháng 6/2026', 'Nâng mức hoa hồng cho nhóm VGA cao cấp lên 6%.'), -- Admin đăng (id = 1)
+(8, 'Phong Vũ ra mắt chuỗi cửa hàng trải nghiệm PC High-End', 'Kính mời các bạn đến trải nghiệm trực tiếp...'), -- Đối tác Phong Vũ đăng (id = 8)
+(5, 'Review nhanh nguồn Cooler Master MWE 750 sau 1 tháng', 'Mình mua về kéo RTX 4070 Ti chạy rất ổn định, nhiệt độ mát mẻ...'); -- Khách hàng đăng (id = 5)
 
 USE LKMT_MoHinhWebCong;
 
@@ -315,14 +326,7 @@ INSERT INTO VAITRO (tenVaiTro, moTa) VALUES
 ('KeToan', 'Kế toán đối soát hoa hồng'),
 ('Marketing', 'Nhân viên chạy chiến dịch Affiliate');
 
--- 2. Bảng NGUOIDUNG (Thêm 3 Khách hàng và 3 Đối tác = 6 user để đủ dữ liệu map cho 2 bảng dưới)
-INSERT INTO NGUOIDUNG (tenDangNhap, matKhau, email, soDienThoai, ngaySinh, trangThai) VALUES
-('khachhang2', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh2@gmail.com', '0912345678', '1998-02-20', 'HoatDong'),
-('khachhang3', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh3@gmail.com', '0923456789', '2001-10-10', 'HoatDong'),
-('khachhang4', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'kh4@gmail.com', '0934567890', '1995-08-08', 'HoatDong'),
-('doitac_phongvu', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@phongvu.vn', NULL, NULL, 'HoatDong'),
-('doitac_anphat', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@anphat.vn', NULL, NULL, 'HoatDong'),
-('doitac_memoryzone', '$2a$12$KrbJEqKkvVLx6rkJSKep9ek/bNURJloykmEB0tyMovIVo7x0Y3HYK', 'contact@memoryzone.vn', NULL, NULL, 'HoatDong');
+
 -- (ID tự động sinh sẽ là: 5,6,7 cho Khách hàng | 8,9,10 cho Đối tác)
 
 -- 3. Bảng VAITRO_NGUOIDUNG (Map quyền cho 6 user mới)
@@ -393,12 +397,6 @@ INSERT INTO DANHGIA (idKhachHang, idDoiTac, diemRating, noiDung, trangThaiDuyet)
 (5, 8, 5, 'Giao hàng nhanh, nguồn xịn, link ghi nhận chuẩn.', 'DaDuyet'),
 (6, 9, 4, 'Case đẹp nhưng giá chưa tốt nhất, phần mềm web affilitate chạy ok.', 'DaDuyet'),
 (7, 10, 5, 'Tản nhiệt êm, đối soát hoa hồng của trang web rất minh bạch.', 'ChoDuyet');
-
--- 15. Bảng TINTUC (Admin đăng 3 bài tin tức)
-INSERT INTO TINTUC (idAdmin, tieuDe, noiDung) VALUES
-(1, 'Top 5 Nguồn máy tính bán chạy tháng này', 'Đẩy mạnh bán các mã nguồn 750W đang có chiết khấu 5% từ Phong Vũ...'),
-(1, 'Hướng dẫn tối ưu chuyển đổi Affiliate qua Facebook Ads', 'Sử dụng tracking link kết hợp pixel để đo lường tỷ lệ mua hàng...'),
-(1, 'Thông báo bảo trì hệ thống ghi nhận Click', 'Hệ thống sẽ bảo trì từ 2h-4h sáng mai, các click trong thời gian này vẫn được lưu cache an toàn.');
 
 USE LKMT_MoHinhWebCong;
 
@@ -473,3 +471,4 @@ INSERT INTO GIATRI_THUOCTINH (idSanPham, idThuocTinh, giaTri) VALUES
 (26, 3, '8 GB GDDR6'),                                -- id 26: ASUS RX 7600
 (27, 3, '16 GB GDDR6X');                              -- id 27: AORUS RTX 4080
 
+select * from nguoidung

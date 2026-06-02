@@ -184,6 +184,5 @@ public class SanPhamServiceImpl implements SanPhamService {
                 .isHopLe(true)
                 .build();
         theoDoiClickRepository.save(click);
->>>>>>> 85fc57d2963caeabc90f60ad64896c62d085feda
     }
 }

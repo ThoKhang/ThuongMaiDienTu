@@ -71,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/upload/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sanpham/*/view").permitAll()
                         
                         // Các API đặc thù của Admin và Đối tác (Đặt trước để tránh khớp nhầm mẫu tổng quát)
