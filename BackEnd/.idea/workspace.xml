@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="65e419e9-fad5-43c5-9db4-a84bba291582" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/BackEnd.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BackEnd.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/KhachHangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/KhachHangController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/TheoDoiClickController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/TheoDoiClickController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/KhachHangServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/KhachHangServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/TheoDoiClickServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/TheoDoiClickServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/KhachHangService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/KhachHangService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/TheoDoiClickService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/TheoDoiClickService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DoiTacLienKetMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DoiTacLienKetMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaTriThuocTinhMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaTriThuocTinhMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaoDichAffiliateMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaoDichAffiliateMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/KhachHangMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/KhachHangMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/NguoiDungMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/NguoiDungMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/SanPhamMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/SanPhamMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TheoDoiClickMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TheoDoiClickMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuocTinhLinhKienMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuocTinhLinhKienMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuongHieuMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuongHieuMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TinTucMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TinTucMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/Components/Pages/sanPham/chiTietSanPhamPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/Components/Pages/sanPham/chiTietSanPhamPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/hooks/useChiTietSanPham.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/hooks/useChiTietSanPham.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "huy912005"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ThoKhang/ThuongMaiDienTu.git",
+    "accountId": "4eb2ce23-c6a4-4258-9c16-899ee1ae7303"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="3EaLRkWrmJZFtzRuuJdL0kOcU1m" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BackEndApplication.executor": "Run",
+    "JUnit.com.ThuongMaiDienTu.BackEnd in BackEnd.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feture/dangKy__ChiTiet-Huy",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.BackEndApplication">
+    <configuration name="BackEndApplication" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.ThuongMaiDienTu.BackEnd.BackEndApplication" />
+      <module name="BackEnd" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.ThuongMaiDienTu.BackEnd in BackEnd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="BackEnd" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ThuongMaiDienTu.BackEnd.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ThuongMaiDienTu.BackEnd" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.BackEndApplication" />
+      <item itemvalue="JUnit.com.ThuongMaiDienTu.BackEnd in BackEnd" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.com.ThuongMaiDienTu.BackEnd in BackEnd" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="65e419e9-fad5-43c5-9db4-a84bba291582" name="Changes" comment="" />
+      <created>1780411728896</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780411728896</updated>
+    </task>
+    <servers />
+  </component>
+</project>
