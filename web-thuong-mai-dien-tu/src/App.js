@@ -16,7 +16,7 @@ import UserManagement from './Components/Pages/admin/UserManagement';
 import ProductManagement from './Components/Pages/admin/ProductManagement';
 import TransactionManagement from './Components/Pages/admin/TransactionManagement';
 // THÊM IMPORT TRANG QUẢN LÝ ĐỐI TÁC
-import PartnerManagement from './Components/Pages/admin/PartnerManagement'; 
+import PartnerManagement from './Components/Pages/admin/PartnerManagement';
 
 function App() {
   return (
@@ -40,34 +40,34 @@ function App() {
             </>
           }
         />
-        
+
         <Route path="/dang-nhap" element={<Login />} />
-        
+
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
-          <Route path="/danh-muc/:id" element={<DanhMuc />} />
+        <Route path="/danh-muc/:id" element={<DanhMuc />} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="commissions" element={<TransactionManagement />} />
-          
+
           {/* THÊM ROUTE CHO TRANG ĐỐI TÁC */}
           <Route path="partners" element={<PartnerManagement />} />
         </Route>
       </Routes>
-      
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
-        rtl={false} 
-        pauseOnFocusLoss 
-        draggable 
-        pauseOnHover 
-        theme="light" 
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </>
   );

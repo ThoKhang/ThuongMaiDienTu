@@ -21,4 +21,5 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer>
             TinhTrangDuyet tinhTrang,
             Pageable pageable
     );
+    List<SanPhamEntity> findByTenSanPhamContainingIgnoreCase(String tenSanPham);
 }

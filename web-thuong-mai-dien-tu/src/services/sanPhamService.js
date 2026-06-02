@@ -28,4 +28,10 @@ export const sanPhamService = {
     });
     return response.data;
   },
+  searchByKeyword: async (keyword) => {
+    const response = await api.get(`/api/sanpham/search`, {
+      params: { keyword },
+    });
+    return response.data;
+  },
 };

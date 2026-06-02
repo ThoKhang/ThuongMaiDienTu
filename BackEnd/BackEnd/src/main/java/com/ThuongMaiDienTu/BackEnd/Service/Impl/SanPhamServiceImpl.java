@@ -77,4 +77,8 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
         return false;
     }
+    @Override
+    public List<SanPhamResponse> searchByTenSanPham(String keyword) {
+        return sanPhamRepository.findByTenSanPhamContainingIgnoreCase(keyword).stream().map(sanPhamMapper::toResponse).toList();
+    }
 }

@@ -13,7 +13,9 @@ const UserLayout = ({ children }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      navigate(`/tim-kiem?q=${encodeURIComponent(searchValue.trim())}`);
+      navigate(`${location.pathname}?q=${encodeURIComponent(searchValue.trim())}`);
+    } else {
+      navigate(`${location.pathname}`);
     }
   };
   const danhMucIdToPath = {
