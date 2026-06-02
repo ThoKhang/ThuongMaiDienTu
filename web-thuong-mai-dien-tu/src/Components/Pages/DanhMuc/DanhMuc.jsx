@@ -218,7 +218,22 @@ export default function DanhMucSanPham() {
                                                    transition-all duration-300 flex flex-col border border-gray-400">
                                         <div className="relative h-40 overflow-hidden bg-surface-container-low
                                                         flex items-center justify-center">
-                                            <span className="text-5xl">🖥️</span>
+
+                                            {/* --- Hiển thị ảnh từ trường url, nếu không có thì hiện icon mặc định --- */}
+                                            {sp.url ? (
+                                                <img
+                                                    src={sp.url}
+                                                    alt={sp.tenSanPham}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    onError={(e) => {
+                                                            // Thay thế bằng ảnh mặc định nếu link bị lỗi
+                                                            e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                                                        }}
+                                                />
+                                            ) : (
+                                                <span className="text-5xl">🖥️</span>
+                                            )}
+
                                             {phanTram ? (
                                                 <span className="absolute top-3 left-3 bg-red-500 text-white
                                                                  text-[10px] font-bold px-2 py-1 rounded uppercase">

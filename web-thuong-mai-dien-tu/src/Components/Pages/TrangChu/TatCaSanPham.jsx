@@ -5,6 +5,7 @@ export default function TatCaSanPham() {
     const [data, setData] = useState(null);
     const [trang, setTrang] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const tongSoTrang = data?.totalPages || 1;
 
@@ -17,23 +18,47 @@ export default function TatCaSanPham() {
 
     useEffect(() => {
         setLoading(true);
+        setError(null);
 
         fetch(`http://localhost:8080/api/sanpham/phan-trang?page=${trang}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi server: " + res.status);
+                return res.json();
+            })
             .then(d => {
                 setData(d);
                 setLoading(false);
             })
-            .catch(() => setLoading(false));
+            .catch(err => {
+                setError(err.message);
+                setLoading(false);
+            });
 
     }, [trang]);
 
     if (loading) {
-        return <div className="text-center py-10">Đang tải sản phẩm...</div>;
+        return (
+            <div className="flex justify-center items-center h-40">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center text-red-500 p-8 bg-red-50 rounded-xl border border-red-200 my-4">
+                ⚠️ Không thể tải dữ liệu sản phẩm: {error}
+            </div>
+        );
     }
 
     if (!data?.content || data.content.length === 0) {
-        return <div className="text-center py-10 text-gray-400">Không có sản phẩm</div>;
+        return (
+            <div className="text-center py-10 text-gray-400">
+                <span className="text-4xl">📦</span>
+                <p className="mt-2 font-semibold">Chưa có sản phẩm nào.</p>
+            </div>
+        );
     }
 
     return (
@@ -48,10 +73,22 @@ export default function TatCaSanPham() {
                             to={`/san-pham/${sp.id}`}
                             state={{ idDanhMuc: sp.idDanhMuc }}
                             className="group bg-white rounded-xl overflow-hidden hover:shadow-xl
-                                                   transition-all duration-300 flex flex-col border border-gray-400">
+                                                   transition-all duration-300 flex flex-col border border-gray-400"
+                        >
                             <div className="relative h-40 overflow-hidden bg-surface-container-low
                                                         flex items-center justify-center">
-                                <span className="text-5xl">🖥️</span>
+                                {sp.url ? (
+                                    <img
+                                        src={sp.url}
+                                        alt={sp.tenSanPham}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        onError={(e) => {
+                                            e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                                        }}
+                                    />
+                                ) : (
+                                    <span className="text-5xl">🖥️</span>
+                                )}
                                 {phanTram ? (
                                     <span className="absolute top-3 left-3 bg-red-500 text-white
                                                                  text-[10px] font-bold px-2 py-1 rounded uppercase">
@@ -82,7 +119,8 @@ export default function TatCaSanPham() {
                                     </div>
                                     <button
                                         onClick={(e) => e.preventDefault()}
-                                        className="text-primary hover:bg-blue-50 p-2 rounded-full transition-colors">
+                                        className="text-primary hover:bg-blue-50 p-2 rounded-full transition-colors"
+                                    >
                                         <span className="material-symbols-outlined text-xl">favorite</span>
                                     </button>
                                 </div>
@@ -96,14 +134,13 @@ export default function TatCaSanPham() {
             {data?.content?.length > 0 && (
                 <div className="border-t border-gray-200 mt-6 pt-4">
                     <div className="flex flex-col items-center gap-2 flex-wrap">
-
                         <div className="flex gap-2 flex-wrap justify-center">
-
                             {/* ⏮️ Về đầu */}
                             <button
                                 onClick={() => setTrang(0)}
                                 disabled={trang === 0}
-                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                            >
                                  ⏮
                             </button>
 
@@ -111,17 +148,18 @@ export default function TatCaSanPham() {
                             <button
                                 onClick={() => setTrang(t => Math.max(0, t - 1))}
                                 disabled={trang === 0}
-                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                            >
                                  ←
                             </button>
 
-                            {/* số trang (giữ nguyên của bạn) */}
+                            {/* số trang */}
                             {Array.from({ length: tongSoTrang }, (_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setTrang(i)}
                                     className={`px-4 py-2 rounded-lg border transition font-medium 
-                                    ${trang=== i ? "bg-yellow-500 text-white" : ""}`}
+                                    ${trang === i ? "bg-yellow-500 text-white" : ""}`}
                                 >
                                     {i + 1}
                                 </button>
@@ -131,7 +169,8 @@ export default function TatCaSanPham() {
                             <button
                                 onClick={() => setTrang(t => Math.min(tongSoTrang - 1, t + 1))}
                                 disabled={trang === tongSoTrang - 1}
-                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                            >
                                 →
                             </button>
 
@@ -139,10 +178,10 @@ export default function TatCaSanPham() {
                             <button
                                 onClick={() => setTrang(tongSoTrang - 1)}
                                 disabled={trang === tongSoTrang - 1}
-                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                            >
                                  ⏭
                             </button>
-
                         </div>
                     </div>
                 </div>
