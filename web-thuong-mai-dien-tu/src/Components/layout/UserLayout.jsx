@@ -9,6 +9,16 @@ const UserLayout = ({ children }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem('accessToken');
+  const rolesStr = localStorage.getItem('roles');
+  let isVendor = false;
+  if (rolesStr) {
+    try {
+      const roles = JSON.parse(rolesStr);
+      isVendor = roles.some(role => role.toUpperCase() === 'ROLE_DOITAC');
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -225,14 +235,16 @@ const UserLayout = ({ children }) => {
           })}
         </nav>
 
-        <div className="px-4 mb-4">
-          <button
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors"
-            onClick={() => navigate('/quan-ly-cua-hang')}
-          >
-            Quản lý cửa hàng
-          </button>
-        </div>
+        {isVendor && (
+          <div className="px-4 mb-4">
+            <button
+              className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors cursor-pointer"
+              onClick={() => navigate('/vendor/quan-ly-tin')}
+            >
+              Quản lý cửa hàng
+            </button>
+          </div>
+        )}
 
         <div className="px-3 space-y-0.5">
           <Link

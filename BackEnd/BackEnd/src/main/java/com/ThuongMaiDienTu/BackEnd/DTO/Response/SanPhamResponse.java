@@ -22,4 +22,5 @@ public class SanPhamResponse {
     private Integer soLuongTon;
     private String urlAffiliate;
     private String tinhTrangDuyet;
+    private Long clicks;
 }

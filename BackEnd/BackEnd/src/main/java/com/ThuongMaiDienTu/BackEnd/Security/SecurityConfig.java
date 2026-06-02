@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableMethodSecurity
@@ -68,13 +69,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                     auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/sanpham/**","/api/trangchu/**","/api/danh-muc/**").permitAll()
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/sanpham/*/view").permitAll()
                         
-                        // done nha ae
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        // Các API đặc thù của Admin và Đối tác (Đặt trước để tránh khớp nhầm mẫu tổng quát)
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/sanpham/partner").hasAnyRole("DOITAC", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/stock").hasAnyRole("DOITAC", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/status").hasAnyRole("DOITAC", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sanpham/*").hasAnyRole("DOITAC", "ADMIN")
+                        
+                        // API công khai của sản phẩm (Đặt sau)
+                        .requestMatchers(HttpMethod.GET, "/api/sanpham/**").permitAll()
+                        .requestMatchers("/api/trangchu/**","/api/danh-muc/**").permitAll()
                         
                         .anyRequest().authenticated()
                 );

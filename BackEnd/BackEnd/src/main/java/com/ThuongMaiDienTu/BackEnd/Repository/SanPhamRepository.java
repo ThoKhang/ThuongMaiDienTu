@@ -22,4 +22,5 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer>
             TinhTrangDuyet tinhTrang,
             Pageable pageable
     );
+    List<SanPhamEntity> findByIdDoiTac(Integer idDoiTac);
 }

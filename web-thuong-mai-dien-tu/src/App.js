@@ -17,7 +17,8 @@ import ProductManagement from './Components/Pages/admin/ProductManagement';
 import TransactionManagement from './Components/Pages/admin/TransactionManagement';
 // THÊM IMPORT TRANG QUẢN LÝ ĐỐI TÁC
 import PartnerManagement from './Components/Pages/admin/PartnerManagement'; 
-
+import VendorLayout from './Components/layout/vendor/VendorLayout';
+import QuanLyTinDang from './Components/Pages/sanPham/QuanLyTinDang';
 function App() {
   return (
     <>
@@ -54,6 +55,14 @@ function App() {
           
           {/* THÊM ROUTE CHO TRANG ĐỐI TÁC */}
           <Route path="partners" element={<PartnerManagement />} />
+        </Route>
+
+        {/* --- ROUTE LỒNG NHAU DÀNH CHO VENDOR --- */}
+        <Route path="/vendor" element={<VendorLayout />}>
+          <Route index element={<QuanLyTinDang />} />
+          <Route path="quan-ly-tin" element={<QuanLyTinDang />} />
+          <Route path="dang-tin" element={<div className="bg-white p-6 rounded-2xl shadow-sm"><h2 className="text-xl font-bold mb-4">Đăng sản phẩm mới</h2><p className="text-slate-500">Tính năng đăng sản phẩm mới đang được phát triển.</p></div>} />
+          <Route path="dashboard" element={<div className="bg-white p-6 rounded-2xl shadow-sm"><h2 className="text-xl font-bold mb-4">Tổng quan cửa hàng</h2><p className="text-slate-500">Báo cáo doanh số và phân tích sẽ hiển thị ở đây.</p></div>} />
         </Route>
       </Routes>
       
