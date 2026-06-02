@@ -52,7 +52,7 @@ export default function TrangChu() {
 
                     {/* PAGINATION — dưới sản phẩm, đẩy xuống đáy cột */}
                     {data?.tatCaSanPham?.length > 0 && (
-                        <div className="border-t border-gray-200 mt-auto pt-4">
+                        <div className="border-t border-gray-200 mt-6 pt-4">
                             <div className="flex flex-col items-center gap-1">
 
                                 <div className="flex justify-center items-center gap-2 flex-wrap">
@@ -68,7 +68,7 @@ export default function TrangChu() {
                                         <button key={i}
                                                 onClick={() => setTrangHienTai(i)}
                                                 className={`px-4 py-2 rounded-lg border transition font-medium
-                ${trangHienTai === i
+                                                    ${trangHienTai === i
                                                     ? "bg-blue-600 text-white border-blue-600"
                                                     : "border-gray-300 text-gray-600 hover:bg-gray-100"}`}>
                                             {i + 1}

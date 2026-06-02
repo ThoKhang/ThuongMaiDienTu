@@ -2,6 +2,66 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import UserLayout from "../../layout/UserLayout";
 
+const DANH_MUC_CONFIG = {
+    1: {
+        ten: "Vi Xử Lý",
+        tenPhu: "Hiệu Năng Vượt Trội",
+        moTa: "Tuyển chọn các dòng CPU Intel, AMD mới nhất. Tối ưu cho gaming, đồ họa và xử lý đa nhiệm.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-blue-900 to-blue-600",
+        accent: "text-blue-300",
+    },
+    2: {
+        ten: "Bộ Nhớ RAM",
+        tenPhu: "Hiệu Suất Cao",
+        moTa: "Tuyển chọn các dòng RAM DDR4, DDR5 chính hãng cho máy trạm và gaming. Đảm bảo độ ổn định tuyệt đối trong mọi tác vụ.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-orange-900 to-orange-500",
+        accent: "text-orange-300",
+    },
+    3: {
+        ten: "Lưu Trữ",
+        tenPhu: "Tốc Độ Cao",
+        moTa: "SSD NVMe, SATA và HDD từ các thương hiệu hàng đầu. Dung lượng lớn, tốc độ đọc ghi vượt trội.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-green-900 to-green-600",
+        accent: "text-green-300",
+    },
+    4: {
+        ten: "Bo Mạch Chủ",
+        tenPhu: "Nền Tảng Vững Chắc",
+        moTa: "Mainboard từ ASUS, MSI, Gigabyte hỗ trợ Intel và AMD. Đa dạng form factor, tích hợp đầy đủ kết nối.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-purple-900 to-purple-600",
+        accent: "text-purple-300",
+    },
+    5: {
+        ten: "Nguồn PSU",
+        tenPhu: "Ổn Định & Bền Bỉ",
+        moTa: "Nguồn máy tính 80 Plus Gold, Platinum từ Corsair, Seasonic, be quiet! Bảo vệ hệ thống toàn diện.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-yellow-900 to-yellow-600",
+        accent: "text-yellow-300",
+    },
+    6: {
+        ten: "Card Đồ Họa",
+        tenPhu: "Chinh Phục Mọi Tựa Game",
+        moTa: "GPU NVIDIA GeForce và AMD Radeon mới nhất. Trải nghiệm gaming 4K, ray tracing và AI rendering đỉnh cao.",
+        label: "DANH MỤC KỸ THUẬT",
+        gradient: "from-red-900 to-red-600",
+        accent: "text-red-300",
+    },
+};
+
+const DEFAULT_CONFIG = {
+    ten: "Sản Phẩm",
+    tenPhu: "Chính Hãng",
+    moTa: "Khám phá các sản phẩm chất lượng cao, chính hãng với giá tốt nhất.",
+    label: "DANH MỤC SẢN PHẨM",
+    gradient: "from-gray-900 to-gray-600",
+    accent: "text-gray-300",
+};
+
 export default function DanhMucSanPham() {
     const { id } = useParams();
     const [data, setData] = useState(null);
@@ -9,11 +69,12 @@ export default function DanhMucSanPham() {
     const [trangHienTai, setTrangHienTai] = useState(0);
     const [sapXep, setSapXep] = useState("moi-nhat");
     const [boLocGia, setBoLocGia] = useState(null);
+    const config = DANH_MUC_CONFIG[Number(id)] || DEFAULT_CONFIG;
 
     const giaOptions = [
-        { label: "Dưới 1 triệu", value: "duoi-1tr", min: 0,        max: 1000000  },
-        { label: "1 - 5 triệu",  value: "1tr-5tr",  min: 1000000,  max: 5000000  },
-        { label: "5 - 20 triệu", value: "5tr-20tr", min: 5000000,  max: 20000000 },
+        { label: "Dưới 1 triệu", value: "duoi-1tr", min: 0,         max: 1000000  },
+        { label: "1 - 5 triệu",  value: "1tr-5tr",  min: 1000000,   max: 5000000  },
+        { label: "5 - 20 triệu", value: "5tr-20tr", min: 5000000,   max: 20000000 },
         { label: "Trên 20 triệu",value: "tren-20tr", min: 20000000, max: Infinity },
     ];
 
@@ -57,11 +118,27 @@ export default function DanhMucSanPham() {
 
     return (
         <UserLayout>
-            {/* flex-col + min-h-screen để đẩy pagination xuống đáy */}
             <div className="flex flex-col min-h-screen">
 
-                {/* Nội dung chính — flex-1 chiếm hết không gian còn lại */}
-                <div className="flex-1 px-4 md:px-8 py-6 w-full">
+                {/* ===== HERO HEADER ===== */}
+                <div className={`bg-gradient-to-r ${config.gradient} mx-2 md:mx-4 mt-4 rounded-2xl px-8 py-8 text-white`}>
+                    <span className="text-xs font-bold tracking-widest uppercase
+                                     bg-white/20 px-3 py-1 rounded-full mb-3 inline-block">
+                        {config.label}
+                    </span>
+                    <h1 className="text-3xl font-black mt-2 leading-tight">
+                        {config.ten}
+                    </h1>
+                    <h1 className={`text-3xl font-black ${config.accent}`}>
+                        {config.tenPhu}
+                    </h1>
+                    <p className="mt-3 text-sm text-white/70 leading-relaxed">
+                        {config.moTa}
+                    </p>
+                </div>
+
+                {/* ===== NỘI DUNG CHÍNH ===== */}
+                <div className="flex-1 px-2 md:px-4 py-6 w-full">
 
                     {/* Bộ lọc + Sắp xếp */}
                     <section className="mb-6 flex flex-wrap items-center justify-between gap-4">
@@ -129,7 +206,7 @@ export default function DanhMucSanPham() {
                             )}
                         </div>
                     ) : (
-                        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 min-h-[630px] content-start">
                             {danhSachHienThi().map(sp => {
                                 const phanTram = tinhPhanTram(sp.giaNiemYet, sp.giaKhuyenMai);
                                 return (
@@ -139,7 +216,7 @@ export default function DanhMucSanPham() {
                                         state={{ idDanhMuc: sp.idDanhMuc }}
                                         className="group bg-white rounded-xl overflow-hidden hover:shadow-xl
                                                    transition-all duration-300 flex flex-col border border-gray-100">
-                                        <div className="relative h-48 overflow-hidden bg-surface-container-low
+                                        <div className="relative h-40 overflow-hidden bg-surface-container-low
                                                         flex items-center justify-center">
                                             <span className="text-5xl">🖥️</span>
                                             {phanTram ? (
@@ -184,44 +261,39 @@ export default function DanhMucSanPham() {
                     )}
                 </div>
 
-                {/* ===== PAGINATION — luôn ở dưới cùng của page ===== */}
+                {/* ===== PAGINATION ===== */}
                 {!loading && danhSachHienThi().length > 0 && (
                     <div className="border-t border-gray-200 mt-auto">
                         <div className="flex flex-col items-center gap-1 py-3">
-
                             <div className="flex justify-center items-center gap-2 flex-wrap">
                                 <button
                                     onClick={() => setTrangHienTai(t => Math.max(0, t - 1))}
                                     disabled={trangHienTai === 0}
                                     className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600
-                               hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                               hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
                                     ← Trước
                                 </button>
-
                                 {Array.from({ length: tongSoTrang }, (_, i) => (
                                     <button key={i}
                                             onClick={() => setTrangHienTai(i)}
                                             className={`px-4 py-2 rounded-lg border transition font-medium
-                            ${trangHienTai === i
+                                                ${trangHienTai === i
                                                 ? "bg-blue-600 text-white border-blue-600"
                                                 : "border-gray-300 text-gray-600 hover:bg-gray-100"}`}>
                                         {i + 1}
                                     </button>
                                 ))}
-
                                 <button
                                     onClick={() => setTrangHienTai(t => Math.min(tongSoTrang - 1, t + 1))}
                                     disabled={trangHienTai === tongSoTrang - 1}
                                     className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600
-                               hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                               hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
                                     Sau →
                                 </button>
                             </div>
-
                             <p className="text-sm text-gray-400">
                                 Trang {trangHienTai + 1} / {tongSoTrang} — Tổng {data?.tongSoSanPham || 0} sản phẩm
                             </p>
-
                         </div>
                     </div>
                 )}
