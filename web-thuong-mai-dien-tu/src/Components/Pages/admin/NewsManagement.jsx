@@ -114,10 +114,13 @@ const NewsManagement = () => {
                                         <td className="p-4">
                                             {item.hinhAnh ? (
                                                 <img 
-                                                    src={item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`} 
+                                                    src={item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`) : "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23e2e8f0' width='100' height='60'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ETrống%3C/text%3E%3C/svg%3E"} 
                                                     alt="Thumbnail" 
                                                     className="w-16 h-12 object-cover rounded shadow-sm border border-gray-200"
-                                                    onError={(e) => { e.target.src = "https://via.placeholder.com/100x60?text=No+Image" }}
+                                                    onError={(e) => { 
+                                                        e.target.onerror = null; 
+                                                        e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23f87171' width='100' height='60'/%3E%3Ctext fill='%23ffffff' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ELỗi%3C/text%3E%3C/svg%3E"; 
+                                                    }}
                                                 />
                                             ) : (
                                                 <div className="w-16 h-12 bg-gray-100 flex items-center justify-center rounded border border-gray-200">

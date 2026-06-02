@@ -61,7 +61,7 @@ export default function TinDang() {
         setEditTieuDe(item.tieuDe);
         setEditNoiDung(item.noiDung);
         setEditFile(null);
-        setEditPreview(item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`) : null);
+       setEditPreview(item.hinhAnh ? `http://localhost:8080/upload/${item.hinhAnh}` : null);
     };
 
     const handleFileChange = (e) => {
@@ -163,10 +163,10 @@ export default function TinDang() {
                                 <div key={item.id} className="group bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/30 rounded-2xl p-4 flex flex-col sm:flex-row gap-5 transition-all shadow-sm hover:shadow-md">
                                     <div className="w-full sm:w-40 h-28 shrink-0 rounded-xl overflow-hidden bg-surface-container-low border border-outline-variant/20 relative">
                                         <img 
-                                            src={item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`) : "https://via.placeholder.com/300x200?text=No+Image"} 
+                                            src={item.hinhAnh ? `http://localhost:8080/upload/${item.hinhAnh}` : null}
                                             alt="Thumb" 
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            onError={(e) => { e.target.src = "https://via.placeholder.com/300x200?text=News"; }}
+                                            onError={(e) => { e.target.style.display = 'none'; }}
                                         />
                                     </div>
                                     <div className="flex-1 flex flex-col justify-between py-1 min-w-0">

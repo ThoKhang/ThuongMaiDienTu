@@ -32,6 +32,16 @@ const Login = () => {
         const roles = response.roles || [];
         const isAdmin = roles.some(role => role.toUpperCase() === 'ROLE_ADMIN');
         
+        // 🔥 BỔ SUNG LƯU THÔNG TIN VÀO LOCAL STORAGE TẠI ĐÂY 🔥
+        // Giả sử API backend trả về response có chứa token, username, roles, và id
+        if (response.accessToken) localStorage.setItem('accessToken', response.accessToken);
+        if (response.username) localStorage.setItem('username', response.username);
+        if (response.roles) localStorage.setItem('roles', JSON.stringify(roles));
+        
+        // Quan trọng nhất để đăng tin được:
+        if (response.id) localStorage.setItem('id', response.id); 
+        // Hoặc nếu backend của bạn trả về biến tên là userId thì dùng: localStorage.setItem('userId', response.userId);
+
         toast.success('Đăng nhập thành công!');
         if (isAdmin) {
           navigate('/admin');
