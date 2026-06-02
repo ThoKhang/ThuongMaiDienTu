@@ -11,8 +11,8 @@ public class TinTucEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "idAdmin", nullable = false)
-    private Integer idAdmin;
+    @Column(name = "idNguoiDang") // Sửa ở đây
+    private Integer idNguoiDang;
 
     @Column(name = "tieuDe", nullable = false, length = 300)
     private String tieuDe;
@@ -22,4 +22,9 @@ public class TinTucEntity {
 
     @Column(name = "ngayDang", insertable = false, updatable = false)
     private LocalDateTime ngayDang;
+    
+    @Column(name = "hinhAnh")
+    private String hinhAnh;
+    
+    private String trangThaiDuyet;
 }

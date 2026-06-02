@@ -10,4 +10,10 @@ public interface TinTucService {
     Page<TinTucResponse> getTinTucPhanTrang(int page);
     List<TinTucResponse> getAllTinTuc();
     TinTucResponse getTinTucById(Integer id);
+    boolean luuTinTucMoi(Integer idNguoiDang, String tieuDe, String noiDung, String hinhAnh);
+    
+    // Thêm hàm duyệt tin tức cho Admin
+    boolean capNhatTrangThaiDuyet(Integer id, String trangThai);
+    List<TinTucResponse> getTinTucByNguoiDang(Integer idNguoiDang);
+    boolean capNhatTinTuc(Integer idTinTuc, Integer idNguoiDang, String tieuDe, String noiDung, String hinhAnh);
 }

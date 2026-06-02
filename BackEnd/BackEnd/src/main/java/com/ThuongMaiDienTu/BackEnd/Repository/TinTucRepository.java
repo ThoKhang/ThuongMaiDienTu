@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TinTucRepository extends JpaRepository<TinTucEntity, Integer> {
-    List<TinTucEntity> findTop5ByOrderByNgayDangDesc();
-    Page<TinTucEntity> findAllByOrderByNgayDangDesc(Pageable pageable);
+    List<TinTucEntity> findTop5ByTrangThaiDuyetOrderByNgayDangDesc(String trangThaiDuyet);
+    Page<TinTucEntity> findByTrangThaiDuyetOrderByNgayDangDesc(String trangThaiDuyet, Pageable pageable);
+    List<TinTucEntity> findByIdNguoiDangOrderByNgayDangDesc(Integer idNguoiDang);
 }

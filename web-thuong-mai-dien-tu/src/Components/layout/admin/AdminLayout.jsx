@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake, FaUserCircle } from 'react-icons/fa';
+import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake, FaUserCircle, FaNewspaper } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const AdminLayout = () => {
@@ -54,6 +54,7 @@ const AdminLayout = () => {
         { path: '/admin/products', name: 'Kiểm duyệt sản phẩm', icon: <FaBoxOpen /> },
         { path: '/admin/commissions', name: 'Quản lý hoa hồng', icon: <FaMoneyBillWave /> },
         { path: '/admin/partners', name: 'Quản lý đối tác', icon: <FaHandshake /> },
+        { path: '/admin/news', name: 'Quản lý bài đăng', icon: <FaNewspaper /> },
     ];
 
     return (
