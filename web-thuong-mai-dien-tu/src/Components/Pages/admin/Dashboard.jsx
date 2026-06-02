@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
     PieChart, Pie, Cell, Legend, BarChart, Bar, LineChart, Line 
 } from 'recharts';
 import { FaUserPlus, FaShoppingCart, FaMoneyCheckAlt, FaChartLine, FaInfoCircle } from 'react-icons/fa';
+import { adminService } from '../../../services/adminService';
+import { toast } from 'react-toastify';
 
 const Dashboard = () => {
-    const dataDoanhThu = [{ name: 'T1', hoaHong: 4000, nhapXuat: 2400 }, { name: 'T2', hoaHong: 3000, nhapXuat: 1398 }, { name: 'T3', hoaHong: 5000, nhapXuat: 9800 }, { name: 'T4', hoaHong: 2780, nhapXuat: 3908 }, { name: 'T5', hoaHong: 6890, nhapXuat: 4800 }, { name: 'T6', hoaHong: 8390, nhapXuat: 3800 }];
-    const dataNguoiDung = [{ name: 'Khách Hàng', value: 450 }, { name: 'Đối Tác', value: 30 }, { name: 'Admin', value: 5 }];
-    const dataTopSanPham = [{ name: 'RTX 4090', doanhThu: 120 }, { name: 'Core i9', doanhThu: 98 }, { name: 'RAM 32GB', doanhThu: 86 }, { name: 'Main Z790', doanhThu: 75 }, { name: 'SSD 2TB', doanhThu: 60 }];
-    const dataTuongTac = [{ name: 'Tuần 1', click: 400, giaoDich: 24 }, { name: 'Tuần 2', click: 300, giaoDich: 13 }, { name: 'Tuần 3', click: 550, giaoDich: 45 }, { name: 'Tuần 4', click: 700, giaoDich: 68 }];
-    const giaoDichGanDay = [{ id: 'GD001', khachHang: 'nguyenvana', sanPham: 'Card ASUS RTX 4090', hoaHong: '+ 1,500,000 đ', thoiGian: '10 phút trước' }, { id: 'GD002', khachHang: 'tranthib', sanPham: 'CPU Intel Core i7', hoaHong: '+ 450,000 đ', thoiGian: '1 giờ trước' }, { id: 'GD003', khachHang: 'lequocc', sanPham: 'RAM 16GB DDR5', hoaHong: '+ 120,000 đ', thoiGian: '3 giờ trước' }];
+    // 1. Khởi tạo State để chứa dữ liệu thật
+    const [dashboardData, setDashboardData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Dải màu đa dạng và bắt mắt
+    // 2. Tự động gọi API khi vào trang
+    useEffect(() => {
+        fetchDashboardData();
+    }, []);
+
+    const fetchDashboardData = async () => {
+        try {
+            const data = await adminService.getDashboardStats();
+            setDashboardData(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Lỗi tải dữ liệu Dashboard:", error);
+            toast.error("Không thể tải dữ liệu thống kê!");
+            setLoading(false);
+        }
+    };
+
     const PIE_COLORS = ['#3B82F6', '#F59E0B', '#10B981'];
     const CHART_BG = '#FFFFFF';
 
@@ -28,6 +44,16 @@ const Dashboard = () => {
         </div>
     );
 
+    // Màn hình chờ khi đang tải dữ liệu
+    if (loading) {
+        return <div style={{ padding: '24px', color: '#1E3A8A', fontWeight: 'bold', fontSize: '18px' }}>Đang tải dữ liệu hệ thống...</div>;
+    }
+
+    // Nếu không có dữ liệu, hiển thị thông báo
+    if (!dashboardData) {
+        return <div style={{ padding: '24px', color: '#EF4444' }}>Không có dữ liệu để hiển thị.</div>;
+    }
+
     return (
         <div style={{ paddingBottom: '40px' }}>
             <div style={{ marginBottom: '32px', background: 'linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%)', padding: '24px', borderRadius: '12px', color: '#FFF', boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)' }}>
@@ -38,10 +64,10 @@ const Dashboard = () => {
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '30px' }}>
-                <StatCard title="Tổng doanh thu" value="124.5M" icon={<FaMoneyCheckAlt />} color="#3B82F6" />
-                <StatCard title="Tổng tài khoản" value="485" icon={<FaUserPlus />} color="#F59E0B" />
-                <StatCard title="Giao dịch mới" value="1,240" icon={<FaShoppingCart />} color="#8B5CF6" />
-                <StatCard title="Tỷ lệ chuyển đổi" value="4.8%" icon={<FaChartLine />} color="#10B981" />
+                <StatCard title="Tổng doanh thu" value={dashboardData.tongDoanhThu || '0 đ'} icon={<FaMoneyCheckAlt />} color="#3B82F6" />
+                <StatCard title="Tổng tài khoản" value={dashboardData.tongTaiKhoan || 0} icon={<FaUserPlus />} color="#F59E0B" />
+                <StatCard title="Giao dịch mới" value={dashboardData.giaoDichMoi || 0} icon={<FaShoppingCart />} color="#8B5CF6" />
+                <StatCard title="Tỷ lệ chuyển đổi" value={dashboardData.tyLeChuyenDoi || '0%'} icon={<FaChartLine />} color="#10B981" />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '30px' }}>
@@ -49,7 +75,7 @@ const Dashboard = () => {
                     <h3 style={{ margin: '0 0 24px', color: '#1E3A8A', fontSize: '18px', fontWeight: 'bold' }}>Biểu đồ Hoa hồng & Nhập xuất (Triệu VNĐ)</h3>
                     <div style={{ height: '320px' }}>
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={dataDoanhThu} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                            <AreaChart data={dashboardData.bieuDoDoanhThu || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorHoaHong" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
@@ -73,8 +99,8 @@ const Dashboard = () => {
                     <div style={{ height: '320px' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
-                                <Pie data={dataNguoiDung} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={5} dataKey="value" stroke="none">
-                                    {dataNguoiDung.map((entry, index) => (
+                                <Pie data={dashboardData.phanBoTaiKhoan || []} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={5} dataKey="value" stroke="none">
+                                    {(dashboardData.phanBoTaiKhoan || []).map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                                     ))}
                                 </Pie>
@@ -91,7 +117,7 @@ const Dashboard = () => {
                     <h3 style={{ margin: '0 0 20px', color: '#1E3A8A', fontSize: '16px', fontWeight: 'bold' }}>Top 5 Linh kiện (Triệu)</h3>
                     <div style={{ height: '250px' }}>
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={dataTopSanPham} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                            <BarChart data={dashboardData.topSanPham || []} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#F3F4F6"/>
                                 <XAxis type="number" fontSize={12} stroke="#9CA3AF" />
                                 <YAxis dataKey="name" type="category" width={90} fontSize={12} stroke="#4B5563" fontWeight="bold" />
@@ -106,7 +132,7 @@ const Dashboard = () => {
                     <h3 style={{ margin: '0 0 20px', color: '#1E3A8A', fontSize: '16px', fontWeight: 'bold' }}>Tương tác</h3>
                     <div style={{ height: '250px' }}>
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={dataTuongTac} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                            <LineChart data={dashboardData.bieuDoTuongTac || []} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                                 <XAxis dataKey="name" fontSize={12} stroke="#9CA3AF" />
                                 <YAxis fontSize={12} stroke="#9CA3AF" />
@@ -122,7 +148,7 @@ const Dashboard = () => {
                 <div style={{ background: CHART_BG, padding: '24px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
                     <h3 style={{ margin: '0 0 20px', color: '#1E3A8A', fontSize: '16px', fontWeight: 'bold' }}>Giao dịch mới nhất</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        {giaoDichGanDay.map((gd) => (
+                        {(dashboardData.giaoDichGanDay || []).map((gd) => (
                             <div key={gd.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed #E5E7EB', paddingBottom: '12px' }}>
                                 <div>
                                     <div style={{ fontWeight: 'bold', color: '#1F2937', fontSize: '14px' }}>{gd.sanPham}</div>

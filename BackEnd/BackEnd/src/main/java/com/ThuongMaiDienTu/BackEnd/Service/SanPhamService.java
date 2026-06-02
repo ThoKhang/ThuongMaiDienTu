@@ -13,4 +13,5 @@ public interface SanPhamService {
     public List<SanPhamResponse> getSanPhamNoiBat();
     Page<SanPhamResponse> getSanPhamPhanTrang(int page);
     Page<SanPhamResponse> getSanPhamTheoDanhMuc(Integer id, int page);
+    boolean capNhatTrangThaiDuyet(Integer idSanPham, String trangThaiMoi);
 }

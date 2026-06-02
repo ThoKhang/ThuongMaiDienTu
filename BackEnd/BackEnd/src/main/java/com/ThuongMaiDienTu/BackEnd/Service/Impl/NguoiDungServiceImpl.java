@@ -26,20 +26,22 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
     @Override
     public boolean thayDoiTrangThaiTaiKhoan(Integer id) {
-        // Tìm user theo ID
         NguoiDungEntity nguoiDung = nguoiDungRepository.findById(id).orElse(null);
         if (nguoiDung == null) {
             return false;
         }
 
-        // Logic đổi trạng thái
-        if ("HoatDong".equals(nguoiDung.getTrangThai())) {
+        boolean isAdmin = nguoiDung.getVaiTros().stream()
+                .anyMatch(role -> role.getTenVaiTro().equalsIgnoreCase("Admin"));
+        if (isAdmin) {
+            return false; 
+        }
+
+        if (nguoiDung.getTrangThai() == TrangThaiNguoiDung.HOAT_DONG) {
             nguoiDung.setTrangThai(TrangThaiNguoiDung.KHOA);
         } else {
             nguoiDung.setTrangThai(TrangThaiNguoiDung.HOAT_DONG);
         }
-        
-        // Lưu lại vào DB
         nguoiDungRepository.save(nguoiDung);
         return true;
     }

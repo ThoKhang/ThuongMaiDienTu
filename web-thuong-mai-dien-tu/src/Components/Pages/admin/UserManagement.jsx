@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { adminService } from '../../../services/adminService';
 import { FaLock, FaUnlock, FaSearch, FaInfoCircle, FaShieldAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify'; 
+import Swal from 'sweetalert2';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -24,11 +25,33 @@ const UserManagement = () => {
         }
     };
 
+    // Thêm hàm kiểm tra Admin
+    const isAdminUser = (user) => {
+        return user.vaiTros.some(role => role.toLowerCase() === 'admin');
+    };
+
     const handleToggleStatus = async (user) => {
+        // ✅ Chặn ngay từ frontend
+        if (isAdminUser(user)) {
+            toast.warning("Không thể khóa tài khoản Admin!");
+            return;
+        }
+
         const hienTaiDangHoatDong = user.trangThai === 'HoatDong';
         const hanhDong = hienTaiDangHoatDong ? 'khóa' : 'mở khóa';
 
-        if(window.confirm(`Bạn có chắc chắn muốn ${hanhDong} tài khoản ${user.tenDangNhap}?`)) {
+        const result = await Swal.fire({
+            title: 'Xác nhận',
+            text: `Bạn có chắc chắn muốn ${hanhDong} tài khoản ${user.tenDangNhap}?`,
+            icon: 'warning', 
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy'
+        });
+
+        if (result.isConfirmed) {
             try {
                 await adminService.toggleUserStatus(user.id);
                 toast.success(`Đã ${hanhDong} tài khoản ${user.tenDangNhap} thành công!`);
@@ -115,6 +138,19 @@ const UserManagement = () => {
                                         )}
                                     </td>
                                     <td style={{ padding: '16px', textAlign: 'center' }}>
+                                         {isAdminUser(user) ? (
+                                            // ✅ Hiển thị badge thay vì nút khóa cho Admin
+                                            <span style={{
+                                                padding: '8px 16px',
+                                                background: '#EFF6FF',
+                                                color: '#1E3A8A',
+                                                borderRadius: '8px',
+                                                fontSize: '13px',
+                                                fontWeight: 'bold'
+                                            }}>
+                                                Quản trị viên
+                                            </span>
+                                        ) : (
                                         <button 
                                             onClick={() => handleToggleStatus(user)}
                                             title={user.trangThai === 'HoatDong' ? "Nhấn để khóa" : "Nhấn để mở khóa"}
@@ -131,6 +167,7 @@ const UserManagement = () => {
                                         >
                                             {user.trangThai === 'HoatDong' ? <><FaLock /> Khóa TK</> : <><FaUnlock /> Mở khóa</>}
                                         </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
