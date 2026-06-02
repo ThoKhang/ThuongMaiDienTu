@@ -2,6 +2,7 @@ package com.ThuongMaiDienTu.BackEnd.Service.Impl;
 
 import com.ThuongMaiDienTu.BackEnd.DTO.Request.SanPhamRequest;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.SanPhamResponse;
+import com.ThuongMaiDienTu.BackEnd.Entity.SanPhamEntity;
 import com.ThuongMaiDienTu.BackEnd.Enum.TinhTrangDuyet;
 import com.ThuongMaiDienTu.BackEnd.Mapper.SanPhamMapper;
 import com.ThuongMaiDienTu.BackEnd.Repository.SanPhamRepository;
@@ -29,9 +30,9 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public SanPhamResponse getSanPhamById(Integer id) {
-        return sanPhamRepository.findById(id)
-                .map(sanPhamMapper::toResponse)
-                .orElse(null);
+        SanPhamEntity sanPham = sanPhamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với ID: " + id));
+        return sanPhamMapper.toResponse(sanPham);
     }
 
     @Override
