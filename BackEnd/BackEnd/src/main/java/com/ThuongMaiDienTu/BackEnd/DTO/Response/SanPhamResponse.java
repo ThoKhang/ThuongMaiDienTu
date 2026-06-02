@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class SanPhamResponse {
     private Integer id;
     private Integer idDanhMuc;
+    private Integer idDoiTac;
     private Integer idThuongHieu;
     private String tenSanPham;
     private String thongSoKyThuat;

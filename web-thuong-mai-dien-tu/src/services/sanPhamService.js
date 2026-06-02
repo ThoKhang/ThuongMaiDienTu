@@ -35,4 +35,16 @@ export const sanPhamService = {
     const response = await api.put(`/api/sanpham/${id}/status`, { tinhTrangDuyet });
     return response.data;
   },
+  updateProduct: async (id, productData) => {
+    const response = await api.put(`/api/sanpham/${id}`, productData);
+    return response.data;
+  },
+  getCategories: async () => {
+    const response = await api.get('/api/danh-muc');
+    return response.data;
+  },
+  getBrands: async () => {
+    const response = await api.get('/api/thuonghieu');
+    return response.data;
+  },
 };

@@ -22,10 +22,36 @@ const QuanLyTinDang = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('ALL');
 
+  // Edit Modal States
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Form states for Editing
+  const [editName, setEditName] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editBrand, setEditBrand] = useState('');
+  const [editPrice, setEditPrice] = useState('');
+  const [editPromoPrice, setEditPromoPrice] = useState('');
+  const [editStock, setEditStock] = useState('');
+  const [editSpecs, setEditSpecs] = useState('');
+  const [editAffiliate, setEditAffiliate] = useState('');
+
   // Fetch partner products
   const { data: products = [], isLoading, error } = useQuery({
     queryKey: ['partnerProducts'],
     queryFn: sanPhamService.getPartnerProducts
+  });
+
+  // Fetch Categories for Edit Dropdown
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: sanPhamService.getCategories
+  });
+
+  // Fetch Brands for Edit Dropdown
+  const { data: brands = [] } = useQuery({
+    queryKey: ['brands'],
+    queryFn: sanPhamService.getBrands
   });
 
   // Mutation for deleting product
@@ -61,6 +87,19 @@ const QuanLyTinDang = () => {
     },
     onError: (err) => {
       Swal.fire('Lỗi', err.response?.data || 'Không thể thay đổi trạng thái.', 'error');
+    }
+  });
+
+  // Mutation for updating full product details
+  const updateProductMutation = useMutation({
+    mutationFn: ({ id, productData }) => sanPhamService.updateProduct(id, productData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['partnerProducts'] });
+      setIsEditModalOpen(false);
+      Swal.fire('Thành công', 'Đã cập nhật thông tin sản phẩm thành công!', 'success');
+    },
+    onError: (err) => {
+      Swal.fire('Lỗi', err.response?.data || 'Không thể cập nhật sản phẩm.', 'error');
     }
   });
 
@@ -153,6 +192,71 @@ const QuanLyTinDang = () => {
         updateStatusMutation.mutate({ id, status: nextStatus });
       }
     });
+  };
+
+  const handleOpenEditModal = (product) => {
+    setSelectedProduct(product);
+    setEditName(product.tenSanPham || '');
+    setEditCategory(product.idDanhMuc || '');
+    setEditBrand(product.idThuongHieu || '');
+    setEditPrice(product.giaNiemYet || '');
+    setEditPromoPrice(product.giaKhuyenMai || '');
+    setEditStock(product.soLuongTon || 0);
+    setEditSpecs(product.thongSoKyThuat || '');
+    setEditAffiliate(product.urlAffiliate || '');
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    
+    // Validations
+    if (!editName.trim()) {
+      Swal.fire('Lỗi', 'Tên sản phẩm không được để trống!', 'error');
+      return;
+    }
+    if (!editCategory) {
+      Swal.fire('Lỗi', 'Vui lòng chọn Danh mục!', 'error');
+      return;
+    }
+    if (!editBrand) {
+      Swal.fire('Lỗi', 'Vui lòng chọn Thương hiệu!', 'error');
+      return;
+    }
+    if (!editPrice || parseFloat(editPrice) <= 0) {
+      Swal.fire('Lỗi', 'Giá niêm yết phải là số dương lớn hơn 0!', 'error');
+      return;
+    }
+    if (editPromoPrice !== '' && editPromoPrice !== null && parseFloat(editPromoPrice) < 0) {
+      Swal.fire('Lỗi', 'Giá khuyến mãi phải lớn hơn hoặc bằng 0!', 'error');
+      return;
+    }
+    if (editPromoPrice !== '' && editPromoPrice !== null && parseFloat(editPromoPrice) > parseFloat(editPrice)) {
+      Swal.fire('Lỗi', 'Giá khuyến mãi không được lớn hơn giá niêm yết!', 'error');
+      return;
+    }
+    if (editStock === '' || parseInt(editStock) < 0) {
+      Swal.fire('Lỗi', 'Số lượng tồn kho phải lớn hơn hoặc bằng 0!', 'error');
+      return;
+    }
+    if (!editAffiliate.trim()) {
+      Swal.fire('Lỗi', 'Link Affiliate không được để trống!', 'error');
+      return;
+    }
+    
+    const productData = {
+      idDanhMuc: parseInt(editCategory),
+      idThuongHieu: parseInt(editBrand),
+      tenSanPham: editName,
+      thongSoKyThuat: editSpecs,
+      giaNiemYet: parseFloat(editPrice),
+      giaKhuyenMai: (editPromoPrice !== '' && editPromoPrice !== null) ? parseFloat(editPromoPrice) : null,
+      soLuongTon: parseInt(editStock),
+      urlAffiliate: editAffiliate,
+      tinhTrangDuyet: selectedProduct.tinhTrangDuyet
+    };
+
+    updateProductMutation.mutate({ id: selectedProduct.id, productData });
   };
 
   if (isLoading) {
@@ -382,7 +486,7 @@ const QuanLyTinDang = () => {
                           {/* Edit (disabled for pending) */}
                           <button
                             disabled={sp.tinhTrangDuyet === TinhTrangDuyet.CHO_DUYET}
-                            onClick={() => Swal.fire('Tính năng đang xây dựng', 'Giao diện chỉnh sửa chi tiết sản phẩm sẽ hoàn thành ở bước tiếp theo.', 'info')}
+                            onClick={() => handleOpenEditModal(sp)}
                             className="p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                             title="Sửa tin đăng"
                           >
@@ -407,6 +511,163 @@ const QuanLyTinDang = () => {
           )}
         </div>
       </div>
+
+      {/* ── EDIT MODAL ── */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-100 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden flex flex-col scale-in">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10">
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">Chỉnh sửa tin đăng</h3>
+                <p className="text-slate-500 text-xs mt-0.5">Mã SKU: #{selectedProduct?.id}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined block text-xl">close</span>
+              </button>
+            </div>
+
+            {/* Modal Body / Form */}
+            <form onSubmit={handleSaveEdit} className="p-6 space-y-5 flex-1">
+              {/* Product Name */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tên sản phẩm</label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Nhập tên đầy đủ của sản phẩm..."
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                  required
+                />
+              </div>
+
+              {/* Category & Brand */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Danh mục</label>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all cursor-pointer"
+                    required
+                  >
+                    <option value="">-- Chọn danh mục --</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.tenDanhMuc}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thương hiệu</label>
+                  <select
+                    value={editBrand}
+                    onChange={(e) => setEditBrand(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all cursor-pointer"
+                    required
+                  >
+                    <option value="">-- Chọn thương hiệu --</option>
+                    {brands.map((b) => (
+                      <option key={b.id} value={b.id}>{b.tenThuongHieu}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Price Niêm Yết & Price Khuyến Mãi */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Giá niêm yết (đ)</label>
+                  <input
+                    type="number"
+                    value={editPrice}
+                    onChange={(e) => setEditPrice(e.target.value)}
+                    placeholder="Ví dụ: 45000000"
+                    min="1"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Giá khuyến mãi (đ - Tùy chọn)</label>
+                  <input
+                    type="number"
+                    value={editPromoPrice}
+                    onChange={(e) => setEditPromoPrice(e.target.value)}
+                    placeholder="Bỏ trống nếu không giảm giá..."
+                    min="0"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                  />
+                </div>
+              </div>
+
+              {/* Stock & Affiliate URL */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1.5 md:col-span-1">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tồn kho</label>
+                  <input
+                    type="number"
+                    value={editStock}
+                    onChange={(e) => setEditStock(e.target.value)}
+                    placeholder="0"
+                    min="0"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5 md:col-span-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Đường dẫn Affiliate (Mua hàng)</label>
+                  <input
+                    type="url"
+                    value={editAffiliate}
+                    onChange={(e) => setEditAffiliate(e.target.value)}
+                    placeholder="https://cua-hang.com/san-pham"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Technical Specifications */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thông số kỹ thuật / Mô tả</label>
+                <textarea
+                  value={editSpecs}
+                  onChange={(e) => setEditSpecs(e.target.value)}
+                  placeholder="Nhập thông số kỹ thuật dạng text hoặc JSON..."
+                  rows={4}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                />
+              </div>
+
+              {/* Form Actions */}
+              <div className="p-2 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50 -mx-6 -mb-6 p-6 sticky bottom-0 z-10 backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-5 py-3 border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold rounded-xl text-sm transition-colors cursor-pointer"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="submit"
+                  disabled={updateProductMutation.isPending}
+                  className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-600/50 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-sky-600/10 active:scale-95 transition-all text-sm flex items-center gap-1.5 cursor-pointer"
+                >
+                  {updateProductMutation.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

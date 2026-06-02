@@ -79,6 +79,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/sanpham/partner").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/stock").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/status").hasAnyRole("DOITAC", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/sanpham/*").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/sanpham/*").hasAnyRole("DOITAC", "ADMIN")
                         
                         // API công khai của sản phẩm (Đặt sau)

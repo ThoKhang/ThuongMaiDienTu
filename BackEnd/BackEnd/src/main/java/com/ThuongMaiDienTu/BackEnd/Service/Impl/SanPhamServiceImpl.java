@@ -129,6 +129,28 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     @Transactional
+    public SanPhamResponse updateSanPham(Integer id, SanPhamRequest request) {
+        SanPhamEntity sp = sanPhamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với ID: " + id));
+        
+        sp.setIdDanhMuc(request.getIdDanhMuc());
+        sp.setIdThuongHieu(request.getIdThuongHieu());
+        sp.setTenSanPham(request.getTenSanPham());
+        sp.setThongSoKyThuat(request.getThongSoKyThuat());
+        sp.setGiaNiemYet(request.getGiaNiemYet());
+        sp.setGiaKhuyenMai(request.getGiaKhuyenMai());
+        sp.setSoLuongTon(request.getSoLuongTon());
+        sp.setUrlAffiliate(request.getUrlAffiliate());
+        
+        if (request.getTinhTrangDuyet() != null) {
+            sp.setTinhTrangDuyet(TinhTrangDuyet.fromDbValue(request.getTinhTrangDuyet()));
+        }
+        
+        return sanPhamMapper.toResponse(sanPhamRepository.save(sp));
+    }
+
+    @Override
+    @Transactional
     public void recordClick(Integer idSanPham, String ipAddress, String userAgent, Integer idKhachHang) {
         if (!sanPhamRepository.existsById(idSanPham)) {
             throw new RuntimeException("Sản phẩm không tồn tại!");

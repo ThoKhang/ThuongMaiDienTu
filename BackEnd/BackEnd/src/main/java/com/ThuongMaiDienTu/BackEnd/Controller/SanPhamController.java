@@ -56,6 +56,24 @@ public class SanPhamController {
         return ResponseEntity.ok(sanPhamService.updateTinhTrangDuyet(id, status));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<SanPhamResponse> update(@PathVariable Integer id, @RequestBody SanPhamRequest request) {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails userDetails = (com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails) authentication.getPrincipal();
+        boolean isAdmin = userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
+        SanPhamResponse sp = sanPhamService.getSanPhamById(id);
+        if (!isAdmin && !sp.getIdDoiTac().equals(userDetails.getId())) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build();
+        }
+        
+        if (!isAdmin) {
+            request.setIdDoiTac(userDetails.getId());
+        }
+        
+        return ResponseEntity.ok(sanPhamService.updateSanPham(id, request));
+    }
+
     @PostMapping("{id}/view")
     public ResponseEntity<String> recordClick(
             @PathVariable Integer id,

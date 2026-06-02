@@ -18,5 +18,6 @@ public interface SanPhamService {
     void deleteSanPham(Integer id);
     SanPhamResponse updateSoLuongTon(Integer id, Integer soLuong);
     SanPhamResponse updateTinhTrangDuyet(Integer id, String tinhTrang);
+    SanPhamResponse updateSanPham(Integer id, SanPhamRequest request);
     void recordClick(Integer idSanPham, String ipAddress, String userAgent, Integer idKhachHang);
 }
