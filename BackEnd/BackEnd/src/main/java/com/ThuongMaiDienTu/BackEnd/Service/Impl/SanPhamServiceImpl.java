@@ -79,6 +79,10 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
         return false;
     }
+    @Override
+    public List<SanPhamResponse> searchByTenSanPham(String keyword) {
+        return sanPhamRepository.findByTenSanPhamContainingIgnoreCase(keyword).stream().map(sanPhamMapper::toResponse).toList();
+    }
 
     @Override
     public List<SanPhamResponse> getSanPhamByDoiTac(Integer idDoiTac) {
@@ -180,5 +184,6 @@ public class SanPhamServiceImpl implements SanPhamService {
                 .isHopLe(true)
                 .build();
         theoDoiClickRepository.save(click);
+>>>>>>> 85fc57d2963caeabc90f60ad64896c62d085feda
     }
 }

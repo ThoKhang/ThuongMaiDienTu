@@ -57,7 +57,7 @@ public class SecurityConfig {
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); 
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
@@ -66,8 +66,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                    auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
@@ -86,10 +85,11 @@ public class SecurityConfig {
                         // API công khai của sản phẩm (Đặt sau)
                         .requestMatchers(HttpMethod.GET, "/api/sanpham/**").permitAll()
                         .requestMatchers("/api/trangchu/**","/api/danh-muc/**","/api/tintuc/**").permitAll()
+                        .requestMatchers("/api/khachhang/**").permitAll()
+                        .requestMatchers("/api/theodoi-click/**").permitAll()
                         
                         .anyRequest().authenticated()
                 );
-
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

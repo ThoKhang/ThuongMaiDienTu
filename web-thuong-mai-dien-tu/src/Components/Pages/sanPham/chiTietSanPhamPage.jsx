@@ -3,7 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import UserLayout from '../../layout/UserLayout';
 import { useChiTietSanPham, useSanPhamTuongTu } from '../../../hooks/useChiTietSanPham';
 import { sanPhamService } from '../../../services/sanPhamService';
-
+import { useTheoDoiClick } from "../../../hooks/useTheoDoiClick";
+import { getUserIdFromToken, getUserInfoFromToken } from "../../../utils/getUserIdFromToken";
+import { khachHangService } from "../../../services/khachHangService";
 /* ─── Helpers ─── */
 const formatCurrency = (amount) =>
   new Intl.NumberFormat('vi-VN').format(amount) + '₫';
@@ -93,10 +95,11 @@ const ChiTietSanPhamPage = () => {
     tenSanPham: sanPham?.tenSanPham ?? 'NVIDIA GeForce RTX 4090 Founders Edition 24GB GDDR6X',
     giaBan: sanPham?.giaKhuyenMai ?? sanPham?.giaNiemYet ?? 42500000,
     giaGoc: sanPham?.giaNiemYet ?? 48000000,
+    url: sanPham?.url,
     tinhTrang: sanPham?.tinhTrang ?? 'Đã qua sử dụng (Like New)',
     baoHanh: sanPham?.baoHanh ?? 'Còn 24 tháng (Chính hãng)',
     moTa: sanPham?.moTa ?? '',
-    diaChiNguoiBan: sanPham?.diaChiNguoiBan ?? 'Quận 7, TP. Hồ Chí Minh',
+    diaChiNguoiBan: sanPham?.diaChiNguoiBan ?? '24 Bắc Đẩu, Đà Nẵng',
     thoiGianDang: sanPham?.thoiGianDang ?? '2 giờ trước',
     luotXem: sanPham?.luotXem ?? 0,
     danhMuc: sanPham?.tenDanhMuc ?? 'Linh kiện đồ họa',
@@ -118,15 +121,49 @@ const ChiTietSanPhamPage = () => {
   };
 
   // Ảnh hiển thị
-  const danhSachAnh = Array.isArray(demo.anhSanPham) && demo.anhSanPham.length > 0
-    ? demo.anhSanPham
-    : [
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBkAsXSm337uUuMCtq9h8ie2dL-uJy8YZkD3hzAgYMjjjaMl9EUP1QaOr-qraJ7XJs7_Gx9Ip2WcJTbXSLVCqcdWCQMc6ZKuwXO7_AbSmMb99Ob2dtkhvpv-qhqjklKmenVnYrowAMtZ5emVRraKZVsEqnj2vfjK7g6fwH-2hEz77kTTyxGLdKm7aC4nqQ1JJ_vrivAHYFbTTmCZsiMYsxNyonGnLD88AYWOmFN5iTgFfhY4kxJjWuSKPXbFCsBBuF7Vmuput8zkno',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCcNXldKgT7FkeJz2wLdRbMSV7Xgjl4GBhdSPvVkgIysDtEuGTxNBvmBsZbu5o_7gIYF8zmH-mgXm2W1_OMgDNdHn1mSZ9RTwkhcCoS_0UfxCSknoPFlzPkhGmJDQqJK22Tc5-NCFy3iWiEfbKyXHHhSyJSq9_PzaqPtUbq-Bpnxy7HX6KZzCdvABfTOCCVUGzJ0hGPCK2E3Y87A17I26bOuIrSOPXL7OQP1r6HIX_Wbelhea11Rd_Zq1hanWqicKxQ64U3rlR98_I',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCx_jCf-OZDInlJXT3_k2t7YUenq_WR3ERMFBgCJBSSHbJIQqewksJ2IL_ZTRIC09G56RrQkUUO5PdiYbOX74_UZO_RZomoLRACAWT-uqgS31IfnUXzBnsPv2WqIpbn1L0VecbP3DtO0esR89viDaCH2OkDXjEnzXNvEMvxZgpydbEnXPN8MAn8N2IXeMi2cv-1o8vkARh7AQggMpHMO5NpOOFOf62WOfXMnmIUX-Z-bZgDx1Q6eG4B8x5tPLkteKlwkEjzYSTXL2I',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDcCOodmD78prGPwavbGcmXs0pWmfUzMgiAVHOPWyU5-Ds8bM1dtG18gYh-aQTVgUJFismQA_V5bVrzLOcqEOQt2_27fhjbKylNMGmCQpNMCsrMv4GRXtincN3ZTjoB3IJPJT6MG6tkXGmX5KvnTZTrbn_N80wgjtvpjUmfc-RBLCsxsln7GAqhjRtXjFeP-gExPde6oynaXXpAPOrFFZIw_-RLKuMzEtUgdWUOSZh10dA6fSGNUyv9z11Zer2NQbA2YDOZdUKhG0A',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBTFwUB9BjYtbo4L9fToYEuqYY1JSOKakTpirJUSo_8T-zyVkIs-TT3G6Y6udQu4na7ptvJtgdxBH4MMtbMNB0lT3NSnqFC4dtVQl8cBmGkCDUeQ7mJWajCqfb7RGcYMSdDRgN-PRgYHL81e_SIEsk48OZy_Hjv5vGjTSLS7vMpWoiXS-l4Rsb45B5GmNyrG-qDMD2AaFoBKxAlG529Kw8ol_iU3ZYKH0Ht3vtRCB0wH2LYJHL6pmJgyWLZjePyfwHrWyxvCKWQ1V8',
-    ];
+  const danhSachAnh = demo?.url ? [demo.url] : [];
+  // const { id } = useParams();
+  const handleLienHeNguoiBan = async () => {
+    try {
+      const userInfo = getUserInfoFromToken();
+      console.log("JWT payload:", userInfo);
+
+      const idNguoiDung = userInfo?.id ?? null;
+      const tenDangNhap = userInfo?.sub ?? null;
+
+      // Bước 1: Tạo / cộng điểm khách hàng TRƯỚC để lấy idNguoiDung thật từ DB
+      let idKhachHang = idNguoiDung; // dùng id từ token nếu có (token mới)
+      if (tenDangNhap || idNguoiDung) {
+        try {
+          const khResult = await khachHangService.createKhachHang({
+            idNguoiDung: idNguoiDung,
+            tenDangNhap: tenDangNhap,
+            hoTen: tenDangNhap ?? "Khách Hàng"
+          });
+          console.log("Kết quả khách hàng:", khResult);
+          // Lấy idNguoiDung thật từ response backend
+          if (khResult?.idNguoiDung) {
+            idKhachHang = khResult.idNguoiDung;
+          }
+        } catch (khErr) {
+          console.error("Lỗi cộng điểm:", khErr);
+        }
+      }
+
+      // Bước 2: Track click với idKhachHang thật vừa lấy được
+      await theoDoiClickMutation.mutateAsync({
+        idSanPham: sanPham.id,
+        idKhachHang: idKhachHang,
+        trinhDuyetFingerprint: navigator.userAgent
+      });
+
+      window.open(sanPham.urlAffiliate, "_blank");
+
+    } catch (error) {
+      console.error("Lỗi handleLienHeNguoiBan:", error);
+    }
+  };
+  const theoDoiClickMutation = useTheoDoiClick();
 
   /* ── Error state ── */
   if (isError) {
@@ -296,9 +333,18 @@ const ChiTietSanPhamPage = () => {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col gap-3">
-                  <button className="w-full bg-primary hover:bg-primary-container text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-primary/10">
-                    <span className="material-symbols-outlined">chat_bubble</span>
-                    Liên hệ với người bán
+                  <button
+                    onClick={handleLienHeNguoiBan}
+                    disabled={theoDoiClickMutation.isPending}
+                    className="w-full bg-primary hover:bg-primary-container text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-primary/10"
+                  >
+                    <span className="material-symbols-outlined">
+                      chat_bubble
+                    </span>
+
+                    {theoDoiClickMutation.isPending
+                      ? "Đang chuyển..."
+                      : "Liên hệ với người bán"}
                   </button>
                   <div className="grid grid-cols-2 gap-3">
                     <button className="bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
@@ -428,30 +474,9 @@ const ChiTietSanPhamPage = () => {
                 <h3 className="font-headline font-bold text-on-surface mb-5">Sản phẩm tương tự</h3>
 
                 {sanPhamTuongTu.length === 0 ? (
-                  /* Demo items khi chưa có data */
-                  <div className="space-y-4">
-                    {[
-                      {
-                        ten: 'ASUS ROG Strix RTX 4080 OC Edition',
-                        gia: 28500000,
-                        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDzS8Bl2IDJGlkkso3XB2F3KiHIUeJ4OiYIrstISkIgB5BgKvb_gZ7G9mzkIywd9uMqudq06vnBWuQqRPIZ1R0D8-uj10ASumlfe_ZiYuc1ePME-fq2-JVSYfk3tjLzMb50KUKPOvFC4uQ7SQsisw4SlgKn9qir5owNchQz9cA2HjJ3TfzCBUcmpxzvMPWcMDeaObYWdS0Sj27g27DzbGOWmx4ankiKYDRUPsvtRuVkUCK2hfGLW-LaEY704Mss4e3RgBn2LX_GPFA',
-                      },
-                      {
-                        ten: 'MSI Suprim X RTX 4090 24GB',
-                        gia: 45000000,
-                        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD9o4mcKoNDTEQf3gNH7jNGWthS6KxuqkvagzQN3y1G2D3V2CqH8dbh9igEUT0riGb5All0zaHLCOzlBTICvmkebKLYa4oyfOq6YaI20eV_gZ1BhtZiu7QPv4WT5rsSIglNfIX0BWihvOXgWHoB_7YTmRRWwaRPdbGZVPtMXwH50-c0lEvaPnpMWSvIFkuucUjRtTQH_uKkavGcz_otXoKErq_WCfHm3p03lWpiqKEZ12gXpzRmjVY9W0Zj_LTar0ShseH4t1_LF_E',
-                      },
-                    ].map((item, i) => (
-                      <div key={i} className="flex gap-3 group cursor-pointer hover:bg-surface-container-low rounded-lg p-2 transition-colors">
-                        <div className="w-20 h-20 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0">
-                          <img src={item.img} alt={item.ten} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold line-clamp-2 group-hover:text-primary transition-colors">{item.ten}</p>
-                          <p className="text-secondary font-black mt-1 text-sm">{formatCurrency(item.gia)}</p>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="text-center py-6 text-outline-variant">
+                    <span className="text-3xl block mb-2">📦</span>
+                    <p className="text-sm">Chưa có sản phẩm tương tự.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -462,8 +487,8 @@ const ChiTietSanPhamPage = () => {
                         className="flex gap-3 group hover:bg-surface-container-low rounded-lg p-2 transition-colors"
                       >
                         <div className="w-20 h-20 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0">
-                          {item.anhDaiDien ? (
-                            <img src={item.anhDaiDien} alt={item.tenSanPham} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          {item.url ? (
+                            <img src={item.url} alt={item.tenSanPham} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="material-symbols-outlined text-outline-variant">image</span>
@@ -472,14 +497,17 @@ const ChiTietSanPhamPage = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold line-clamp-2 group-hover:text-primary transition-colors">{item.tenSanPham}</p>
-                          <p className="text-secondary font-black mt-1 text-sm">{formatCurrency(item.giaBan)}</p>
+                          <p className="text-secondary font-black mt-1 text-sm">{formatCurrency(item.giaKhuyenMai ?? item.giaNiemYet ?? 0)}</p>
                         </div>
                       </Link>
                     ))}
                   </div>
                 )}
 
-                <button className="w-full mt-6 text-primary text-sm font-bold hover:underline">
+                <button
+                  onClick={() => window.location.href = "http://localhost:3000/"}
+                  className="w-full mt-6 text-primary text-sm font-bold hover:underline"
+                >
                   Xem thêm sản phẩm
                 </button>
               </div>

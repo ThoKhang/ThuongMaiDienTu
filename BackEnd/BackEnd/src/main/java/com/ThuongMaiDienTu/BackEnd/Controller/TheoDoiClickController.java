@@ -1,13 +1,19 @@
 package com.ThuongMaiDienTu.BackEnd.Controller;
 
+import com.ThuongMaiDienTu.BackEnd.DTO.Request.TheoDoiClickRequest;
+import com.ThuongMaiDienTu.BackEnd.DTO.Response.TheoDoiClickResponse;
+import com.ThuongMaiDienTu.BackEnd.Service.TheoDoiClickService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/theodoiclick")
 @RestController
+@RequestMapping("/api/theodoi-click")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class TheoDoiClickController {
+    private final TheoDoiClickService theoDoiClickService;
+    @PostMapping
+    public ResponseEntity<TheoDoiClickResponse> create(@RequestBody TheoDoiClickRequest request) {
+        return ResponseEntity.ok(theoDoiClickService.createTheoDoiClick(request));
+    }
 }

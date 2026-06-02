@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import UserLayout from "../../layout/UserLayout";
 
 const DANH_MUC_CONFIG = {
@@ -64,6 +64,8 @@ const DEFAULT_CONFIG = {
 
 export default function DanhMucSanPham() {
     const { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const q = searchParams.get("q") || "";
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [trangHienTai, setTrangHienTai] = useState(0);
@@ -102,6 +104,11 @@ export default function DanhMucSanPham() {
     const danhSachHienThi = () => {
         if (!data?.sanPham) return [];
         let arr = [...data.sanPham];
+        
+        if (q) {
+            arr = arr.filter(sp => sp.tenSanPham.toLowerCase().includes(q.toLowerCase()));
+        }
+
         if (boLocGia) {
             const opt = giaOptions.find(o => o.value === boLocGia);
             if (opt) arr = arr.filter(sp => {

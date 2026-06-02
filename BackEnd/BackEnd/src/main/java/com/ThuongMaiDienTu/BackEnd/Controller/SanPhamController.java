@@ -30,7 +30,7 @@ public class SanPhamController {
     public ResponseEntity<List<SanPhamResponse>> getAll() {
         return ResponseEntity.ok(sanPhamService.getAllSanPham());
     }
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SanPhamResponse> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(sanPhamService.getSanPhamById(id));
     }
@@ -112,5 +112,9 @@ public class SanPhamController {
                         .findByTinhTrangDuyet(TinhTrangDuyet.DA_DUYET, pageable)
                         .map(sanPhamMapper::toResponse)
         );
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<SanPhamResponse>> search(@RequestParam String keyword) {
+        return ResponseEntity.ok(sanPhamService.searchByTenSanPham(keyword));
     }
 }
