@@ -14,12 +14,16 @@ import java.math.BigDecimal;
 public class SanPhamResponse {
     private Integer id;
     private Integer idDanhMuc;
+    private Integer idDoiTac;
     private Integer idThuongHieu;
     private String tenSanPham;
+    private String url;
+    private String moTa;
     private String thongSoKyThuat;
     private BigDecimal giaNiemYet;
     private BigDecimal giaKhuyenMai;
     private Integer soLuongTon;
     private String urlAffiliate;
     private String tinhTrangDuyet;
+    private Long clicks;
 }

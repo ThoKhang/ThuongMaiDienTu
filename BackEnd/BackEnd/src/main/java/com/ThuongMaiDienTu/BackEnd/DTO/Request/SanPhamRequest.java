@@ -9,6 +9,8 @@ public class SanPhamRequest {
     private Integer idDoiTac;
     private Integer idThuongHieu;
     private String tenSanPham;
+    private String url;
+    private String moTa;
     private String thongSoKyThuat;
     private BigDecimal giaNiemYet;
     private BigDecimal giaKhuyenMai;

@@ -24,6 +24,10 @@ public class SanPhamEntity {
     private Integer idThuongHieu;
     @Column(name = "tenSanPham", nullable = false, length = 200)
     private String tenSanPham;
+    @Column(name = "url", length = 500)
+    private String url;
+    @Column(name = "moTa", columnDefinition = "TEXT")
+    private String moTa;
     @Column(name = "thongSoKyThuat", columnDefinition = "NVARCHAR(MAX)")
     private String thongSoKyThuat;
     @Column(name = "giaNiemYet", nullable = false)

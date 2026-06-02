@@ -2,7 +2,24 @@ package com.ThuongMaiDienTu.BackEnd.Repository;
 
 import com.ThuongMaiDienTu.BackEnd.Entity.TheoDoiClickEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface TheoDoiClickRepository extends JpaRepository<TheoDoiClickEntity, Long> {}
+public interface TheoDoiClickRepository extends JpaRepository<TheoDoiClickEntity, Long> {
+    long countByIdSanPham(Integer idSanPham);
+
+    @Query("SELECT tc.idSanPham, COUNT(tc.id) FROM TheoDoiClickEntity tc WHERE tc.idSanPham IN :idSanPhams GROUP BY tc.idSanPham")
+    List<Object[]> countClicksByProductIds(@Param("idSanPhams") List<Integer> idSanPhams);
+
+    @Query(value = "SELECT COUNT(*) FROM THEODOI_CLICK " +
+                   "WHERE idSanPham = :idSanPham AND diaChiIP = :ipAddress AND trinhDuyetFingerprint = :userAgent " +
+                   "AND thoiGianClick >= NOW() - INTERVAL 10 SECOND", nativeQuery = true)
+    int countRecentClicks(@Param("idSanPham") Integer idSanPham, 
+                          @Param("ipAddress") String ipAddress, 
+                          @Param("userAgent") String userAgent);
+}
+

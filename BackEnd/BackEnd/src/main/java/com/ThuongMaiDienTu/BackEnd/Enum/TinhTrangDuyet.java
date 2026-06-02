@@ -3,7 +3,8 @@ package com.ThuongMaiDienTu.BackEnd.Enum;
 public enum TinhTrangDuyet {
     CHO_DUYET("ChoDuyet"),
     DA_DUYET("DaDuyet"),
-    TU_CHOI("TuChoi");
+    TU_CHOI("TuChoi"),
+    DA_AN("DaAn");
     private final String dbValue;
     TinhTrangDuyet(String dbValue) {
         this.dbValue = dbValue;
