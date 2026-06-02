@@ -10,16 +10,20 @@ import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 import Home from './Components/Pages/TrangChu/TrangChu';
 import DanhMuc from './Components/Pages/DanhMuc/DanhMuc';
 
+// BỔ SUNG IMPORT TRANG CHI TIẾT TIN TỨC
+import ChiTietTinTuc from './Components/Pages/TinTuc/ChiTietTinTuc';
+
 import AdminLayout from './Components/layout/admin/AdminLayout';
 import Dashboard from './Components/Pages/admin/Dashboard';
 import UserManagement from './Components/Pages/admin/UserManagement';
 import ProductManagement from './Components/Pages/admin/ProductManagement';
 import TransactionManagement from './Components/Pages/admin/TransactionManagement';
-// THÊM IMPORT TRANG QUẢN LÝ ĐỐI TÁC
 import PartnerManagement from './Components/Pages/admin/PartnerManagement'; 
+import NewsManagement from './Components/Pages/admin/NewsManagement';
 import VendorLayout from './Components/layout/vendor/VendorLayout';
 import QuanLyTinDang from './Components/Pages/sanPham/QuanLyTinDang';
 import VendorDashboard from './Components/Pages/sanPham/VendorDashboard';
+
 function App() {
   return (
     <>
@@ -46,16 +50,27 @@ function App() {
         <Route path="/dang-nhap" element={<Login />} />
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
-          <Route path="/danh-muc/:id" element={<DanhMuc />} />
+        <Route path="/danh-muc/:id" element={<DanhMuc />} />
+
+        {/* THÊM ĐỊNH TUYẾN CHO TRANG CHI TIẾT TIN TỨC */}
+        <Route 
+          path="/tin-tuc/:id" 
+          element={
+            <>
+              <Header />
+              <ChiTietTinTuc />
+              <Footer />
+            </>
+          } 
+        />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="commissions" element={<TransactionManagement />} />
-          
-          {/* THÊM ROUTE CHO TRANG ĐỐI TÁC */}
           <Route path="partners" element={<PartnerManagement />} />
+          <Route path="news" element={<NewsManagement />} />
         </Route>
 
         {/* --- ROUTE LỒNG NHAU DÀNH CHO VENDOR --- */}
