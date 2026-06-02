@@ -472,3 +472,4 @@ INSERT INTO GIATRI_THUOCTINH (idSanPham, idThuocTinh, giaTri) VALUES
 (25, 3, '8 GB GDDR6'),                                -- id 25: Gigabyte RTX 4060 Ti
 (26, 3, '8 GB GDDR6'),                                -- id 26: ASUS RX 7600
 (27, 3, '16 GB GDDR6X');                              -- id 27: AORUS RTX 4080
+
