@@ -7,27 +7,26 @@ import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
 import Login from './Components/Pages/Auth/Login';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
+import Home from './Components/Pages/TrangChu/TrangChu';
+import DanhMuc from './Components/Pages/DanhMuc/DanhMuc';
 
-// BỔ SUNG IMPORT TRANG ADMIN
 import AdminLayout from './Components/layout/admin/AdminLayout';
 import Dashboard from './Components/Pages/admin/Dashboard';
 import UserManagement from './Components/Pages/admin/UserManagement';
 import ProductManagement from './Components/Pages/admin/ProductManagement';
-// 1. THÊM DÒNG IMPORT NÀY:
 import TransactionManagement from './Components/Pages/admin/TransactionManagement';
+// THÊM IMPORT TRANG QUẢN LÝ ĐỐI TÁC
+import PartnerManagement from './Components/Pages/admin/PartnerManagement'; 
 
 function App() {
   return (
     <>
       <Routes>
-        {/* --- CÁC ROUTE KHÁCH HÀNG --- */}
         <Route
           path="/"
           element={
             <>
-              <Header />
-              <Register />
-              <Footer />
+              <Home />
             </>
           }
         />
@@ -45,15 +44,16 @@ function App() {
         <Route path="/dang-nhap" element={<Login />} />
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
+          <Route path="/danh-muc/:id" element={<DanhMuc />} />
 
-        {/* --- ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="users" element={<UserManagement />} />
-          
-          {/* 2. THÊM DÒNG ROUTE NÀY: */}
           <Route path="commissions" element={<TransactionManagement />} />
+          
+          {/* THÊM ROUTE CHO TRANG ĐỐI TÁC */}
+          <Route path="partners" element={<PartnerManagement />} />
         </Route>
       </Routes>
       
