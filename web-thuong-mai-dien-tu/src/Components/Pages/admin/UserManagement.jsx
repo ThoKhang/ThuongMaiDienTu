@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { adminService } from '../../../services/adminService';
 import { FaLock, FaUnlock, FaSearch, FaInfoCircle, FaShieldAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify'; 
+import Swal from 'sweetalert2';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -39,7 +40,18 @@ const UserManagement = () => {
         const hienTaiDangHoatDong = user.trangThai === 'HoatDong';
         const hanhDong = hienTaiDangHoatDong ? 'khóa' : 'mở khóa';
 
-        if (window.confirm(`Bạn có chắc chắn muốn ${hanhDong} tài khoản ${user.tenDangNhap}?`)) {
+        const result = await Swal.fire({
+            title: 'Xác nhận',
+            text: `Bạn có chắc chắn muốn ${hanhDong} tài khoản ${user.tenDangNhap}?`,
+            icon: 'warning', 
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy'
+        });
+
+        if (result.isConfirmed) {
             try {
                 await adminService.toggleUserStatus(user.id);
                 toast.success(`Đã ${hanhDong} tài khoản ${user.tenDangNhap} thành công!`);

@@ -31,7 +31,6 @@ public class NguoiDungEntity {
     private String email;
 
     @Column(name = "trangThai")
-    @Convert(converter = TrangThaiNguoiDungConverter.class)
     private TrangThaiNguoiDung trangThai;
 
     @Column(name = "ngayTao")
