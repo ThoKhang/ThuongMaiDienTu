@@ -16,6 +16,8 @@ public class SanPhamResponse {
     private Integer idDanhMuc;
     private Integer idThuongHieu;
     private String tenSanPham;
+    private String url;
+    private String moTa;
     private String thongSoKyThuat;
     private BigDecimal giaNiemYet;
     private BigDecimal giaKhuyenMai;
