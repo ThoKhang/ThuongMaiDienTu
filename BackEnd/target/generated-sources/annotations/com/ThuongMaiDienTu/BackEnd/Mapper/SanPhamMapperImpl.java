@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-02T23:46:57+0700",
+    date = "2026-06-03T01:09:00+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -52,6 +52,7 @@ public class SanPhamMapperImpl implements SanPhamMapper {
         sanPhamResponse.tinhTrangDuyet( entityTinhTrangDuyetDbValue( entity ) );
         sanPhamResponse.id( entity.getId() );
         sanPhamResponse.idDanhMuc( entity.getIdDanhMuc() );
+        sanPhamResponse.idDoiTac( entity.getIdDoiTac() );
         sanPhamResponse.idThuongHieu( entity.getIdThuongHieu() );
         sanPhamResponse.tenSanPham( entity.getTenSanPham() );
         sanPhamResponse.url( entity.getUrl() );
