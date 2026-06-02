@@ -5,6 +5,7 @@ const UserLayout = ({ children }) => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem('accessToken');
 
@@ -93,8 +94,50 @@ const UserLayout = ({ children }) => {
                 >
                   Đăng tin
                 </button>
-                <div className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary transition-all">
-                  <span className="material-symbols-outlined text-primary text-xl">person</span>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary transition-all focus:outline-none"
+                  >
+                    <span className="material-symbols-outlined text-primary text-xl">person</span>
+                  </button>
+                  {showProfileMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Tài khoản</p>
+                        <p className="text-sm font-bold text-gray-800 truncate">{localStorage.getItem('username') || 'Người dùng'}</p>
+                      </div>
+                      {(() => {
+                        try {
+                          const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+                          if (roles.some(role => role.toUpperCase() === 'ROLE_ADMIN')) {
+                            return (
+                              <Link
+                                to="/admin"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-semibold"
+                                onClick={() => setShowProfileMenu(false)}
+                              >
+                                Kênh Quản trị
+                              </Link>
+                            );
+                          }
+                        } catch (e) {}
+                        return null;
+                      })()}
+                      <button
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          localStorage.removeItem('accessToken');
+                          localStorage.removeItem('username');
+                          localStorage.removeItem('roles');
+                          navigate('/dang-nhap');
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold"
+                      >
+                        Đăng xuất
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (

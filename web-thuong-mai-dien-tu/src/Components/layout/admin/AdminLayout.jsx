@@ -1,9 +1,41 @@
-import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const AdminLayout = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem('accessToken');
+    const rolesStr = localStorage.getItem('roles');
+    let isAdmin = false;
+    if (rolesStr) {
+        try {
+            const roles = JSON.parse(rolesStr);
+            isAdmin = roles.some(role => role.toUpperCase() === 'ROLE_ADMIN');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    useEffect(() => {
+        if (!token || !isAdmin) {
+            toast.error('Bạn không có quyền truy cập trang quản trị!');
+            navigate('/dang-nhap');
+        }
+    }, [token, isAdmin, navigate]);
+
+    if (!token || !isAdmin) {
+        return null;
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('roles');
+        navigate('/dang-nhap');
+    };
 
     const menuItems = [
         { path: '/admin', name: 'Dashboard', icon: <FaHome /> },
@@ -47,7 +79,7 @@ const AdminLayout = () => {
                 </nav>
 
                 <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                    <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#FCA5A5', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', borderRadius: '8px', transition: '0.3s' }}
+                    <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#FCA5A5', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', borderRadius: '8px', transition: '0.3s' }}
                             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EF4444'; e.currentTarget.style.color = '#FFF'; }}
                             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'; e.currentTarget.style.color = '#FCA5A5'; }}>
                         <FaSignOutAlt /> Đăng xuất
