@@ -78,7 +78,9 @@ export default function TinTucSideBar() {
                         <div className="relative h-40 overflow-hidden bg-gray-100 flex items-center justify-center border-b border-gray-200">
                             {tin.hinhAnh ? (
                                 <img
-                                    src={tin.hinhAnh}
+                                    src={tin.hinhAnh 
+                                    ? `http://localhost:8080/upload/${tin.hinhAnh}` 
+                                    : "https://via.placeholder.com/300x200?text=News"}
                                     alt={tin.tieuDe}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     onError={(e) => {
