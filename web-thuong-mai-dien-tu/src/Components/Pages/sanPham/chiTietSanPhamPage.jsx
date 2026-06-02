@@ -48,6 +48,9 @@ const ChiTietSanPhamSkeleton = () => (
   </div>
 );
 
+// Bộ nhớ đệm chống trùng lặp lượt xem (10 giây cho mỗi sản phẩm)
+const viewedProductsCache = {};
+
 /* ─── Main Component ─── */
 const ChiTietSanPhamPage = () => {
   const { id } = useParams();
@@ -67,7 +70,12 @@ const ChiTietSanPhamPage = () => {
   // Tăng lượt xem khi vào trang
   useEffect(() => {
     if (id) {
-      sanPhamService.tangLuotXem(id).catch(() => {/* silent */ });
+      const now = Date.now();
+      const lastViewTime = viewedProductsCache[id];
+      if (!lastViewTime || now - lastViewTime > 10000) {
+        viewedProductsCache[id] = now;
+        sanPhamService.tangLuotXem(id).catch(() => {/* silent */ });
+      }
     }
   }, [id]);
 

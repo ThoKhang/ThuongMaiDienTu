@@ -39,26 +39,33 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        try {
+            // Thực hiện xác thực (kiểm tra username & password)
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getTenDangNhap(), loginRequest.getMatKhau()));
 
-        // Thực hiện xác thực (kiểm tra username & password)
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getTenDangNhap(), loginRequest.getMatKhau()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            // Tạo JWT Token
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        // Tạo JWT Token
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new JwtResponse(
-                jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                roles));
+            return ResponseEntity.ok(new JwtResponse(
+                    jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    roles));
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tài khoản hoặc mật khẩu không chính xác!");
+        } catch (org.springframework.security.authentication.DisabledException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tài khoản của bạn đã bị khóa hoặc chưa được kích hoạt!");
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng nhập thất bại: " + e.getMessage());
+        }
     }
 
     @PostMapping("/send-otp")

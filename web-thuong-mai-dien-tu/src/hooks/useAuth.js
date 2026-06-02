@@ -52,7 +52,10 @@ export const useLogin = () => {
     },
     onError: (error) => {
       console.error('Lỗi đăng nhập:', error);
-      toast.error(error.response?.data || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!');
+      const errorMsg = typeof error.response?.data === 'string'
+        ? error.response.data
+        : error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!';
+      toast.error(errorMsg);
     }
   });
 };

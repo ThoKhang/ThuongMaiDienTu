@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="65e419e9-fad5-43c5-9db4-a84bba291582" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/SanPhamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/SanPhamController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Repository/SanPhamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Repository/SanPhamRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/SanPhamServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/SanPhamServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/SanPhamService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/SanPhamService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

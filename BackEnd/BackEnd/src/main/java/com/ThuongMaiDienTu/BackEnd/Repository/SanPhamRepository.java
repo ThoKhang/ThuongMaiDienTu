@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer> {
 
-    @Query("SELECT s FROM SanPhamEntity s WHERE s.giaKhuyenMai < s.giaNiemYet " +
-           "AND s.tinhTrangDuyet = :tinhTrang ORDER BY s.giaNiemYet DESC")
     Page<SanPhamEntity> findByTinhTrangDuyet(TinhTrangDuyet tinhTrang, Pageable pageable);
     Page<SanPhamEntity> findByIdDanhMucAndTinhTrangDuyet(
             Integer idDanhMuc,
@@ -22,4 +20,5 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer>
             Pageable pageable
     );
     List<SanPhamEntity> findByTenSanPhamContainingIgnoreCase(String tenSanPham);
+    List<SanPhamEntity> findByIdDoiTac(Integer idDoiTac);
 }

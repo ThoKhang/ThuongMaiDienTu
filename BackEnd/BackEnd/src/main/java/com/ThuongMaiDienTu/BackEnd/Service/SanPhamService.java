@@ -20,4 +20,10 @@ public interface SanPhamService {
     boolean capNhatTrangThaiDuyet(Integer idSanPham, String trangThaiMoi);
 
     List<SanPhamResponse> searchByTenSanPham(String keyword);
+    List<SanPhamResponse> getSanPhamByDoiTac(Integer idDoiTac);
+    void deleteSanPham(Integer id);
+    SanPhamResponse updateSoLuongTon(Integer id, Integer soLuong);
+    SanPhamResponse updateTinhTrangDuyet(Integer id, String tinhTrang);
+    SanPhamResponse updateSanPham(Integer id, SanPhamRequest request);
+    void recordClick(Integer idSanPham, String ipAddress, String userAgent, Integer idKhachHang);
 }
