@@ -9,4 +9,5 @@ public interface SanPhamService {
     List<SanPhamResponse> getAllSanPham();
     SanPhamResponse getSanPhamById(Integer id);
     SanPhamResponse createSanPham(SanPhamRequest request);
+    boolean capNhatTrangThaiDuyet(Integer idSanPham, String trangThaiMoi);
 }

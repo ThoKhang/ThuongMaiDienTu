@@ -63,12 +63,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Áp dụng cấu hình CORS vừa tạo
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor", "/api/admin/**").permitAll()
+                    auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/sanpham/**").permitAll()
+                        .requestMatchers("/register-user").permitAll()
+                        .requestMatchers("/register-vendor").permitAll()
+                         // t mở để test admin
+                        .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

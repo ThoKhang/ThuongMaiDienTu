@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt } from 'react-icons/fa';
-
+import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen } from 'react-icons/fa';
 const AdminLayout = () => {
     const location = useLocation();
 
     const menuItems = [
         { path: '/admin', name: 'Dashboard', icon: <FaHome /> },
         { path: '/admin/users', name: 'Quản lý người dùng', icon: <FaUsers /> },
+        { path: '/admin/products', name: 'Kiểm duyệt sản phẩm', icon: <FaBoxOpen /> },
         { path: '/admin/commissions', name: 'Quản lý hoa hồng', icon: <FaMoneyBillWave /> },
     ];
 

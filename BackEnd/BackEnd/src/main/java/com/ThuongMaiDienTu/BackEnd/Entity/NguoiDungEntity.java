@@ -1,6 +1,7 @@
 package com.ThuongMaiDienTu.BackEnd.Entity;
 
 import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
+import com.ThuongMaiDienTu.BackEnd.Converter.TrangThaiNguoiDungConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
