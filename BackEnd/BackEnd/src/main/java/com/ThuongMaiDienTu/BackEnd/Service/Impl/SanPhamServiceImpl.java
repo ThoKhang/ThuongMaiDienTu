@@ -82,11 +82,26 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPhamResponse> getSanPhamByDoiTac(Integer idDoiTac) {
-        return sanPhamRepository.findByIdDoiTac(idDoiTac)
-                .stream()
+        List<SanPhamEntity> products = sanPhamRepository.findByIdDoiTac(idDoiTac);
+        if (products.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
+        List<Integer> productIds = products.stream()
+                .map(SanPhamEntity::getId)
+                .collect(Collectors.toList());
+
+        List<Object[]> clickCounts = theoDoiClickRepository.countClicksByProductIds(productIds);
+        java.util.Map<Integer, Long> clickMap = clickCounts.stream()
+                .collect(Collectors.toMap(
+                        arr -> (Integer) arr[0],
+                        arr -> (Long) arr[1]
+                ));
+
+        return products.stream()
                 .map(sp -> {
                     SanPhamResponse res = sanPhamMapper.toResponse(sp);
-                    res.setClicks(theoDoiClickRepository.countByIdSanPham(sp.getId()));
+                    res.setClicks(clickMap.getOrDefault(sp.getId(), 0L));
                     return res;
                 })
                 .collect(Collectors.toList());
