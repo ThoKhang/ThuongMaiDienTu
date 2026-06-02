@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 
 const UserLayout = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchValue, setSearchValue] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -14,14 +15,33 @@ const UserLayout = ({ children }) => {
       navigate(`/tim-kiem?q=${encodeURIComponent(searchValue.trim())}`);
     }
   };
+  const danhMucIdToPath = {
+    1: '/danh-muc/vi-xu-ly',
+    2: '/danh-muc/ram',
+    3: '/danh-muc/luu-tru',
+    4: '/danh-muc/bo-mach-chu',
+    5: '/danh-muc/nguon-psu',
+    6: '/danh-muc/card-do-hoa',
+  };
+  const getActivePath = () => {
+    const isDanhMucPage = location.pathname.startsWith('/danh-muc/');
+    if (isDanhMucPage) return location.pathname;
+
+    const idDanhMuc = location.state?.idDanhMuc;
+    if (idDanhMuc) return danhMucIdToPath[idDanhMuc] || null;
+
+    return null;
+  };
+
+  const activePath = getActivePath();
 
   const danhMucSidebar = [
-    { icon: 'memory', label: 'Vi xử lý', path: '/danh-muc/vi-xu-ly' },
-    { icon: 'sd_storage', label: 'RAM', path: '/danh-muc/ram' },
-    { icon: 'hard_drive', label: 'Lưu trữ', path: '/danh-muc/luu-tru' },
-    { icon: 'settings_input_component', label: 'Bo mạch chủ', path: '/danh-muc/bo-mach-chu' },
-    { icon: 'power', label: 'Nguồn PSU', path: '/danh-muc/nguon-psu' },
-    { icon: 'video_settings', label: 'Card đồ họa', path: '/danh-muc/card-do-hoa', active: true },
+    { icon: 'memory', label: 'Vi xử lý', path: '/danh-muc/1' },
+    { icon: 'sd_storage', label: 'RAM', path: '/danh-muc/2' },
+    { icon: 'hard_drive', label: 'Lưu trữ', path: '/danh-muc/3' },
+    { icon: 'settings_input_component', label: 'Bo mạch chủ', path: '/danh-muc/4' },
+    { icon: 'power', label: 'Nguồn PSU', path: '/danh-muc/5' },
+    { icon: 'video_settings', label: 'Card đồ họa', path: '/danh-muc/6' },
   ];
 
   return (
@@ -142,13 +162,15 @@ const UserLayout = ({ children }) => {
         </div>
 
         <nav className="flex-1 mt-4 px-2">
-          {danhMucSidebar.map((item) => (
+          {danhMucSidebar.map((item) => {
+            const isActive = activePath === item.path;
+            return(
             <Link
               key={item.path}
               to={item.path}
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 mb-0.5
-                ${item.active
+                ${isActive
                   ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600 font-bold pl-2'
                   : 'text-gray-500 hover:text-blue-600 hover:translate-x-1 hover:bg-blue-50/50'
                 }`}
@@ -156,7 +178,8 @@ const UserLayout = ({ children }) => {
               <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
               <span>{item.label}</span>
             </Link>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="px-4 mb-4">

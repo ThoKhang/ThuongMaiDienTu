@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor", "/api/admin/**").permitAll()
+                        auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor","/api/admin/**","/api/trangchu/**","/api/danh-muc/**").permitAll()
                 );
 
         http.authenticationProvider(authenticationProvider());
