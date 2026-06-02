@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-// THÊM 2 IMPORT NÀY
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -57,7 +56,7 @@ public class SecurityConfig {
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Áp dụng cho toàn bộ API
+        source.registerCorsConfiguration("/**", configuration); 
         return source;
     }
 
@@ -72,9 +71,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/sanpham/**").permitAll()
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
-                         // t mở để test admin
-                        .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        
+                        // done nha ae
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        
                         .anyRequest().authenticated()
                 );
 
