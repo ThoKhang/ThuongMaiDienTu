@@ -9,7 +9,7 @@ export const adminService = {
     
     toggleUserStatus: async (id) => {
         // Gắn /api trực tiếp vào request
-        const response = await api.put(`/api/admin/users/${id}/status`);
+        const response = await api.put(`/api/admin/users/${id}/toggle-status`);
         return response.data;
     },
     getAllProducts: async () => {

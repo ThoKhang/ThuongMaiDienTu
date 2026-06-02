@@ -16,6 +16,7 @@ public class AdminUserController {
 
     @Autowired
     private NguoiDungService nguoiDungService;
+    @Autowired
     private NguoiDungRepository nguoiDungRepository;
 
     // API 1: Xem danh sách toàn bộ tài khoản

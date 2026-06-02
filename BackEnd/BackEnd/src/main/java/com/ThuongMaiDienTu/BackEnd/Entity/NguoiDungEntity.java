@@ -1,6 +1,7 @@
 package com.ThuongMaiDienTu.BackEnd.Entity;
 
 import com.ThuongMaiDienTu.BackEnd.Enum.TrangThaiNguoiDung;
+import com.ThuongMaiDienTu.BackEnd.Converter.TrangThaiNguoiDungConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,7 @@ public class NguoiDungEntity {
     private String email;
 
     @Column(name = "trangThai")
+    @Convert(converter = TrangThaiNguoiDungConverter.class)
     private TrangThaiNguoiDung trangThai;
 
     @Column(name = "ngayTao")
