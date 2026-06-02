@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                     auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/sanpham/**","/api/danh-muc/**","/api/tintuc/**").permitAll()
+                        .requestMatchers("/api/sanpham/**","/api/danh-muc/**","/api/tintuc/**","/api/trangchu/**").permitAll()
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
                         .requestMatchers("/error").permitAll()

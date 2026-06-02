@@ -5,6 +5,8 @@ export default function TinTucSideBar() {
     const [trangTin, setTrangTin] = useState(0);
     const [loading, setLoading] = useState(true);
 
+    const [error, setError] = useState(null);
+
     const tongSoTrang = data?.totalPages || 1;
 
     const formatNgay = (ngay) =>
@@ -17,18 +19,33 @@ export default function TinTucSideBar() {
 
     useEffect(() => {
         setLoading(true);
+        setError(null);
         fetch(`http://localhost:8080/api/tintuc/phan-trang?page=${trangTin}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi server: " + res.status);
+                return res.json();
+            })
             .then(d => {
                 console.log("TIN TỨC:", d); // 👈 debug cực quan trọng
                 setData(d);
                 setLoading(false);
             })
-            .catch(() => setLoading(false));
+            .catch(err => {
+                setError(err.message);
+                setLoading(false);
+            });
     }, [trangTin]);
 
     if (loading) {
         return <div className="text-center py-6 text-gray-400">Đang tải tin tức...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="text-center text-red-500 p-4 bg-red-50 rounded-xl border border-red-200 my-2">
+                ⚠️ Không thể tải tin tức: {error}
+            </div>
+        );
     }
 
     return (
