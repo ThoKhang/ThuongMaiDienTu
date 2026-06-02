@@ -16,12 +16,12 @@ const UserLayout = ({ children }) => {
     }
   };
   const danhMucIdToPath = {
-    1: '/danh-muc/vi-xu-ly',
-    2: '/danh-muc/ram',
-    3: '/danh-muc/luu-tru',
-    4: '/danh-muc/bo-mach-chu',
-    5: '/danh-muc/nguon-psu',
-    6: '/danh-muc/card-do-hoa',
+    1: '/danh-muc/1',
+    2: '/danh-muc/2',
+    3: '/danh-muc/3',
+    4: '/danh-muc/4',
+    5: '/danh-muc/5',
+    6: '/danh-muc/6',
   };
   const getActivePath = () => {
     const isDanhMucPage = location.pathname.startsWith('/danh-muc/');
