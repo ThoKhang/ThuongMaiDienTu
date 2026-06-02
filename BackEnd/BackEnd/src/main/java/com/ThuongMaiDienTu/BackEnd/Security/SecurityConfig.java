@@ -56,7 +56,7 @@ public class SecurityConfig {
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); 
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
@@ -65,19 +65,20 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                    auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/sanpham/**","/api/danh-muc/**","/api/tintuc/**","/api/trangchu/**").permitAll()
+                        .requestMatchers("/api/sanpham/**", "/api/danh-muc/**", "/api/tintuc/**", "/api/trangchu/**")
+                        .permitAll()
+                        .requestMatchers("/api/khachhang/**").permitAll()
+                        .requestMatchers("/api/theodoi-click/**").permitAll()
                         .requestMatchers("/register-user").permitAll()
                         .requestMatchers("/register-vendor").permitAll()
                         .requestMatchers("/error").permitAll()
-                        
+
                         // done nha ae
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
-                        
-                        .anyRequest().authenticated()
-                );
+
+                        .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

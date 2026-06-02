@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65e419e9-fad5-43c5-9db4-a84bba291582" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/BackEnd.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BackEnd.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/KhachHangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/KhachHangController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/TheoDoiClickController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/TheoDoiClickController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/DTO/Request/KhachHangRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/DTO/Request/KhachHangRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Jwt/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Jwt/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Security/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/KhachHangServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/KhachHangServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/TheoDoiClickServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/Impl/TheoDoiClickServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/KhachHangService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/KhachHangService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/TheoDoiClickService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Service/TheoDoiClickService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" afterDir="false" />
@@ -31,8 +26,7 @@
       <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/Components/Pages/sanPham/chiTietSanPhamPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/Components/Pages/sanPham/chiTietSanPhamPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/hooks/useChiTietSanPham.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/hooks/useChiTietSanPham.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/services/sanPhamService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/utils/getUserIdFromToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web-thuong-mai-dien-tu/src/utils/getUserIdFromToken.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

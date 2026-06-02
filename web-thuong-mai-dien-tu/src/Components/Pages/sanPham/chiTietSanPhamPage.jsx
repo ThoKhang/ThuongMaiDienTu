@@ -117,36 +117,42 @@ const ChiTietSanPhamPage = () => {
   // const { id } = useParams();
   const handleLienHeNguoiBan = async () => {
     try {
-
       const userInfo = getUserInfoFromToken();
-      const idKhachHang = userInfo ? userInfo.id : null;
+      console.log("JWT payload:", userInfo);
 
-      // Track click
-      await theoDoiClickMutation.mutateAsync({
-        idSanPham: sanPham.id,
-        idKhachHang,
-        trinhDuyetFingerprint: navigator.userAgent
-      });
+      const idNguoiDung = userInfo?.id ?? null;
+      const tenDangNhap = userInfo?.sub ?? null;
 
-      // Update customer reward points
-      if (userInfo && userInfo.id) {
+      // Bước 1: Tạo / cộng điểm khách hàng TRƯỚC để lấy idNguoiDung thật từ DB
+      let idKhachHang = idNguoiDung; // dùng id từ token nếu có (token mới)
+      if (tenDangNhap || idNguoiDung) {
         try {
-          await khachHangService.createKhachHang({
-            idNguoiDung: userInfo.id,
-            hoTen: userInfo.hoTen || userInfo.name || userInfo.sub || "Khách Hàng"
+          const khResult = await khachHangService.createKhachHang({
+            idNguoiDung: idNguoiDung,
+            tenDangNhap: tenDangNhap,
+            hoTen: tenDangNhap ?? "Khách Hàng"
           });
+          console.log("Kết quả khách hàng:", khResult);
+          // Lấy idNguoiDung thật từ response backend
+          if (khResult?.idNguoiDung) {
+            idKhachHang = khResult.idNguoiDung;
+          }
         } catch (khErr) {
-          console.error("Lỗi khi cộng điểm thưởng:", khErr);
+          console.error("Lỗi cộng điểm:", khErr);
         }
       }
 
-      window.open(
-        sanPham.urlAffiliate,
-        "_blank"
-      );
+      // Bước 2: Track click với idKhachHang thật vừa lấy được
+      await theoDoiClickMutation.mutateAsync({
+        idSanPham: sanPham.id,
+        idKhachHang: idKhachHang,
+        trinhDuyetFingerprint: navigator.userAgent
+      });
+
+      window.open(sanPham.urlAffiliate, "_blank");
 
     } catch (error) {
-      console.error(error);
+      console.error("Lỗi handleLienHeNguoiBan:", error);
     }
   };
   const theoDoiClickMutation = useTheoDoiClick();
