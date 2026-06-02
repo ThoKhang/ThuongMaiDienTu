@@ -7,6 +7,8 @@ import Footer from './Components/layout/DangKy/Footer';
 import Register from './Components/Pages/Auth/Register';
 import Login from './Components/Pages/Auth/Login';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
+import Home from './Components/Pages/TrangChu/TrangChu';
+import DanhMuc from './Components/Pages/DanhMuc/DanhMuc';
 
 import AdminLayout from './Components/layout/admin/AdminLayout';
 import Dashboard from './Components/Pages/admin/Dashboard';
@@ -24,9 +26,7 @@ function App() {
           path="/"
           element={
             <>
-              <Header />
-              <Register />
-              <Footer />
+              <Home />
             </>
           }
         />
@@ -44,6 +44,7 @@ function App() {
         <Route path="/dang-nhap" element={<Login />} />
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
+          <Route path="/danh-muc/:id" element={<DanhMuc />} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
