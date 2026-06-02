@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen } from 'react-icons/fa';
+import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const AdminLayout = () => {
@@ -42,13 +42,12 @@ const AdminLayout = () => {
         { path: '/admin/users', name: 'Quản lý người dùng', icon: <FaUsers /> },
         { path: '/admin/products', name: 'Kiểm duyệt sản phẩm', icon: <FaBoxOpen /> },
         { path: '/admin/commissions', name: 'Quản lý hoa hồng', icon: <FaMoneyBillWave /> },
+        { path: '/admin/partners', name: 'Quản lý đối tác', icon: <FaHandshake /> },
     ];
 
     return (
-        // Nền tổng thể màu xanh xám nhạt để làm nổi bật nội dung
         <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F0F4F8', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
             
-            {/* Sidebar MÀU XANH ĐẬM (Deep Blue) */}
             <aside style={{ width: '260px', backgroundColor: '#1E3A8A', color: '#FFFFFF', boxShadow: '4px 0 15px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', zIndex: 10 }}>
                 <div style={{ padding: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     <h2 style={{ margin: 0, color: '#FFFFFF', fontSize: '24px', fontWeight: 'bold', letterSpacing: '1px' }}>LKMT Portal</h2>
@@ -88,7 +87,6 @@ const AdminLayout = () => {
                 </div>
             </aside>
 
-            {/* Main Content Area */}
             <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
                 <Outlet />
             </main>
