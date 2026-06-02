@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 
 const UserLayout = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchValue, setSearchValue] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem('accessToken');
 
@@ -14,14 +16,33 @@ const UserLayout = ({ children }) => {
       navigate(`/tim-kiem?q=${encodeURIComponent(searchValue.trim())}`);
     }
   };
+  const danhMucIdToPath = {
+    1: '/danh-muc/1',
+    2: '/danh-muc/2',
+    3: '/danh-muc/3',
+    4: '/danh-muc/4',
+    5: '/danh-muc/5',
+    6: '/danh-muc/6',
+  };
+  const getActivePath = () => {
+    const isDanhMucPage = location.pathname.startsWith('/danh-muc/');
+    if (isDanhMucPage) return location.pathname;
+
+    const idDanhMuc = location.state?.idDanhMuc;
+    if (idDanhMuc) return danhMucIdToPath[idDanhMuc] || null;
+
+    return null;
+  };
+
+  const activePath = getActivePath();
 
   const danhMucSidebar = [
-    { icon: 'memory', label: 'Vi xử lý', path: '/danh-muc/vi-xu-ly' },
-    { icon: 'sd_storage', label: 'RAM', path: '/danh-muc/ram' },
-    { icon: 'hard_drive', label: 'Lưu trữ', path: '/danh-muc/luu-tru' },
-    { icon: 'settings_input_component', label: 'Bo mạch chủ', path: '/danh-muc/bo-mach-chu' },
-    { icon: 'power', label: 'Nguồn PSU', path: '/danh-muc/nguon-psu' },
-    { icon: 'video_settings', label: 'Card đồ họa', path: '/danh-muc/card-do-hoa', active: true },
+    { icon: 'memory', label: 'Vi xử lý', path: '/danh-muc/1' },
+    { icon: 'sd_storage', label: 'RAM', path: '/danh-muc/2' },
+    { icon: 'hard_drive', label: 'Lưu trữ', path: '/danh-muc/3' },
+    { icon: 'settings_input_component', label: 'Bo mạch chủ', path: '/danh-muc/4' },
+    { icon: 'power', label: 'Nguồn PSU', path: '/danh-muc/5' },
+    { icon: 'video_settings', label: 'Card đồ họa', path: '/danh-muc/6' },
   ];
 
   return (
@@ -93,8 +114,50 @@ const UserLayout = ({ children }) => {
                 >
                   Đăng tin
                 </button>
-                <div className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary transition-all">
-                  <span className="material-symbols-outlined text-primary text-xl">person</span>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary transition-all focus:outline-none"
+                  >
+                    <span className="material-symbols-outlined text-primary text-xl">person</span>
+                  </button>
+                  {showProfileMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Tài khoản</p>
+                        <p className="text-sm font-bold text-gray-800 truncate">{localStorage.getItem('username') || 'Người dùng'}</p>
+                      </div>
+                      {(() => {
+                        try {
+                          const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+                          if (roles.some(role => role.toUpperCase() === 'ROLE_ADMIN')) {
+                            return (
+                              <Link
+                                to="/admin"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-semibold"
+                                onClick={() => setShowProfileMenu(false)}
+                              >
+                                Kênh Quản trị
+                              </Link>
+                            );
+                          }
+                        } catch (e) {}
+                        return null;
+                      })()}
+                      <button
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          localStorage.removeItem('accessToken');
+                          localStorage.removeItem('username');
+                          localStorage.removeItem('roles');
+                          navigate('/dang-nhap');
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold"
+                      >
+                        Đăng xuất
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
@@ -142,13 +205,15 @@ const UserLayout = ({ children }) => {
         </div>
 
         <nav className="flex-1 mt-4 px-2">
-          {danhMucSidebar.map((item) => (
+          {danhMucSidebar.map((item) => {
+            const isActive = activePath === item.path;
+            return(
             <Link
               key={item.path}
               to={item.path}
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 mb-0.5
-                ${item.active
+                ${isActive
                   ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600 font-bold pl-2'
                   : 'text-gray-500 hover:text-blue-600 hover:translate-x-1 hover:bg-blue-50/50'
                 }`}
@@ -156,7 +221,8 @@ const UserLayout = ({ children }) => {
               <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
               <span>{item.label}</span>
             </Link>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="px-4 mb-4">

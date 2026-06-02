@@ -1,6 +1,7 @@
 package com.ThuongMaiDienTu.BackEnd.Controller;
 
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.NguoiDungResponse;
+import com.ThuongMaiDienTu.BackEnd.Repository.NguoiDungRepository;
 import com.ThuongMaiDienTu.BackEnd.Service.NguoiDungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/users")
-@CrossOrigin(origins = "*")
 public class AdminUserController {
 
     @Autowired
     private NguoiDungService nguoiDungService;
+    @Autowired
+    private NguoiDungRepository nguoiDungRepository;
 
     // API 1: Xem danh sách toàn bộ tài khoản
     @PreAuthorize("hasRole('ADMIN')")
@@ -29,10 +31,16 @@ public class AdminUserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/toggle-status")
     public ResponseEntity<String> toggleUserStatus(@PathVariable Integer id) {
+        // Kiểm tra user tồn tại không
+        if (!nguoiDungRepository.existsById(id)) {
+            return ResponseEntity.badRequest().body("Lỗi: Không tìm thấy người dùng!");
+        }
+
         boolean isSuccess = nguoiDungService.thayDoiTrangThaiTaiKhoan(id);
         if (isSuccess) {
-            return ResponseEntity.ok("Thay đổi trạng thái tài khoản thành công!");
+            return ResponseEntity.ok("Thay đổi trạng thái thành công!");
         }
-        return ResponseEntity.badRequest().body("Lỗi: Không tìm thấy người dùng với ID này!");
+        // ✅ Trả về 403 rõ ràng khi cố khóa Admin
+        return ResponseEntity.status(403).body("Không thể khóa tài khoản Admin!");
     }
 }

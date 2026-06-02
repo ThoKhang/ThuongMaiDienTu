@@ -16,9 +16,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private NguoiDungRepository nguoiDungRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        NguoiDungEntity nguoiDung = nguoiDungRepository.findByTenDangNhap(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng: " + username));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        NguoiDungEntity nguoiDung = nguoiDungRepository.findByTenDangNhap(usernameOrEmail)
+                .or(() -> nguoiDungRepository.findByEmail(usernameOrEmail))
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với username hoặc email: " + usernameOrEmail));
         return CustomUserDetails.build(nguoiDung);
     }
 }

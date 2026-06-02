@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-// THÊM 2 IMPORT NÀY
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -57,20 +56,27 @@ public class SecurityConfig {
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Áp dụng cho toàn bộ API
+        source.registerCorsConfiguration("/**", configuration); 
         return source;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Áp dụng cấu hình CORS vừa tạo
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**","/api/sanpham/**", "/register-user", "/register-vendor").permitAll() // Thêm endpoint của bạn vào đây nếu chưa có prefix /api
-                                .requestMatchers("/error").permitAll()
-                                .anyRequest().authenticated()
+                    auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/sanpham/**","/api/danh-muc/**","/api/tintuc/**").permitAll()
+                        .requestMatchers("/register-user").permitAll()
+                        .requestMatchers("/register-vendor").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        
+                        // done nha ae
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        
+                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

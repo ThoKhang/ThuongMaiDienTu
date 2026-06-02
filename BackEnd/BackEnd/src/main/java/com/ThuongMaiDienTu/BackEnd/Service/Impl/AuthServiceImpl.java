@@ -24,6 +24,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.ThuongMaiDienTu.BackEnd.DTO.Response.JwtResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,20 @@ public class AuthServiceImpl implements AuthService {
     private final DoiTacLienKetMapper doiTacMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
+
+    // Bộ nhớ tạm lưu mã OTP
+    private final ConcurrentHashMap<String, OtpData> otpMap = new ConcurrentHashMap<>();
+
+    private static class OtpData {
+        String code;
+        long expiryTime;
+
+        OtpData(String code, long expiryTime) {
+            this.code = code;
+            this.expiryTime = expiryTime;
+        }
+    }
+
     @Override
     public String nguoiDungRegister(NguoiDungRequest nguoiDungRequest) {
         log.info("Bắt đầu đăng ký người dùng mới: {}", nguoiDungRequest.getTenDangNhap());
@@ -67,5 +85,54 @@ public class AuthServiceImpl implements AuthService {
         currentUser.getVaiTros().add(roleDoiTac);
         nguoiDungRepository.save(currentUser);
         return doiTacMapper.toResponse(doiTac);
+    }
+
+    @Override
+    public void sendOtp(String email) {
+        log.info("Yêu cầu gửi OTP cho email: {}", email);
+        if (!nguoiDungRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email này chưa được đăng ký trong hệ thống!");
+        }
+        
+        // Tạo OTP 6 chữ số ngẫu nhiên
+        String otp = String.valueOf((int) ((Math.random() * 900000) + 100000));
+        
+        // Hết hạn sau 5 phút
+        long expiryTime = System.currentTimeMillis() + (5 * 60 * 1000);
+        otpMap.put(email, new OtpData(otp, expiryTime));
+        
+        log.info("================================================");
+        log.info("MÃ OTP ĐĂNG NHẬP CHO EMAIL {}: ===> {} <===", email, otp);
+        log.info("================================================");
+    }
+
+    @Override
+    public JwtResponse verifyOtpAndLogin(String email, String otp) {
+        log.info("Yêu cầu xác thực OTP cho email: {}", email);
+        OtpData otpData = otpMap.get(email);
+        
+        if (otpData == null || System.currentTimeMillis() > otpData.expiryTime) {
+            throw new RuntimeException("Mã OTP đã hết hạn hoặc không tồn tại!");
+        }
+        
+        if (!otpData.code.equals(otp)) {
+            throw new RuntimeException("Mã OTP không chính xác!");
+        }
+        
+        // OTP chính xác -> Xóa mã OTP sau khi dùng
+        otpMap.remove(email);
+        
+        NguoiDungEntity nguoiDung = nguoiDungRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin người dùng!"));
+                
+        CustomUserDetails userDetails = CustomUserDetails.build(nguoiDung);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        
+        String token = jwtUtils.generateJwtToken(authentication);
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+                
+        return new JwtResponse(token, userDetails.getId(), userDetails.getUsername(), roles);
     }
 }

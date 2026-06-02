@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,6 +60,21 @@ public class AuthController {
                 userDetails.getUsername(),
                 roles));
     }
+
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        authService.sendOtp(email);
+        return ResponseEntity.ok("Mã OTP đã được gửi thành công đến email của bạn!");
+    }
+
+    @PostMapping("/login-otp")
+    public ResponseEntity<?> loginOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+        return ResponseEntity.ok(authService.verifyOtpAndLogin(email, otp));
+    }
+
     @PostMapping("register-user")
     public ResponseEntity<?> UserRegister(@RequestBody NguoiDungRequest  nguoiDungRequest) {
         String token = authService.nguoiDungRegister(nguoiDungRequest);
