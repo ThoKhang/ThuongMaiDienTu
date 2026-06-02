@@ -42,7 +42,6 @@ const VendorLayout = () => {
     const menuItems = [
         { path: '/vendor/dashboard', name: 'Tổng quan', icon: 'dashboard' },
         { path: '/vendor/quan-ly-tin', name: 'Quản lý tin đăng', icon: 'storefront' },
-        { path: '/vendor/dang-tin', name: 'Đăng sản phẩm mới', icon: 'add_circle' },
     ];
 
     return (

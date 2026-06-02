@@ -289,7 +289,7 @@ const QuanLyTinDang = () => {
           className="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-5 rounded-xl shadow-lg shadow-sky-600/20 active:scale-95 transition-all flex items-center gap-2 self-start md:self-auto text-sm"
         >
           <FaPlus size={12} />
-          Đăng sản phẩm mới
+          Đăng tin
         </button>
       </div>
 
