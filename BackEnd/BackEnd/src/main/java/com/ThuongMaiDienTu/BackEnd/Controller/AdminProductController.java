@@ -3,6 +3,7 @@ package com.ThuongMaiDienTu.BackEnd.Controller;
 import com.ThuongMaiDienTu.BackEnd.Service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +14,7 @@ public class AdminProductController {
     private SanPhamService sanPhamService;
 
     // Lấy danh sách toàn bộ sản phẩm (Bao gồm cả chờ duyệt và đã duyệt
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
         // Giả sử bạn đã có hàm layDanhSachSanPham() trả về List DTO
@@ -21,7 +22,7 @@ public class AdminProductController {
     }
 
     // API Cập nhật trạng thái duyệt (Duyệt / Từ chối)
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateProductStatus(
             @PathVariable Integer id, 

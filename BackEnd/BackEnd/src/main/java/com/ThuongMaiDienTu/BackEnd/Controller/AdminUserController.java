@@ -20,7 +20,7 @@ public class AdminUserController {
     private NguoiDungRepository nguoiDungRepository;
 
     // API 1: Xem danh sách toàn bộ tài khoản
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<NguoiDungResponse>> getAllUsers() {
         List<NguoiDungResponse> users = nguoiDungService.layDanhSachNguoiDung();
@@ -28,7 +28,7 @@ public class AdminUserController {
     }
 
     // API 2: Khóa hoặc Mở khóa tài khoản theo ID
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/toggle-status")
     public ResponseEntity<String> toggleUserStatus(@PathVariable Integer id) {
         // Kiểm tra user tồn tại không

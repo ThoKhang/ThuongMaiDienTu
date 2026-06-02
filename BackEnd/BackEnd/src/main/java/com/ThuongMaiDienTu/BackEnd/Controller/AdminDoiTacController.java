@@ -3,6 +3,7 @@ package com.ThuongMaiDienTu.BackEnd.Controller;
 import com.ThuongMaiDienTu.BackEnd.Service.DoiTacService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +17,7 @@ public class AdminDoiTacController {
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(doiTacService.getAllDoiTac());
     }
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/config")
     public ResponseEntity<String> updateConfig(
             @PathVariable Integer id, 
