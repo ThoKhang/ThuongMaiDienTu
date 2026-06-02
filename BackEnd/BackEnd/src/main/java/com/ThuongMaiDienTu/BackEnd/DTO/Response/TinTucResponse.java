@@ -14,4 +14,5 @@ public class TinTucResponse {
     private LocalDateTime ngayDang;
     private String hinhAnh;
     private String trangThaiDuyet;
+    private String loaiNguoiDang; // "Admin", "KhachHang", "DoiTac"
 }

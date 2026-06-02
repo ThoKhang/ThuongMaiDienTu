@@ -3,6 +3,7 @@ package com.ThuongMaiDienTu.BackEnd.Service.Impl;
 import com.ThuongMaiDienTu.BackEnd.DTO.Response.TinTucResponse;
 import com.ThuongMaiDienTu.BackEnd.Entity.TinTucEntity;
 import com.ThuongMaiDienTu.BackEnd.Mapper.TinTucMapper;
+import com.ThuongMaiDienTu.BackEnd.Repository.NguoiDungRepository;
 import com.ThuongMaiDienTu.BackEnd.Repository.TinTucRepository;
 import com.ThuongMaiDienTu.BackEnd.Service.TinTucService;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,14 @@ public class TinTucServiceImpl implements TinTucService {
 
     private final TinTucRepository tinTucRepository;
     private final TinTucMapper tinTucMapper;
+    private final NguoiDungRepository nguoiDungRepository;
 
     @Override
     public List<TinTucResponse> getTinTucMoiNhat() {
         // CẬP NHẬT: Chỉ lấy những tin có trạng thái "DaDuyet"
         return tinTucRepository.findTop5ByTrangThaiDuyetOrderByNgayDangDesc("DaDuyet")
                 .stream()
-                .map(tinTucMapper::toResponse)
+                .map(this::toResponseWithLoai)
                 .collect(Collectors.toList());
     }
 
@@ -36,7 +38,7 @@ public class TinTucServiceImpl implements TinTucService {
 
         // CẬP NHẬT: Chỉ lấy những tin có trạng thái "DaDuyet"
         return tinTucRepository.findByTrangThaiDuyetOrderByNgayDangDesc("DaDuyet", pageable)
-                .map(tinTucMapper::toResponse);
+                .map(this::toResponseWithLoai);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class TinTucServiceImpl implements TinTucService {
         // Hàm này giữ nguyên để Admin lấy toàn bộ (cả Chờ duyệt và Đã duyệt) trong bảng quản lý
         return tinTucRepository.findAll()
                 .stream()
-                .map(tinTucMapper::toResponse)
+                .map(this::toResponseWithLoai)
                 .toList();
     }
 
@@ -92,7 +94,7 @@ public class TinTucServiceImpl implements TinTucService {
     public List<TinTucResponse> getTinTucByNguoiDang(Integer idNguoiDang) {
         return tinTucRepository.findByIdNguoiDangOrderByNgayDangDesc(idNguoiDang)
                 .stream()
-                .map(tinTucMapper::toResponse)
+                .map(this::toResponseWithLoai)
                 .toList();
     }
 
@@ -113,4 +115,19 @@ public class TinTucServiceImpl implements TinTucService {
         }
         return false;
     }
+    private String getLoaiNguoiDang(Integer idNguoiDang) {
+        return nguoiDungRepository.findById(idNguoiDang)
+                .map(nd -> nd.getVaiTros().stream()
+                        .map(vt -> vt.getTenVaiTro())
+                        .filter(r -> r.equals("Admin") || r.equals("DoiTac") || r.equals("KhachHang"))
+                        .findFirst()
+                        .orElse("KhachHang"))
+                .orElse("KhachHang");
+    }
+    private TinTucResponse toResponseWithLoai(TinTucEntity entity) {
+        TinTucResponse res = tinTucMapper.toResponse(entity);
+        res.setLoaiNguoiDang(getLoaiNguoiDang(entity.getIdNguoiDang()));
+        return res;
+    }
+    
 }
