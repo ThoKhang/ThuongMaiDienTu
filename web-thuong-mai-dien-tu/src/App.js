@@ -13,6 +13,10 @@ import DanhMuc from './Components/Pages/DanhMuc/DanhMuc';
 // BỔ SUNG IMPORT TRANG CHI TIẾT TIN TỨC
 import ChiTietTinTuc from './Components/Pages/TinTuc/ChiTietTinTuc';
 
+// BỔ SUNG IMPORT TRANG ĐĂNG TIN VÀ QUẢN LÝ TIN CỦA USER
+import DangTin from './Components/Pages/TinTuc/DangTin';
+import TinDang from './Components/Pages/TinTuc/TinDang';
+
 import AdminLayout from './Components/layout/admin/AdminLayout';
 import Dashboard from './Components/Pages/admin/Dashboard';
 import UserManagement from './Components/Pages/admin/UserManagement';
@@ -51,6 +55,10 @@ function App() {
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
         <Route path="/danh-muc/:id" element={<DanhMuc />} />
+
+        {/* --- ĐỊNH TUYẾN CHO ĐĂNG TIN VÀ QUẢN LÝ TIN (USER) --- */}
+        <Route path="/dang-tin" element={<DangTin />} />
+        <Route path="/tin-dang" element={<TinDang />} />
 
         {/* THÊM ĐỊNH TUYẾN CHO TRANG CHI TIẾT TIN TỨC */}
         <Route 
