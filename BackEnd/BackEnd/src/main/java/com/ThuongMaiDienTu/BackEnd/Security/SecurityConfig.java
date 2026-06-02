@@ -76,6 +76,7 @@ public class SecurityConfig {
                         
                         // Các API đặc thù của Admin và Đối tác (Đặt trước để tránh khớp nhầm mẫu tổng quát)
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/vendor/**").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers("/api/sanpham/partner").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/stock").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/status").hasAnyRole("DOITAC", "ADMIN")

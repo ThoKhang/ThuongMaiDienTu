@@ -47,4 +47,8 @@ export const sanPhamService = {
     const response = await api.get('/api/thuonghieu');
     return response.data;
   },
+  getVendorDashboard: async () => {
+    const response = await api.get('/api/vendor/dashboard');
+    return response.data;
+  },
 };
