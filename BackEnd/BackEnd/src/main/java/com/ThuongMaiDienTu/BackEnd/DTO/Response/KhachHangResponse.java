@@ -7,6 +7,4 @@ public class KhachHangResponse {
     private Integer idNguoiDung;
     private String hoTen;
     private Integer diemThuong;
-    private LocalDate ngaySinh;
-    private String soDienThoai;
 }

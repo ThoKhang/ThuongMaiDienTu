@@ -5,14 +5,18 @@ import lombok.*;
 
 @Entity
 @Table(name = "VAITRO")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class VaiTroEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "tenVaiTro", nullable = false, unique = true, length = 50)
+    @Column(name = "tenVaiTro", nullable = false, unique = true)
     private String tenVaiTro;
 
-    @Column(name = "moTa", length = 255)
+    @Column(name = "moTa")
     private String moTa;
 }
