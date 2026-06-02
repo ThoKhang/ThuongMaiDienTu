@@ -8,7 +8,7 @@ import Register from './Components/Pages/Auth/Register';
 import Login from './Components/Pages/Auth/Login';
 import ChiTietSanPhamPage from './Components/Pages/sanPham/chiTietSanPhamPage';
 import Home from './Components/Pages/TrangChu/TrangChu';
-import LuuTru from './Components/Pages/DanhMuc/LuuTru';
+import DanhMuc from './Components/Pages/DanhMuc/DanhMuc';
 
 // BỔ SUNG IMPORT TRANG ADMIN
 import AdminLayout from './Components/layout/admin/AdminLayout';
@@ -43,7 +43,7 @@ function App() {
         <Route path="/dang-nhap" element={<Login />} />
         
         <Route path="/san-pham/:id" element={<ChiTietSanPhamPage />} />
-          <Route path="/danh-muc/3" element={<LuuTru />} />
+          <Route path="/danh-muc/:id" element={<DanhMuc />} />
 
         {/* --- ROUTE LỒNG NHAU DÀNH CHO ADMIN --- */}
         <Route path="/admin" element={<AdminLayout />}>
