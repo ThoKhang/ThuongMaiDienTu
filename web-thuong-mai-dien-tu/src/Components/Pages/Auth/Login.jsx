@@ -17,7 +17,6 @@ import {
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [userRoleTab, setUserRoleTab] = useState('user'); // 'user' or 'admin'
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const loginMutation = useLogin();
@@ -31,22 +30,12 @@ const Login = () => {
     loginMutation.mutate(payload, {
       onSuccess: (response) => {
         const roles = response.roles || [];
+        const isAdmin = roles.some(role => role.toUpperCase() === 'ROLE_ADMIN');
         
-        if (userRoleTab === 'admin') {
-          // Kiểm tra xem user có quyền ROLE_ADMIN hay không
-          const isAdmin = roles.some(role => role.toUpperCase() === 'ROLE_ADMIN');
-          if (!isAdmin) {
-            // Hủy lưu thông tin nếu đăng nhập nhầm quyền admin
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('username');
-            localStorage.removeItem('roles');
-            toast.error('Tài khoản của bạn không có quyền quản trị (Admin)!');
-            return;
-          }
-          toast.success('Đăng nhập quản trị viên thành công!');
-          navigate('/');
+        toast.success('Đăng nhập thành công!');
+        if (isAdmin) {
+          navigate('/admin');
         } else {
-          toast.success('Đăng nhập thành công!');
           navigate('/');
         }
       }
@@ -108,32 +97,6 @@ const Login = () => {
           <div className="space-y-2 text-center lg:text-left">
             <h2 className="text-3xl font-headline font-extrabold text-on-surface tracking-tight">Chào mừng trở lại</h2>
             <p className="text-on-surface-variant text-sm font-light">Vui lòng đăng nhập để tiếp tục với tài khoản của bạn.</p>
-          </div>
-
-          {/* User Type Tabs */}
-          <div className="bg-surface-container-low p-1.5 rounded-xl grid grid-cols-2 gap-1 border border-gray-100 select-none">
-            <button
-              type="button"
-              onClick={() => setUserRoleTab('user')}
-              className={`py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                userRoleTab === 'user'
-                  ? 'bg-white text-primary shadow-sm font-bold'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-            >
-              Người dùng
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserRoleTab('admin')}
-              className={`py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                userRoleTab === 'admin'
-                  ? 'bg-white text-primary shadow-sm font-bold'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-            >
-              Admin
-            </button>
           </div>
 
           {/* Login Form */}
