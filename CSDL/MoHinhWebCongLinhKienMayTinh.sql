@@ -473,3 +473,34 @@ INSERT INTO GIATRI_THUOCTINH (idSanPham, idThuocTinh, giaTri) VALUES
 (26, 3, '8 GB GDDR6'),                                -- id 26: ASUS RX 7600
 (27, 3, '16 GB GDDR6X');                              -- id 27: AORUS RTX 4080
 
+
+-- Thêm table bài đăng
+CREATE TABLE BAIDANG (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tieuDe VARCHAR(250) NOT NULL,
+    idSanPham INT NOT NULL,
+    idNguoiDang INT NOT NULL,
+    idDoiTac INT NOT NULL,
+    giaBan DECIMAL(18,2) NOT NULL,
+    moTaTinhTrang TEXT NULL,
+    diaChiGiaoDich VARCHAR(255) NULL,
+    trangThaiDuyet VARCHAR(30) DEFAULT 'ChoDuyet',
+    idAdminDuyet INT NULL,
+    ngayDang DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ngayDuyet DATETIME NULL,
+    luotXem INT DEFAULT 0,
+
+    CONSTRAINT FK_BD_SP FOREIGN KEY (idSanPham) REFERENCES SANPHAM(id) ON DELETE CASCADE,
+    CONSTRAINT FK_BD_ND FOREIGN KEY (idNguoiDang) REFERENCES NGUOIDUNG(id) ON DELETE CASCADE,
+    CONSTRAINT FK_BD_DT FOREIGN KEY (idDoiTac) REFERENCES DOITACLIENKET(idNguoiDung) ON DELETE CASCADE,
+    CONSTRAINT FK_BD_ADMIN FOREIGN KEY (idAdminDuyet) REFERENCES NGUOIDUNG(id)
+);
+
+-- 2. Tạo bảng phụ lưu DANH SÁCH HÌNH ẢNH của bài đăng
+CREATE TABLE HINHANH_BAIDANG (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idBaiDang INT NOT NULL,
+    urlHinhAnh VARCHAR(500) NOT NULL, -- Đường dẫn của ảnh
+    isDaiDien BOOLEAN DEFAULT 0,      -- Ảnh nào là ảnh chính hiển thị ở danh sách (1: Chính, 0: Ảnh phụ)
+    CONSTRAINT FK_HABD_BD FOREIGN KEY (idBaiDang) REFERENCES BAIDANG(id) ON DELETE CASCADE
+);
