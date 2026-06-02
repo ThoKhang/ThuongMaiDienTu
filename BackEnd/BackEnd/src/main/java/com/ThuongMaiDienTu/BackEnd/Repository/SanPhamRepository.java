@@ -15,7 +15,6 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, Integer>
 
     @Query("SELECT s FROM SanPhamEntity s WHERE s.giaKhuyenMai < s.giaNiemYet " +
            "AND s.tinhTrangDuyet = :tinhTrang ORDER BY s.giaNiemYet DESC")
-    List<SanPhamEntity> findSanPhamNoiBat(@Param("tinhTrang") TinhTrangDuyet tinhTrang, Pageable pageable);
     Page<SanPhamEntity> findByTinhTrangDuyet(TinhTrangDuyet tinhTrang, Pageable pageable);
     Page<SanPhamEntity> findByIdDanhMucAndTinhTrangDuyet(
             Integer idDanhMuc,

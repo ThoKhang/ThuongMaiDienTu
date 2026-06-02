@@ -85,7 +85,7 @@ public class SecurityConfig {
                         
                         // API công khai của sản phẩm (Đặt sau)
                         .requestMatchers(HttpMethod.GET, "/api/sanpham/**").permitAll()
-                        .requestMatchers("/api/trangchu/**","/api/danh-muc/**").permitAll()
+                        .requestMatchers("/api/trangchu/**","/api/danh-muc/**","/api/tintuc/**").permitAll()
                         
                         .anyRequest().authenticated()
                 );

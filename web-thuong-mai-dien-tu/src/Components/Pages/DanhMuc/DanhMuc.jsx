@@ -215,7 +215,7 @@ export default function DanhMucSanPham() {
                                         to={`/san-pham/${sp.id}`}
                                         state={{ idDanhMuc: sp.idDanhMuc }}
                                         className="group bg-white rounded-xl overflow-hidden hover:shadow-xl
-                                                   transition-all duration-300 flex flex-col border border-gray-100">
+                                                   transition-all duration-300 flex flex-col border border-gray-400">
                                         <div className="relative h-40 overflow-hidden bg-surface-container-low
                                                         flex items-center justify-center">
                                             <span className="text-5xl">🖥️</span>
@@ -267,11 +267,17 @@ export default function DanhMucSanPham() {
                         <div className="flex flex-col items-center gap-1 py-3">
                             <div className="flex justify-center items-center gap-2 flex-wrap">
                                 <button
+                                    onClick={() => setTrangHienTai(tongSoTrang - 1)}
+                                    disabled={trangHienTai === tongSoTrang - 1}
+                                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                    ⏮
+                                </button>
+                                <button
                                     onClick={() => setTrangHienTai(t => Math.max(0, t - 1))}
                                     disabled={trangHienTai === 0}
                                     className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600
                                                hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
-                                    ← Trước
+                                    ←
                                 </button>
                                 {Array.from({ length: tongSoTrang }, (_, i) => (
                                     <button key={i}
@@ -288,12 +294,15 @@ export default function DanhMucSanPham() {
                                     disabled={trangHienTai === tongSoTrang - 1}
                                     className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600
                                                hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
-                                    Sau →
+                                    →
+                                </button>
+                                <button
+                                    onClick={() => setTrangHienTai(tongSoTrang - 1)}
+                                    disabled={trangHienTai === tongSoTrang - 1}
+                                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                                    ⏭
                                 </button>
                             </div>
-                            <p className="text-sm text-gray-400">
-                                Trang {trangHienTai + 1} / {tongSoTrang} — Tổng {data?.tongSoSanPham || 0} sản phẩm
-                            </p>
                         </div>
                     </div>
                 )}
