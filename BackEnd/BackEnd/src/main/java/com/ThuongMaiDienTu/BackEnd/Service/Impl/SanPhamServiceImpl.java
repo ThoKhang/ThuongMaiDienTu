@@ -47,14 +47,6 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public List<SanPhamResponse> getSanPhamNoiBat() {
-        return sanPhamRepository
-            .findSanPhamNoiBat(TinhTrangDuyet.DA_DUYET, PageRequest.of(0, 8))
-            .stream()
-            .map(sanPhamMapper::toResponse)
-            .collect(Collectors.toList());
-    }
-    @Override
     public Page<SanPhamResponse> getSanPhamPhanTrang(int page) {
         Pageable pageable = PageRequest.of(page, 9, Sort.by("id").descending());
         return sanPhamRepository
@@ -63,7 +55,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
     @Override
     public Page<SanPhamResponse> getSanPhamTheoDanhMuc(Integer id, int page) {
-        Pageable pageable = PageRequest.of(page, 9, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, 8, Sort.by("id").descending());
         return sanPhamRepository
                 .findByIdDanhMucAndTinhTrangDuyet(id, TinhTrangDuyet.DA_DUYET, pageable)
                 .map(sanPhamMapper::toResponse);
