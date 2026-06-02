@@ -16,7 +16,7 @@ public class AdminGiaoDichController {
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(giaoDichService.getAllGiaoDich());
     }
-
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable Integer id, @RequestParam String status) {
         boolean success = giaoDichService.capNhatTrangThai(id, status);
