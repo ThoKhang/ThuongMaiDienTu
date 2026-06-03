@@ -81,7 +81,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/stock").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*/status").hasAnyRole("DOITAC", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/sanpham/*").hasAnyRole("DOITAC", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/sanpham/*").hasAnyRole("DOITAC", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sanpham/*","/api/giaodich-affiliate/**").hasAnyRole("DOITAC", "ADMIN")
                         
                         // API công khai của sản phẩm (Đặt sau)
                         .requestMatchers(HttpMethod.GET, "/api/sanpham/**").permitAll()

@@ -16,4 +16,9 @@ public class TheoDoiClickController {
     public ResponseEntity<TheoDoiClickResponse> create(@RequestBody TheoDoiClickRequest request) {
         return ResponseEntity.ok(theoDoiClickService.createTheoDoiClick(request));
     }
+
+    @GetMapping("/count/{idSanPham}")
+    public ResponseEntity<Long> countClicks(@PathVariable Integer idSanPham) {
+        return ResponseEntity.ok(theoDoiClickService.countClicksBySanPham(idSanPham));
+    }
 }
