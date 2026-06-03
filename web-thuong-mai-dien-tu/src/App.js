@@ -62,15 +62,15 @@ function App() {
         <Route path="/tin-dang" element={<TinDang />} />
 
         {/* THÊM ĐỊNH TUYẾN CHO TRANG CHI TIẾT TIN TỨC */}
-        <Route
-          path="/tin-tuc/:id"
+        <Route 
+          path="/tin-tuc/:id" 
           element={
             <>
               <Header />
               <ChiTietTinTuc />
               <Footer />
             </>
-          }
+          } 
         />
 
         <Route path="/admin" element={<AdminLayout />}>

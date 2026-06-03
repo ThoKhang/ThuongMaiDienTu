@@ -17,10 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
-import java.io.File;
-import java.io.IOException;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,23 +26,18 @@ public class SanPhamController {
     final private SanPhamRepository sanPhamRepository;
     final private SanPhamMapper sanPhamMapper;
     private final SanPhamService sanPhamService;
-    private final String uploadDir;
-
     @GetMapping
     public ResponseEntity<List<SanPhamResponse>> getAll() {
         return ResponseEntity.ok(sanPhamService.getAllSanPham());
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<SanPhamResponse> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(sanPhamService.getSanPhamById(id));
     }
-
     @PostMapping
     public ResponseEntity<SanPhamResponse> create(@RequestBody SanPhamRequest request) {
         return ResponseEntity.ok(sanPhamService.createSanPham(request));
     }
-
     @GetMapping("partner")
     public ResponseEntity<List<SanPhamResponse>> getPartnerProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,36 +52,32 @@ public class SanPhamController {
     }
 
     @PutMapping("{id}/stock")
-    public ResponseEntity<SanPhamResponse> updateStock(@PathVariable Integer id,
-            @RequestBody java.util.Map<String, Integer> requestBody) {
+    public ResponseEntity<SanPhamResponse> updateStock(@PathVariable Integer id, @RequestBody java.util.Map<String, Integer> requestBody) {
         Integer soLuong = requestBody.get("soLuongTon");
         return ResponseEntity.ok(sanPhamService.updateSoLuongTon(id, soLuong));
     }
 
     @PutMapping("{id}/status")
-    public ResponseEntity<SanPhamResponse> updateStatus(@PathVariable Integer id,
-            @RequestBody java.util.Map<String, String> requestBody) {
+    public ResponseEntity<SanPhamResponse> updateStatus(@PathVariable Integer id, @RequestBody java.util.Map<String, String> requestBody) {
         String status = requestBody.get("tinhTrangDuyet");
         return ResponseEntity.ok(sanPhamService.updateTinhTrangDuyet(id, status));
     }
 
     @PutMapping("{id}")
     public ResponseEntity<SanPhamResponse> update(@PathVariable Integer id, @RequestBody SanPhamRequest request) {
-        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder
-                .getContext().getAuthentication();
-        com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails userDetails = (com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails) authentication
-                .getPrincipal();
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails userDetails = (com.ThuongMaiDienTu.BackEnd.Security.CustomUserDetails) authentication.getPrincipal();
         boolean isAdmin = userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
+        
         SanPhamResponse sp = sanPhamService.getSanPhamById(id);
         if (!isAdmin && !sp.getIdDoiTac().equals(userDetails.getId())) {
             return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build();
         }
-
+        
         if (!isAdmin) {
             request.setIdDoiTac(userDetails.getId());
         }
-
+        
         return ResponseEntity.ok(sanPhamService.updateSanPham(id, request));
     }
 
@@ -117,30 +104,17 @@ public class SanPhamController {
     @GetMapping("/phan-trang")
     public ResponseEntity<Page<SanPhamResponse>> getPhanTrang(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
+            @RequestParam(defaultValue = "8") int size
+    ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 sanPhamRepository
                         .findByTinhTrangDuyet(TinhTrangDuyet.DA_DUYET, pageable)
-                        .map(sanPhamMapper::toResponse));
+                        .map(sanPhamMapper::toResponse)
+        );
     }
-
     @GetMapping("/search")
     public ResponseEntity<List<SanPhamResponse>> search(@RequestParam String keyword) {
         return ResponseEntity.ok(sanPhamService.searchByTenSanPham(keyword));
-    }
-
-    @PostMapping("/upload-image")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-        try {
-            if (file != null && !file.isEmpty()) {
-                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                file.transferTo(new File(uploadDir + File.separator + fileName));
-                return ResponseEntity.ok("http://localhost:8080/upload/" + fileName);
-            }
-            return ResponseEntity.badRequest().body("File is empty");
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Error uploading file: " + e.getMessage());
-        }
     }
 }

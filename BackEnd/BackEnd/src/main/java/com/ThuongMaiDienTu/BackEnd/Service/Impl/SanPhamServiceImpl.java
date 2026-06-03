@@ -168,7 +168,21 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (!sanPhamRepository.existsById(idSanPham)) {
             throw new RuntimeException("Sản phẩm không tồn tại!");
         }
-        // Lượt xem sản phẩm (view) không ghi nhận vào bảng THEODOI_CLICK nữa.
-        // Chỉ ghi nhận lượt click liên kết (khi bấm liên hệ/mua hàng) thông qua /api/theodoi-click.
+        
+        String truncatedUserAgent = userAgent != null && userAgent.length() > 500 ? userAgent.substring(0, 500) : userAgent;
+
+        // Chống trùng lặp: nếu cùng 1 IP + UserAgent click vào sản phẩm này trong vòng 10 giây
+        if (theoDoiClickRepository.countRecentClicks(idSanPham, ipAddress, truncatedUserAgent) > 0) {
+            return;
+        }
+
+        com.ThuongMaiDienTu.BackEnd.Entity.TheoDoiClickEntity click = com.ThuongMaiDienTu.BackEnd.Entity.TheoDoiClickEntity.builder()
+                .idSanPham(idSanPham)
+                .idKhachHang(idKhachHang)
+                .diaChiIP(ipAddress)
+                .trinhDuyetFingerprint(truncatedUserAgent)
+                .isHopLe(true)
+                .build();
+        theoDoiClickRepository.save(click);
     }
 }

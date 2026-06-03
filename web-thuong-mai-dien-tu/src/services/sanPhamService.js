@@ -66,18 +66,4 @@ export const sanPhamService = {
     const response = await api.get('/api/vendor/dashboard');
     return response.data;
   },
-  createProduct: async (productData) => {
-    const response = await api.post('/api/sanpham', productData);
-    return response.data;
-  },
-  uploadImage: async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const response = await api.post('/api/sanpham/upload-image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
-  },
 };
