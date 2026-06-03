@@ -129,5 +129,15 @@ public class TinTucServiceImpl implements TinTucService {
         res.setLoaiNguoiDang(getLoaiNguoiDang(entity.getIdNguoiDang()));
         return res;
     }
+    @Override
+    public boolean xoaTinTuc(Integer idTinTuc, Integer idNguoiDang) {
+        TinTucEntity tinTuc = tinTucRepository.findById(idTinTuc).orElse(null);
+        // Kiểm tra bài viết có tồn tại và thuộc về đúng người dùng yêu cầu xóa không
+        if (tinTuc != null && tinTuc.getIdNguoiDang().equals(idNguoiDang)) {
+            tinTucRepository.delete(tinTuc);
+            return true;
+        }
+        return false;
+    }
     
 }
