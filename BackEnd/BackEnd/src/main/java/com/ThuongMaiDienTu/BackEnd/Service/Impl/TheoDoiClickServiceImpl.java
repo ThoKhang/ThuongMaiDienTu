@@ -21,4 +21,9 @@ public class TheoDoiClickServiceImpl implements TheoDoiClickService {
         TheoDoiClickEntity saved = theoDoiClickRepository.save(entity);
         return theoDoiClickMapper.toResponse(saved);
     }
+
+    @Override
+    public long countClicksBySanPham(Integer idSanPham) {
+        return theoDoiClickRepository.countByIdSanPham(idSanPham);
+    }
 }

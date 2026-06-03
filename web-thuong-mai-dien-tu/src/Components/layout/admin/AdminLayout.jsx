@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake, FaUserCircle, FaNewspaper } from 'react-icons/fa';
+import { FaHome, FaUsers, FaMoneyBillWave, FaSignOutAlt, FaBoxOpen, FaHandshake, FaUserCircle, FaNewspaper, FaMoneyCheckAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const AdminLayout = () => {
@@ -55,6 +55,7 @@ const AdminLayout = () => {
         { path: '/admin/commissions', name: 'Quản lý hoa hồng', icon: <FaMoneyBillWave /> },
         { path: '/admin/partners', name: 'Quản lý đối tác', icon: <FaHandshake /> },
         { path: '/admin/news', name: 'Quản lý bài đăng', icon: <FaNewspaper /> },
+        { path: '/admin/thanh-toan', name: 'Thanh toán', icon: <FaMoneyCheckAlt /> },
     ];
 
     return (

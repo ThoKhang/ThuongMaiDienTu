@@ -61,7 +61,7 @@ export default function TinDang() {
         setEditTieuDe(item.tieuDe);
         setEditNoiDung(item.noiDung);
         setEditFile(null);
-       setEditPreview(item.hinhAnh ? `http://localhost:8080/upload/${item.hinhAnh}` : null);
+        setEditPreview(item.hinhAnh ? `http://localhost:8080/upload/${item.hinhAnh}` : null);
     };
 
     const handleFileChange = (e) => {
@@ -99,6 +99,26 @@ export default function TinDang() {
             toast.error("Không thể kết nối đến máy chủ.");
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    // THÊM: Hàm Xử lý Xóa Tin
+    const handleDelete = async (idTinTuc) => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.")) {
+            try {
+                const res = await fetch(`http://localhost:8080/api/tintuc/cua-toi/${idTinTuc}?idNguoiDang=${idNguoiDang}`, {
+                    method: 'DELETE'
+                });
+
+                if (res.ok) {
+                    toast.success("Đã xóa bài viết thành công.");
+                    fetchMyNews(); // Cập nhật lại danh sách sau khi xóa
+                } else {
+                    toast.error("Có lỗi xảy ra khi xóa bài viết.");
+                }
+            } catch (error) {
+                toast.error("Không thể kết nối đến máy chủ.");
+            }
         }
     };
 
@@ -163,10 +183,13 @@ export default function TinDang() {
                                 <div key={item.id} className="group bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/30 rounded-2xl p-4 flex flex-col sm:flex-row gap-5 transition-all shadow-sm hover:shadow-md">
                                     <div className="w-full sm:w-40 h-28 shrink-0 rounded-xl overflow-hidden bg-surface-container-low border border-outline-variant/20 relative">
                                         <img 
-                                            src={item.hinhAnh ? `http://localhost:8080/upload/${item.hinhAnh}` : null}
+                                            src={item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `http://localhost:8080/upload/${item.hinhAnh}`) : "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect fill='%23e2e8f0' width='300' height='200'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='16' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3EChưa có ảnh%3C/text%3E%3C/svg%3E"} 
                                             alt="Thumb" 
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                            onError={(e) => { 
+                                                e.target.onerror = null; 
+                                                e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect fill='%23e2e8f0' width='300' height='200'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='16' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3EẢnh bị lỗi%3C/text%3E%3C/svg%3E"; 
+                                            }}
                                         />
                                     </div>
                                     <div className="flex-1 flex flex-col justify-between py-1 min-w-0">
@@ -183,7 +206,7 @@ export default function TinDang() {
                                             </Link>
                                         </div>
                                         
-                                        <div className="mt-4 flex items-center gap-3">
+                                        <div className="mt-4 flex flex-wrap items-center gap-3">
                                             {item.trangThaiDuyet !== 'TuChoi' ? (
                                                 <button onClick={() => openEditModal(item)} className="text-primary hover:bg-blue-50 bg-primary-container/20 border border-primary/20 px-4 py-1.5 rounded-lg text-sm font-bold transition-colors flex items-center gap-1.5">
                                                     <span className="material-symbols-outlined text-[16px]">edit</span>
@@ -195,6 +218,15 @@ export default function TinDang() {
                                                     Bài viết bị từ chối không thể sửa
                                                 </span>
                                             )}
+
+                                            {/* THÊM NÚT XÓA Ở ĐÂY */}
+                                            <button 
+                                                onClick={() => handleDelete(item.id)} 
+                                                className="text-error hover:bg-red-50 bg-red-50/50 border border-red-200 px-4 py-1.5 rounded-lg text-sm font-bold transition-colors flex items-center gap-1.5"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">delete</span>
+                                                Xóa bài
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +242,6 @@ export default function TinDang() {
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setEditingNews(null)}></div>
                     <div className="relative bg-surface-container-lowest rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col max-h-[90vh] overflow-hidden border border-outline-variant/30 animate-in fade-in zoom-in duration-200">
                         
-                        {/* Modal Header */}
                         <div className="px-8 py-5 border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-lowest z-10">
                             <div>
                                 <h2 className="text-2xl font-headline font-extrabold text-on-surface">Cập nhật bài viết</h2>
@@ -221,7 +252,6 @@ export default function TinDang() {
                             </button>
                         </div>
                         
-                        {/* Modal Body */}
                         <div className="p-8 overflow-y-auto custom-scrollbar flex-1 bg-surface-container-lowest">
                             <form id="editForm" onSubmit={handleUpdate} className="space-y-6">
                                 <div>
@@ -256,7 +286,6 @@ export default function TinDang() {
                             </form>
                         </div>
 
-                        {/* Modal Footer */}
                         <div className="px-8 py-5 border-t border-outline-variant/20 flex justify-end gap-3 bg-surface-container-lowest z-10">
                             <button type="button" onClick={() => setEditingNews(null)} className="px-6 py-2.5 font-bold text-on-surface-variant bg-surface-container-high rounded-xl hover:bg-surface-container-highest transition-colors">
                                 Hủy bỏ
