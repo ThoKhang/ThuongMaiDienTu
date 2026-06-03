@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b350e283-e855-4275-8e68-a14a6fc2b077" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/CauHinhAffiliateMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhGiaMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DanhMucMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DoiTacLienKetMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/DoiTacLienKetMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaTriThuocTinhMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaTriThuocTinhMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaoDichAffiliateMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/GiaoDichAffiliateMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/KhachHangMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/KhachHangMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/NguoiDungMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/NguoiDungMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/SanPhamMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/SanPhamMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TheoDoiClickMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TheoDoiClickMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuocTinhLinhKienMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuocTinhLinhKienMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuongHieuMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/ThuongHieuMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TinTucMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/TinTucMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/ThuongMaiDienTu/BackEnd/Mapper/VaiTroNguoiDungMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/SanPhamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/main/java/com/ThuongMaiDienTu/BackEnd/Controller/SanPhamController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +43,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/fix__Huy",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true"
   }
