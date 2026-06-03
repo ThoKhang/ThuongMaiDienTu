@@ -3,18 +3,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import { sanPhamService } from '../../../services/sanPhamService';
 import { TinhTrangDuyet, TinhTrangDuyetLabels, TinhTrangDuyetColors } from '../../../configs/constants';
-import { 
-  FaEye, 
-  FaCheckCircle, 
-  FaClock, 
-  FaEyeSlash, 
-  FaTimesCircle, 
-  FaTrashAlt, 
-  FaEdit, 
-  FaSearch, 
-  FaBox, 
-  FaWarehouse, 
-  FaPlus 
+import {
+  FaEye,
+  FaCheckCircle,
+  FaClock,
+  FaEyeSlash,
+  FaTimesCircle,
+  FaTrashAlt,
+  FaEdit,
+  FaSearch,
+  FaBox,
+  FaWarehouse,
+  FaPlus
 } from 'react-icons/fa';
 
 const QuanLyTinDang = () => {
@@ -22,9 +22,25 @@ const QuanLyTinDang = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('ALL');
 
+  // Create Modal States
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createName, setCreateName] = useState('');
+  const [createCategory, setCreateCategory] = useState('');
+  const [createBrand, setCreateBrand] = useState('');
+  const [createPrice, setCreatePrice] = useState('');
+  const [createPromoPrice, setCreatePromoPrice] = useState('');
+  const [createStock, setCreateStock] = useState('');
+  const [createSpecs, setCreateSpecs] = useState('');
+  const [createAffiliate, setCreateAffiliate] = useState('');
+  const [createUrl, setCreateUrl] = useState('');
+  const [createImageFile, setCreateImageFile] = useState(null);
+  const [createDescription, setCreateDescription] = useState('');
+
   // Edit Modal States
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editImageFile, setEditImageFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Form states for Editing
   const [editName, setEditName] = useState('');
@@ -101,7 +117,28 @@ const QuanLyTinDang = () => {
       Swal.fire('Thành công', 'Đã cập nhật thông tin sản phẩm thành công!', 'success');
     },
     onError: (err) => {
-      Swal.fire('Lỗi', err.response?.data || 'Không thể cập nhật sản phẩm.', 'error');
+      const errorData = err.response?.data;
+      const errorMessage = typeof errorData === 'string'
+        ? errorData
+        : (errorData?.message || JSON.stringify(errorData) || 'Không thể cập nhật sản phẩm.');
+      Swal.fire('Lỗi', errorMessage, 'error');
+    }
+  });
+
+  // Mutation for creating new product
+  const createProductMutation = useMutation({
+    mutationFn: sanPhamService.createProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['partnerProducts'] });
+      setIsCreateModalOpen(false);
+      Swal.fire('Thành công', 'Đăng sản phẩm mới thành công!', 'success');
+    },
+    onError: (err) => {
+      const errorData = err.response?.data;
+      const errorMessage = typeof errorData === 'string'
+        ? errorData
+        : (errorData?.message || JSON.stringify(errorData) || 'Không thể đăng sản phẩm.');
+      Swal.fire('Lỗi', errorMessage, 'error');
     }
   });
 
@@ -116,8 +153,8 @@ const QuanLyTinDang = () => {
   // Filtered products list
   const filteredProducts = products.filter(sp => {
     // 1. Filter by search term
-    const matchesSearch = sp.tenSanPham.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          sp.id.toString().includes(searchTerm);
+    const matchesSearch = sp.tenSanPham.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      sp.id.toString().includes(searchTerm);
     if (!matchesSearch) return false;
 
     // 2. Filter by status tab
@@ -207,13 +244,14 @@ const QuanLyTinDang = () => {
     setEditSpecs(product.thongSoKyThuat || '');
     setEditAffiliate(product.urlAffiliate || '');
     setEditUrl(product.url || '');
+    setEditImageFile(null);
     setEditDescription(product.moTa || '');
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = (e) => {
+  const handleSaveEdit = async (e) => {
     e.preventDefault();
-    
+
     // Validations
     if (!editName.trim()) {
       Swal.fire('Lỗi', 'Tên sản phẩm không được để trống!', 'error');
@@ -247,7 +285,20 @@ const QuanLyTinDang = () => {
       Swal.fire('Lỗi', 'Link Affiliate không được để trống!', 'error');
       return;
     }
-    
+
+    setIsUploading(true);
+    let finalUrl = editUrl;
+    try {
+      if (editImageFile) {
+        finalUrl = await sanPhamService.uploadImage(editImageFile);
+      }
+    } catch (err) {
+      setIsUploading(false);
+      Swal.fire('Lỗi', 'Không thể tải ảnh lên server!', 'error');
+      return;
+    }
+    setIsUploading(false);
+
     const productData = {
       idDanhMuc: parseInt(editCategory),
       idThuongHieu: parseInt(editBrand),
@@ -257,12 +308,96 @@ const QuanLyTinDang = () => {
       giaKhuyenMai: (editPromoPrice !== '' && editPromoPrice !== null) ? parseFloat(editPromoPrice) : null,
       soLuongTon: parseInt(editStock),
       urlAffiliate: editAffiliate,
-      url: editUrl,
+      url: finalUrl,
       moTa: editDescription,
       tinhTrangDuyet: selectedProduct.tinhTrangDuyet
     };
 
     updateProductMutation.mutate({ id: selectedProduct.id, productData });
+  };
+
+  const handleOpenCreateModal = () => {
+    setCreateName('');
+    setCreateCategory('');
+    setCreateBrand('');
+    setCreatePrice('');
+    setCreatePromoPrice('');
+    setCreateStock('');
+    setCreateSpecs('');
+    setCreateAffiliate('');
+    setCreateUrl('');
+    setCreateImageFile(null);
+    setCreateDescription('');
+    setIsCreateModalOpen(true);
+  };
+
+  const handleSaveCreate = async (e) => {
+    e.preventDefault();
+
+    // Validations
+    if (!createName.trim()) {
+      Swal.fire('Lỗi', 'Tên sản phẩm không được để trống!', 'error');
+      return;
+    }
+    if (!createCategory) {
+      Swal.fire('Lỗi', 'Vui lòng chọn Danh mục!', 'error');
+      return;
+    }
+    if (!createBrand) {
+      Swal.fire('Lỗi', 'Vui lòng chọn Thương hiệu!', 'error');
+      return;
+    }
+    if (!createPrice || parseFloat(createPrice) <= 0) {
+      Swal.fire('Lỗi', 'Giá niêm yết phải là số dương lớn hơn 0!', 'error');
+      return;
+    }
+    if (createPromoPrice !== '' && createPromoPrice !== null && parseFloat(createPromoPrice) < 0) {
+      Swal.fire('Lỗi', 'Giá khuyến mãi phải lớn hơn hoặc bằng 0!', 'error');
+      return;
+    }
+    if (createPromoPrice !== '' && createPromoPrice !== null && parseFloat(createPromoPrice) > parseFloat(createPrice)) {
+      Swal.fire('Lỗi', 'Giá khuyến mãi không được lớn hơn giá niêm yết!', 'error');
+      return;
+    }
+    if (createStock === '' || parseInt(createStock) < 0) {
+      Swal.fire('Lỗi', 'Số lượng tồn kho phải lớn hơn hoặc bằng 0!', 'error');
+      return;
+    }
+    if (!createAffiliate.trim()) {
+      Swal.fire('Lỗi', 'Link Affiliate không được để trống!', 'error');
+      return;
+    }
+
+    setIsUploading(true);
+    let finalUrl = createUrl;
+    try {
+      if (createImageFile) {
+        finalUrl = await sanPhamService.uploadImage(createImageFile);
+      }
+    } catch (err) {
+      setIsUploading(false);
+      Swal.fire('Lỗi', 'Không thể tải ảnh lên server!', 'error');
+      return;
+    }
+    setIsUploading(false);
+
+    const userId = localStorage.getItem('id') || localStorage.getItem('userId') || 1;
+
+    const productData = {
+      idDanhMuc: parseInt(createCategory),
+      idDoiTac: parseInt(userId),
+      idThuongHieu: parseInt(createBrand),
+      tenSanPham: createName,
+      thongSoKyThuat: createSpecs,
+      giaNiemYet: parseFloat(createPrice),
+      giaKhuyenMai: (createPromoPrice !== '' && createPromoPrice !== null) ? parseFloat(createPromoPrice) : null,
+      soLuongTon: parseInt(createStock),
+      urlAffiliate: createAffiliate,
+      url: finalUrl,
+      moTa: createDescription
+    };
+
+    createProductMutation.mutate(productData);
   };
 
   if (isLoading) {
@@ -291,11 +426,11 @@ const QuanLyTinDang = () => {
           <p className="text-slate-500 text-sm font-light mt-1">Theo dõi, lọc trạng thái duyệt và tối ưu hóa tin bán linh kiện.</p>
         </div>
         <button
-          onClick={() => Swal.fire('Thông báo', 'Tính năng tạo sản phẩm mới đang được chuyển giao từ form đăng tin.', 'info')}
+          onClick={handleOpenCreateModal}
           className="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-5 rounded-xl shadow-lg shadow-sky-600/20 active:scale-95 transition-all flex items-center gap-2 self-start md:self-auto text-sm"
         >
           <FaPlus size={12} />
-          Đăng tin
+          Đăng sản phẩm mới
         </button>
       </div>
 
@@ -374,11 +509,10 @@ const QuanLyTinDang = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                    activeTab === tab.id
-                      ? 'bg-white text-sky-600 shadow-sm font-black'
-                      : 'text-slate-500 hover:text-slate-800'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${activeTab === tab.id
+                    ? 'bg-white text-sky-600 shadow-sm font-black'
+                    : 'text-slate-500 hover:text-slate-800'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -411,7 +545,7 @@ const QuanLyTinDang = () => {
                 {filteredProducts.map(sp => {
                   const isOutOfStock = sp.soLuongTon === 0;
                   const label = isOutOfStock ? 'Hết hàng' : TinhTrangDuyetLabels[sp.tinhTrangDuyet] || sp.tinhTrangDuyet;
-                  const colorClass = isOutOfStock 
+                  const colorClass = isOutOfStock
                     ? 'bg-purple-500/10 text-purple-600 border border-purple-500/20'
                     : TinhTrangDuyetColors[sp.tinhTrangDuyet] || 'bg-gray-100 text-gray-700';
 
@@ -427,7 +561,7 @@ const QuanLyTinDang = () => {
                                 alt={sp.tenSanPham}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
-                                  e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                                  e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22200%22%20viewBox%3D%220%200%20300%20200%22%3E%3Crect%20fill%3D%22%23eee%22%20width%3D%22300%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22%23999%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20dy%3D%2210.5%22%20font-weight%3D%22bold%22%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%3ENo%20Image%3C%2Ftext%3E%3C%2Fsvg%3E";
                                 }}
                               />
                             ) : (
@@ -459,11 +593,10 @@ const QuanLyTinDang = () => {
                       <td className="py-4.5 px-4 text-center">
                         <button
                           onClick={() => handleUpdateStock(sp.id, sp.soLuongTon)}
-                          className={`font-semibold px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 mx-auto transition-colors cursor-pointer ${
-                            isOutOfStock 
-                              ? 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
-                              : 'bg-slate-50 border-slate-150 text-slate-600 hover:bg-slate-100'
-                          }`}
+                          className={`font-semibold px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 mx-auto transition-colors cursor-pointer ${isOutOfStock
+                            ? 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
+                            : 'bg-slate-50 border-slate-150 text-slate-600 hover:bg-slate-100'
+                            }`}
                         >
                           {sp.soLuongTon}
                           <FaEdit size={10} className="opacity-60" />
@@ -489,11 +622,10 @@ const QuanLyTinDang = () => {
                           {(sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET || sp.tinhTrangDuyet === TinhTrangDuyet.DA_AN) && (
                             <button
                               onClick={() => handleToggleStatus(sp.id, sp.tinhTrangDuyet)}
-                              className={`p-2 rounded-lg border text-xs font-semibold cursor-pointer transition-colors ${
-                                sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET
-                                  ? 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
-                                  : 'bg-sky-50 border-sky-100 text-sky-600 hover:bg-sky-100'
-                              }`}
+                              className={`p-2 rounded-lg border text-xs font-semibold cursor-pointer transition-colors ${sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET
+                                ? 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
+                                : 'bg-sky-50 border-sky-100 text-sky-600 hover:bg-sky-100'
+                                }`}
                               title={sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET ? 'Tạm ẩn tin đăng' : 'Hiển thị lại tin'}
                             >
                               {sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET ? 'Ẩn tin' : 'Hiện tin'}
@@ -528,6 +660,179 @@ const QuanLyTinDang = () => {
           )}
         </div>
       </div>
+
+      {/* ── CREATE MODAL ── */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-100 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden flex flex-col scale-in">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10">
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">Đăng sản phẩm mới</h3>
+                <p className="text-slate-500 text-xs mt-0.5">Điền thông tin chi tiết cho sản phẩm</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCreateModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined block text-xl">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveCreate} className="p-6 space-y-5 flex-1">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tên sản phẩm</label>
+                <input
+                  type="text"
+                  value={createName}
+                  onChange={(e) => setCreateName(e.target.value)}
+                  placeholder="Nhập tên đầy đủ của sản phẩm..."
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Danh mục</label>
+                  <select
+                    value={createCategory}
+                    onChange={(e) => setCreateCategory(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all cursor-pointer"
+                    required
+                  >
+                    <option value="">-- Chọn danh mục --</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.tenDanhMuc}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thương hiệu</label>
+                  <select
+                    value={createBrand}
+                    onChange={(e) => setCreateBrand(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all cursor-pointer"
+                    required
+                  >
+                    <option value="">-- Chọn thương hiệu --</option>
+                    {brands.map((b) => (
+                      <option key={b.id} value={b.id}>{b.tenThuongHieu}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Giá niêm yết (đ)</label>
+                  <input
+                    type="number"
+                    value={createPrice}
+                    onChange={(e) => setCreatePrice(e.target.value)}
+                    placeholder="Ví dụ: 45000000"
+                    min="1"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Giá khuyến mãi (đ - Tùy chọn)</label>
+                  <input
+                    type="number"
+                    value={createPromoPrice}
+                    onChange={(e) => setCreatePromoPrice(e.target.value)}
+                    placeholder="Bỏ trống nếu không giảm giá..."
+                    min="0"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1.5 md:col-span-1">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tồn kho</label>
+                  <input
+                    type="number"
+                    value={createStock}
+                    onChange={(e) => setCreateStock(e.target.value)}
+                    placeholder="0"
+                    min="0"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5 md:col-span-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Đường dẫn Affiliate (Mua hàng)</label>
+                  <input
+                    type="url"
+                    value={createAffiliate}
+                    onChange={(e) => setCreateAffiliate(e.target.value)}
+                    placeholder="https://cua-hang.com/san-pham"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tải lên ảnh sản phẩm mới</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) setCreateImageFile(file);
+                  }}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mô tả chi tiết</label>
+                <textarea
+                  value={createDescription}
+                  onChange={(e) => setCreateDescription(e.target.value)}
+                  placeholder="Nhập mô tả sản phẩm..."
+                  rows={3}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thông số kỹ thuật (Dạng JSON hoặc Text)</label>
+                <textarea
+                  value={createSpecs}
+                  onChange={(e) => setCreateSpecs(e.target.value)}
+                  placeholder="Nhập thông số kỹ thuật..."
+                  rows={3}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all"
+                />
+              </div>
+
+              <div className="p-2 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50 -mx-6 -mb-6 p-6 sticky bottom-0 z-10 backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="px-5 py-3 border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold rounded-xl text-sm transition-colors cursor-pointer"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="submit"
+                  disabled={createProductMutation.isPending || isUploading}
+                  className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-600/50 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-sky-600/10 active:scale-95 transition-all text-sm flex items-center gap-1.5 cursor-pointer"
+                >
+                  {(createProductMutation.isPending || isUploading) ? 'Đang xử lý...' : 'Đăng sản phẩm'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ── EDIT MODAL ── */}
       {isEditModalOpen && (
@@ -654,12 +959,14 @@ const QuanLyTinDang = () => {
 
               {/* Đường dẫn ảnh sản phẩm (URL) */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Đường dẫn ảnh sản phẩm (URL)</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Cập nhật ảnh sản phẩm (Chọn file mới nếu muốn đổi)</label>
                 <input
-                  type="url"
-                  value={editUrl}
-                  onChange={(e) => setEditUrl(e.target.value)}
-                  placeholder="Nhập đường dẫn hình ảnh (https://...)"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) setEditImageFile(file);
+                  }}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white text-sm outline-none transition-all font-mono"
                 />
               </div>
@@ -699,10 +1006,10 @@ const QuanLyTinDang = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={updateProductMutation.isPending}
+                  disabled={updateProductMutation.isPending || isUploading}
                   className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-600/50 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-sky-600/10 active:scale-95 transition-all text-sm flex items-center gap-1.5 cursor-pointer"
                 >
-                  {updateProductMutation.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+                  {(updateProductMutation.isPending || isUploading) ? 'Đang xử lý...' : 'Lưu thay đổi'}
                 </button>
               </div>
             </form>

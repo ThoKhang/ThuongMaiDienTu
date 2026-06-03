@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-03T01:09:00+0700",
+    date = "2026-06-03T09:48:46+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,7 +24,6 @@ public class TinTucMapperImpl implements TinTucMapper {
 
         TinTucEntity.TinTucEntityBuilder tinTucEntity = TinTucEntity.builder();
 
-        tinTucEntity.idAdmin( request.getIdAdmin() );
         tinTucEntity.tieuDe( request.getTieuDe() );
         tinTucEntity.noiDung( request.getNoiDung() );
 
@@ -37,15 +36,17 @@ public class TinTucMapperImpl implements TinTucMapper {
             return null;
         }
 
-        TinTucResponse tinTucResponse = new TinTucResponse();
+        TinTucResponse.TinTucResponseBuilder tinTucResponse = TinTucResponse.builder();
 
-        tinTucResponse.setId( entity.getId() );
-        tinTucResponse.setIdAdmin( entity.getIdAdmin() );
-        tinTucResponse.setTieuDe( entity.getTieuDe() );
-        tinTucResponse.setNoiDung( entity.getNoiDung() );
-        tinTucResponse.setNgayDang( entity.getNgayDang() );
+        tinTucResponse.id( entity.getId() );
+        tinTucResponse.idNguoiDang( entity.getIdNguoiDang() );
+        tinTucResponse.tieuDe( entity.getTieuDe() );
+        tinTucResponse.noiDung( entity.getNoiDung() );
+        tinTucResponse.ngayDang( entity.getNgayDang() );
+        tinTucResponse.hinhAnh( entity.getHinhAnh() );
+        tinTucResponse.trangThaiDuyet( entity.getTrangThaiDuyet() );
 
-        return tinTucResponse;
+        return tinTucResponse.build();
     }
 
     @Override

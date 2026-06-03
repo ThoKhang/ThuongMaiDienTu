@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../../services/adminService';
 import { FaSearch, FaCheckCircle, FaBan, FaBoxOpen, FaLink } from 'react-icons/fa';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const ProductManagement = () => {
     const [products, setProducts] = useState([]);
@@ -26,18 +27,39 @@ const ProductManagement = () => {
 
     const handleUpdateStatus = async (id, tenSP, status) => {
         const actionText = status === 'DaDuyet' ? 'duyệt' : 'từ chối/khóa';
-        if(window.confirm(`Bạn muốn ${actionText} sản phẩm: "${tenSP}"?`)) {
+        const result = await Swal.fire({
+            title: "Xác nhận",
+            text: `Bạn muốn ${actionText} sản phẩm: "${tenSP}"?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy"
+        });
+
+        if (result.isConfirmed) {
             try {
                 await adminService.updateProductStatus(id, status);
-                toast.success(`Đã ${actionText} sản phẩm thành công!`);
+
+                Swal.fire({
+                    title: "Thành công",
+                    text: `Đã ${actionText} sản phẩm thành công!`,
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
                 fetchProducts(); // Load lại bảng
             } catch (error) {
-                toast.error(`Lỗi khi xử lý. Vui lòng thử lại!`);
+                Swal.fire({
+                    title: "Lỗi",
+                    text: "Lỗi khi xử lý. Vui lòng thử lại!",
+                    icon: "error"
+                });
             }
         }
     };
 
-    const filteredProducts = products.filter(p => 
+    const filteredProducts = products.filter(p =>
         p.tenSanPham?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -56,12 +78,12 @@ const ProductManagement = () => {
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px', borderBottom: '1px solid #E5E7EB' }}>
                     <h3 style={{ margin: 0, color: '#1E3A8A', fontSize: '20px', fontWeight: 'bold' }}>Danh sách linh kiện</h3>
-                    
+
                     <div style={{ position: 'relative' }}>
                         <FaSearch style={{ position: 'absolute', top: '50%', left: '16px', transform: 'translateY(-50%)', color: '#6B7280' }} />
-                        <input 
-                            type="text" 
-                            placeholder="Tìm tên sản phẩm..." 
+                        <input
+                            type="text"
+                            placeholder="Tìm tên sản phẩm..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{ padding: '12px 16px 12px 42px', width: '300px', borderRadius: '8px', border: '1px solid #D1D5DB', outline: 'none', fontSize: '14px', backgroundColor: '#F9FAFB' }}
