@@ -242,7 +242,7 @@ const VendorDashboard = () => {
                                     tick={{ fontSize: 11, fill: '#64748b' }}
                                     tickFormatter={(v) => v && v.length > 18 ? v.substring(0, 17) + '…' : v} />
                                 <Tooltip
-                                    formatter={(v) => [`${v} click`, 'Lượt xem']}
+                                    formatter={(v) => [`${v} click`, 'Lượt click']}
                                     contentStyle={{ borderRadius: 12, border: '1px solid #e2e8f0', fontSize: 12 }}
                                 />
                                 <Bar dataKey="soClick" radius={[0, 6, 6, 0]}>
