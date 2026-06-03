@@ -16,4 +16,5 @@ public interface TinTucService {
     boolean capNhatTrangThaiDuyet(Integer id, String trangThai);
     List<TinTucResponse> getTinTucByNguoiDang(Integer idNguoiDang);
     boolean capNhatTinTuc(Integer idTinTuc, Integer idNguoiDang, String tieuDe, String noiDung, String hinhAnh);
+    boolean xoaTinTuc(Integer idTinTuc, Integer idNguoiDang);
 }

@@ -95,4 +95,19 @@ public class TinTucController {
             return ResponseEntity.internalServerError().body("Lỗi hệ thống khi cập nhật bài viết: " + e.getMessage());
         }
     }
+    // Xóa tin tức của tôi
+    @DeleteMapping("/cua-toi/{idTinTuc}")
+    public ResponseEntity<?> deleteMyNews(
+            @PathVariable Integer idTinTuc,
+            @RequestParam("idNguoiDang") Integer idNguoiDang) {
+        try {
+            boolean success = tinTucService.xoaTinTuc(idTinTuc, idNguoiDang);
+            if (success) {
+                return ResponseEntity.ok("Xóa bài viết thành công.");
+            }
+            return ResponseEntity.badRequest().body("Bạn không có quyền xóa hoặc bài viết không tồn tại!");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi hệ thống khi xóa bài viết.");
+        }
+    }
 }

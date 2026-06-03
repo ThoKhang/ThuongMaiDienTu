@@ -55,7 +55,7 @@ public class TinTucServiceImpl implements TinTucService {
         TinTucEntity tin = tinTucRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tin tức với ID: " + id));
 
-        return tinTucMapper.toResponse(tin);
+        return toResponseWithLoai(tin); 
     }
 
     @Override
@@ -128,6 +128,16 @@ public class TinTucServiceImpl implements TinTucService {
         TinTucResponse res = tinTucMapper.toResponse(entity);
         res.setLoaiNguoiDang(getLoaiNguoiDang(entity.getIdNguoiDang()));
         return res;
+    }
+    @Override
+    public boolean xoaTinTuc(Integer idTinTuc, Integer idNguoiDang) {
+        TinTucEntity tinTuc = tinTucRepository.findById(idTinTuc).orElse(null);
+        // Kiểm tra bài viết có tồn tại và thuộc về đúng người dùng yêu cầu xóa không
+        if (tinTuc != null && tinTuc.getIdNguoiDang().equals(idNguoiDang)) {
+            tinTucRepository.delete(tinTuc);
+            return true;
+        }
+        return false;
     }
     
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import UserLayout from '../../layout/UserLayout'; // Đảm bảo đường dẫn này đúng với dự án của bạn
+import UserLayout from '../../layout/UserLayout';
 
 /* ─── Skeleton Loader ─── */
 const SkeletonBlock = ({ className = '' }) => (
@@ -36,12 +36,23 @@ const ChiTietTinTucSkeleton = () => (
     </div>
 );
 
+const getLoaiBadge = (loai) => {
+    switch (loai) {
+        case "Admin":
+            return { label: "🛡️ Hệ thống", bg: "bg-purple-100 text-purple-700", ten: "Quản trị viên" };
+        case "DoiTac":
+            return { label: "🏢 Đối tác", bg: "bg-green-100 text-green-700", ten: "Đối tác" };
+        default:
+            return { label: "👤 Người dùng", bg: "bg-yellow-100 text-yellow-700", ten: "Người dùng" };
+    }
+};
+
 export default function ChiTietTinTuc() {
     const { id } = useParams();
     const navigate = useNavigate();
-    
+
     const [baiViet, setBaiViet] = useState(null);
-    const [tinMoiNhat, setTinMoiNhat] = useState([]); 
+    const [tinMoiNhat, setTinMoiNhat] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -53,7 +64,6 @@ export default function ChiTietTinTuc() {
         });
     };
 
-    // Scroll lên đầu trang mỗi khi chuyển bài viết
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [id]);
@@ -61,7 +71,7 @@ export default function ChiTietTinTuc() {
     useEffect(() => {
         setLoading(true);
         setError(null);
-        
+
         Promise.all([
             fetch(`http://localhost:8080/api/tintuc/${id}`).then(res => {
                 if (!res.ok) throw new Error("Không tìm thấy bài viết!");
@@ -89,10 +99,7 @@ export default function ChiTietTinTuc() {
                     <p className="text-on-surface-variant text-center max-w-sm">
                         {error || 'Bài viết không tồn tại hoặc đã bị gỡ khỏi hệ thống.'}
                     </p>
-                    <Link
-                        to="/"
-                        className="px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-container transition-colors"
-                    >
+                    <Link to="/" className="px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-container transition-colors">
                         Về trang chủ
                     </Link>
                 </div>
@@ -100,52 +107,46 @@ export default function ChiTietTinTuc() {
         );
     }
 
+    const badge = getLoaiBadge(baiViet?.loaiNguoiDang);
+
     return (
         <UserLayout>
             {loading ? (
                 <ChiTietTinTucSkeleton />
             ) : (
                 <div className="px-4 md:px-8 pb-20">
-                    
+
                     {/* ── Breadcrumb ── */}
                     <nav className="flex items-center gap-2 text-xs font-medium text-outline py-6 font-label">
                         <Link to="/" className="hover:text-primary transition-colors">Trang chủ</Link>
-                        
                         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-                        
-                        <Link to="/tin-tuc" className="hover:text-primary transition-colors">
-                            Tin tức công nghệ
-                        </Link>
-                        
+                        <Link to="/tin-tuc" className="hover:text-primary transition-colors">Tin tức công nghệ</Link>
                         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-                        
-                        <span className="text-on-surface line-clamp-1 max-w-[300px]">
-                            {baiViet?.tieuDe}
-                        </span>
+                        <span className="text-on-surface line-clamp-1 max-w-[300px]">{baiViet?.tieuDe}</span>
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        
+
                         {/* ── LEFT: Nội dung bài viết (8 cols) ── */}
                         <div className="lg:col-span-8">
                             <article className="bg-surface-container-lowest p-6 md:p-10 rounded-xl shadow-sm border border-outline-variant/20">
-                                
+
                                 {/* Tiêu đề & Meta */}
                                 <header className="mb-8">
                                     <h1 className="text-3xl md:text-4xl font-headline font-extrabold tracking-tight text-on-surface leading-tight mb-4">
                                         {baiViet.tieuDe}
                                     </h1>
-                                    <div className="flex items-center gap-4 text-sm text-outline border-b border-outline-variant/30 pb-6">
+                                    <div className="flex flex-wrap items-center gap-4 text-sm text-outline border-b border-outline-variant/30 pb-6">
                                         <div className="flex items-center gap-1.5">
                                             <span className="material-symbols-outlined text-lg">calendar_today</span>
                                             {formatNgay(baiViet.ngayDang)}
                                         </div>
                                         <div className="flex items-center gap-1.5">
                                             <span className="material-symbols-outlined text-lg">person</span>
-                                            Admin
+                                            {badge.ten}
                                         </div>
-                                        <span className="bg-primary-container text-on-primary-container px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ml-auto">
-                                            Tin tức hệ thống
+                                        <span className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ml-auto ${badge.bg}`}>
+                                            {badge.label}
                                         </span>
                                     </div>
                                 </header>
@@ -153,9 +154,9 @@ export default function ChiTietTinTuc() {
                                 {/* Ảnh Cover */}
                                 {baiViet.hinhAnh ? (
                                     <div className="w-full aspect-[16/9] mb-8 rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
-                                        <img 
-                                            src={baiViet.hinhAnh} 
-                                            alt={baiViet.tieuDe} 
+                                        <img
+                                            src={`http://localhost:8080/upload/${baiViet.hinhAnh}`}
+                                            alt={baiViet.tieuDe}
                                             className="w-full h-full object-cover"
                                             onError={(e) => { e.target.style.display = 'none'; }}
                                         />
@@ -170,7 +171,7 @@ export default function ChiTietTinTuc() {
                                 <div className="prose prose-lg prose-blue max-w-none text-on-surface-variant leading-relaxed whitespace-pre-line">
                                     {baiViet.noiDung}
                                 </div>
-                                
+
                                 {/* Box Share / Tags */}
                                 <div className="mt-12 pt-6 border-t border-outline-variant/30 flex items-center justify-between">
                                     <div className="flex gap-2">
@@ -194,40 +195,47 @@ export default function ChiTietTinTuc() {
                                 </h3>
 
                                 <div className="space-y-5">
-                                    {tinMoiNhat.map((tin) => (
-                                        <Link 
-                                            key={tin.id} 
-                                            to={`/tin-tuc/${tin.id}`}
-                                            className="flex gap-4 group cursor-pointer hover:bg-surface-container-low rounded-lg p-2 transition-colors -ml-2"
-                                        >
-                                            {/* Thumbnail Mini */}
-                                            <div className="w-24 h-16 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0 relative">
-                                                {tin.hinhAnh ? (
-                                                    <img 
-                                                        src={tin.hinhAnh} 
-                                                        alt={tin.tieuDe} 
-                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-primary-container text-primary">
-                                                        <span className="material-symbols-outlined text-xl">article</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            
-                                            {/* Title & Date Mini */}
-                                            <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                                <h4 className="text-sm font-bold text-on-surface line-clamp-2 group-hover:text-primary transition-colors leading-snug">
-                                                    {tin.tieuDe}
-                                                </h4>
-                                                <p className="text-xs text-outline mt-1 flex items-center gap-1">
-                                                    <span className="material-symbols-outlined text-[12px]">schedule</span>
-                                                    {new Date(tin.ngayDang).toLocaleDateString("vi-VN")}
-                                                </p>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                    
+                                    {tinMoiNhat.map((tin) => {
+                                        const tinBadge = getLoaiBadge(tin.loaiNguoiDang);
+                                        return (
+                                            <Link
+                                                key={tin.id}
+                                                to={`/tin-tuc/${tin.id}`}
+                                                className="flex gap-4 group cursor-pointer hover:bg-surface-container-low rounded-lg p-2 transition-colors -ml-2"
+                                            >
+                                                {/* Thumbnail Mini */}
+                                                <div className="w-24 h-16 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0 relative">
+                                                    {tin.hinhAnh ? (
+                                                        <img
+                                                            src={`http://localhost:8080/upload/${tin.hinhAnh}`}
+                                                            alt={tin.tieuDe}
+                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-primary-container text-primary">
+                                                            <span className="material-symbols-outlined text-xl">article</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Title & Date & Badge Mini */}
+                                                <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+                                                    <h4 className="text-sm font-bold text-on-surface line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+                                                        {tin.tieuDe}
+                                                    </h4>
+                                                    <p className="text-xs text-outline flex items-center gap-1">
+                                                        <span className="material-symbols-outlined text-[12px]">schedule</span>
+                                                        {new Date(tin.ngayDang).toLocaleDateString("vi-VN")}
+                                                    </p>
+                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded w-fit ${tinBadge.bg}`}>
+                                                        {tinBadge.label}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+
                                     {tinMoiNhat.length === 0 && (
                                         <p className="text-outline text-sm text-center py-4">Chưa có tin tức nào khác.</p>
                                     )}
