@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Swal from "sweetalert2";
 
 const NewsManagement = () => {
     const [news, setNews] = useState([]);
@@ -31,7 +32,16 @@ const NewsManagement = () => {
     }, []);
 
     const handleUpdateStatus = async (id, status) => {
-        if (!window.confirm(`Bạn có chắc chắn muốn chuyển bài viết này sang trạng thái: ${status}?`)) return;
+        const result = await Swal.fire({
+            title: "Xác nhận",
+            text: `Bạn có chắc chắn muốn chuyển bài viết này sang trạng thái: ${status}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy"
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const response = await fetch(`http://localhost:8080/api/admin/news/${id}/status?status=${status}`, {
@@ -113,13 +123,13 @@ const NewsManagement = () => {
                                         <td className="p-4 text-sm font-semibold text-gray-600">#{item.id}</td>
                                         <td className="p-4">
                                             {item.hinhAnh ? (
-                                                <img 
-                                                    src={item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`) : "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23e2e8f0' width='100' height='60'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ETrống%3C/text%3E%3C/svg%3E"} 
-                                                    alt="Thumbnail" 
+                                                <img
+                                                    src={item.hinhAnh ? (item.hinhAnh.startsWith('http') ? item.hinhAnh : `/upload/${item.hinhAnh}`) : "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23e2e8f0' width='100' height='60'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ETrống%3C/text%3E%3C/svg%3E"}
+                                                    alt="Thumbnail"
                                                     className="w-16 h-12 object-cover rounded shadow-sm border border-gray-200"
-                                                    onError={(e) => { 
-                                                        e.target.onerror = null; 
-                                                        e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23f87171' width='100' height='60'/%3E%3Ctext fill='%23ffffff' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ELỗi%3C/text%3E%3C/svg%3E"; 
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Crect fill='%23f87171' width='100' height='60'/%3E%3Ctext fill='%23ffffff' font-family='sans-serif' font-size='10' dy='4' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ELỗi%3C/text%3E%3C/svg%3E";
                                                     }}
                                                 />
                                             ) : (
@@ -141,22 +151,20 @@ const NewsManagement = () => {
                                                 <button
                                                     onClick={() => handleUpdateStatus(item.id, 'DaDuyet')}
                                                     disabled={item.trangThaiDuyet === 'DaDuyet'}
-                                                    className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${
-                                                        item.trangThaiDuyet === 'DaDuyet' 
-                                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                                                    className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${item.trangThaiDuyet === 'DaDuyet'
+                                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                                         : 'bg-green-600 text-white hover:bg-green-700'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     Duyệt
                                                 </button>
                                                 <button
                                                     onClick={() => handleUpdateStatus(item.id, 'TuChoi')}
                                                     disabled={item.trangThaiDuyet === 'TuChoi'}
-                                                    className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${
-                                                        item.trangThaiDuyet === 'TuChoi' 
-                                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                                                    className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${item.trangThaiDuyet === 'TuChoi'
+                                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                                         : 'bg-red-600 text-white hover:bg-red-700'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     Từ chối
                                                 </button>

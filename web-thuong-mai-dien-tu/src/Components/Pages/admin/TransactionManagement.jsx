@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../../services/adminService';
 import { FaSearch, FaCheckCircle, FaTimesCircle, FaShieldAlt, FaInfoCircle, FaMoneyCheckAlt, FaClock } from 'react-icons/fa';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const TransactionManagement = () => {
     const [transactions, setTransactions] = useState([]);
@@ -25,18 +26,39 @@ const TransactionManagement = () => {
 
     const handleUpdateStatus = async (id, maGD, status) => {
         const actionText = status === 'DaXacNhan' ? 'XÁC NHẬN (Thanh toán hoa hồng)' : 'TỪ CHỐI (Hủy hoa hồng)';
-        if(window.confirm(`Bạn muốn ${actionText} giao dịch ${maGD}?`)) {
-            try {
-                await adminService.updateTransactionStatus(id, status);
-                toast.success(`Đã xử lý giao dịch ${maGD} thành công!`);
-                fetchTransactions(); 
-            } catch (error) {
-                toast.error(`Lỗi khi xử lý giao dịch!`);
-            }
+        const result = await Swal.fire({
+            title: "Xác nhận",
+            text: `Bạn muốn ${actionText} giao dịch ${maGD}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy"
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            await adminService.updateTransactionStatus(id, status);
+
+            await Swal.fire({
+                title: "Thành công",
+                text: `Đã xử lý giao dịch ${maGD} thành công!`,
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            fetchTransactions();
+        } catch (error) {
+            Swal.fire({
+                title: "Lỗi",
+                text: "Lỗi khi xử lý giao dịch!",
+                icon: "error"
+            });
         }
     };
 
-    const filtered = transactions.filter(t => 
+    const filtered = transactions.filter(t =>
         t.maGiaoDich?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         t.sanPham?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -107,7 +129,7 @@ const TransactionManagement = () => {
                                     <td style={{ padding: '16px' }}>
                                         <div style={{ fontWeight: 700, color: '#111827' }}>[{t.doiTac}]</div>
                                         <div style={{ fontSize: '13px', color: '#4B5563', marginTop: '2px' }}>{t.sanPham} (x{t.soLuong})</div>
-                                        <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}><FaClock/> {t.ngayGiaoDich} - Khách: {t.khachHang}</div>
+                                        <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}><FaClock /> {t.ngayGiaoDich} - Khách: {t.khachHang}</div>
                                     </td>
                                     <td style={{ padding: '16px', fontWeight: '600', color: '#374151' }}>
                                         {t.tongGiaTri?.toLocaleString('vi-VN')} đ
