@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 import { sanPhamService } from '../../../services/sanPhamService';
 import { TinhTrangDuyet, TinhTrangDuyetLabels, TinhTrangDuyetColors } from '../../../configs/constants';
 import {
-  FaEye,
   FaCheckCircle,
   FaClock,
   FaEyeSlash,
@@ -14,7 +13,8 @@ import {
   FaSearch,
   FaBox,
   FaWarehouse,
-  FaPlus
+  FaPlus,
+  FaMousePointer
 } from 'react-icons/fa';
 
 const QuanLyTinDang = () => {
@@ -143,7 +143,7 @@ const QuanLyTinDang = () => {
   });
 
   // Calculations for stats
-  const totalViews = products.reduce((sum, sp) => sum + (sp.clicks || 0), 0);
+  const totalClicks = products.reduce((sum, sp) => sum + (sp.clicks || 0), 0);
   const countActive = products.filter(sp => sp.tinhTrangDuyet === TinhTrangDuyet.DA_DUYET && sp.soLuongTon > 0).length;
   const countPending = products.filter(sp => sp.tinhTrangDuyet === TinhTrangDuyet.CHO_DUYET).length;
   const countHidden = products.filter(sp => sp.tinhTrangDuyet === TinhTrangDuyet.DA_AN).length;
@@ -436,11 +436,11 @@ const QuanLyTinDang = () => {
 
       {/* ── STATS SECTION ── */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {/* Total Views */}
+        {/* Total Clicks */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-sky-500 bg-sky-50 p-2.5 rounded-xl w-fit"><FaEye size={20} /></div>
-          <p className="text-slate-400 text-xs font-semibold uppercase mt-4 tracking-wider">Tổng lượt xem</p>
-          <h2 className="text-2xl font-bold text-slate-800 mt-1">{totalViews}</h2>
+          <div className="text-sky-500 bg-sky-50 p-2.5 rounded-xl w-fit"><FaMousePointer size={18} /></div>
+          <p className="text-slate-400 text-xs font-semibold uppercase mt-4 tracking-wider">Tổng lượt click</p>
+          <h2 className="text-2xl font-bold text-slate-800 mt-1">{totalClicks}</h2>
         </div>
 
         {/* Active */}
@@ -536,7 +536,7 @@ const QuanLyTinDang = () => {
                   <th className="py-4 px-6">Sản phẩm</th>
                   <th className="py-4 px-4">Giá bán</th>
                   <th className="py-4 px-4 text-center">Tồn kho</th>
-                  <th className="py-4 px-4 text-center">Lượt xem</th>
+                  <th className="py-4 px-4 text-center">Lượt click</th>
                   <th className="py-4 px-4">Trạng thái</th>
                   <th className="py-4 px-6 text-right">Hành động</th>
                 </tr>
