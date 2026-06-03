@@ -4,14 +4,23 @@ public enum TrangThaiGiaoDich {
     CHO_DUYET("ChoDuyet"),
     THANH_CONG("ThanhCong"),
     GIAN_LAN("GianLan");
+
     private final String dbValue;
+
     TrangThaiGiaoDich(String dbValue) {
         this.dbValue = dbValue;
     }
+
     public String getDbValue() {
         return dbValue;
     }
+
     public static TrangThaiGiaoDich fromDbValue(String value) {
+        if ("DaXacNhan".equalsIgnoreCase(value))
+            return THANH_CONG;
+        if ("TuChoi".equalsIgnoreCase(value))
+            return GIAN_LAN;
+
         for (TrangThaiGiaoDich status : TrangThaiGiaoDich.values()) {
             if (status.getDbValue().equalsIgnoreCase(value)) {
                 return status;
