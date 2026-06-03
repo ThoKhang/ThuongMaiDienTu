@@ -55,7 +55,7 @@ public class TinTucServiceImpl implements TinTucService {
         TinTucEntity tin = tinTucRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tin tức với ID: " + id));
 
-        return tinTucMapper.toResponse(tin);
+        return toResponseWithLoai(tin); 
     }
 
     @Override
